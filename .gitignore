@@ -90,3 +90,9 @@ dist
 
 # OS Specific files
 .DS_Store
+
+# I'm using <ROOT>/output folder to export the markdown files.
+output
+
+# I'm using <ROOT>/medium-export folder to keep the contents of the folder downloaded from the medium profile.
+medium-export

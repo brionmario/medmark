@@ -44,6 +44,7 @@ authors: ${data.authors}
 draft: ${data.draft}
 categories: []
 tags: [${data.tags}]
+images: [${data.images.map(image => image.mediumUrl)}]
 ---
 
 ${data.body}

@@ -22,6 +22,7 @@
     "url": "https://github.com/brionmario/medium-to-mdx"
   },
   "scripts": {
+    "compile": "node lib/index.js medium-export/posts -o output -t templates/brionmario.com.js",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -29,6 +30,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "fake-useragent": "^1.0.1",
+    "json-to-pretty-yaml": "^1.2.2",
     "meow": "^5.0.0",
     "mkdirp": "^0.5.1",
     "request": "^2.88.0",
@@ -37,10 +39,12 @@
   "devDependencies": {
     "@brionmario/eslint-plugin": "^0.2.3",
     "@brionmario/prettier-config": "^0.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.30.0",
+    "fs-extra": "^11.1.0",
     "prettier": "^2.8.1"
   },
   "bin": {
-    "medium2mdx": "./bin/medium2gatsby"
+    "medium2mdx": "./bin/medium2mdx"
   }
 }

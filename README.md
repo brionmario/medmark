@@ -29,7 +29,7 @@
 ## CLI Usage 
 ```
  Usage
-    $ medium2gatsby <src_file_or_folder>
+    $ medium2mdx <src_file_or_folder>
 
   Options
    --output, -o Destination folder for output files. Defaults to './'.

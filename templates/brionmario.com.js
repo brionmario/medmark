@@ -22,35 +22,43 @@
  * SOFTWARE.
  */
 
+const YAML = require('json-to-pretty-yaml');
+
 module.exports = {
   render: function (data) {
     // data.published is Date ISO format: 2018-04-16T14:48:00.000Z
+    // We need to convert it to something like 2018-04-16.
     var date = new Date(data.published);
     var prettyDate =
       date.getFullYear() +
       '-' +
       (date.getMonth() + 1).toString().padStart(2, 0) +
       '-' +
-      date.getDate().toString().padStart(2, 0); //2018-04-16
+      date.getDate().toString().padStart(2, 0);
 
-    var template = `\
+    var frontMatterAsJSON = {
+      slug: `/posts/${data.titleForSlug}/`,
+      date: prettyDate,
+      title: data.title,
+      description: data.description,
+      authors: data.authors,
+      readingTime: data.readingTime,
+      draft: data.draft,
+      categories: data.categories,
+      tags: data.tags,
+      bannerImage: data.images.map(image => image.mediumUrl)[0],
+      images: data.images.map(image => image.mediumUrl),
+    };
+
+    var frontMatter = `\
 ---
-slug: /posts/${data.titleForSlug}/
-date: ${prettyDate}
-title: ${data.title}
-description:
-  ${data.description}
-authors: ${data.authors}
-draft: ${data.draft}
-categories: []
-tags: [${data.tags}]
-images: [${data.images.map(image => image.mediumUrl)}]
+${YAML.stringify(frontMatterAsJSON)}
 ---
 
 ${data.body}
 `;
 
-    return template;
+    return frontMatter;
   },
   getOptions: function () {
     return {

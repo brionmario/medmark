@@ -35,13 +35,15 @@ module.exports = {
 
     var template = `\
 ---
-slug: "/posts/${data.titleForSlug}/"
+slug: /posts/${data.titleForSlug}/
 date: ${prettyDate}
-title: "${data.title}"
-draft: false
-description: "${data.description}"
+title: ${data.title}
+description:
+  ${data.description}
+authors: ${data.authors}
+draft: ${data.draft}
 categories: []
-keywords: [${data.tags.join(',')}]
+tags: [${data.tags}]
 ---
 
 ${data.body}

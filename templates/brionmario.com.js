@@ -47,6 +47,7 @@ module.exports = {
       categories: data.categories,
       tags: data.tags,
       bannerImage: data.images.map(image => image.mediumUrl)[0],
+      ogImage: data.images.map(image => image.mediumUrl)[0],
       images: data.images.map(image => image.mediumUrl),
     };
 

@@ -1,7 +1,7 @@
 {
-  "name": "medium-to-mdx",
+  "name": "@brionmario/medium-to-markdown",
   "version": "0.1.0",
-  "description": "The React implementation of the Oxygen Design System",
+  "description": "Export your Medium articles to markdown(md).",
   "keywords": [
     "medium",
     "medium-to-md",
@@ -10,19 +10,19 @@
     "markdown",
     "mdx"
   ],
-  "homepage": "https://github.com/brionmario/medium-to-mdx#readme",
+  "homepage": "https://github.com/brionmario/medium-to-markdown#readme",
   "bugs": {
-    "url": "https://github.com/brionmario/medium-to-mdx/issues"
+    "url": "https://github.com/brionmario/medium-to-markdown/issues"
   },
   "license": "MIT",
   "author": "Brion Mario",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/brionmario/medium-to-mdx"
+    "url": "https://github.com/brionmario/markdown"
   },
   "scripts": {
-    "compile": "node lib/index.js medium-export/posts -o output -t templates/brionmario.com.js",
+    "compile": "node bin/medium-to-markdown.js medium-export/posts -o output -t templates/brionmario.com.js",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -33,8 +33,10 @@
     "json-to-pretty-yaml": "^1.2.2",
     "meow": "^5.0.0",
     "mkdirp": "^0.5.1",
+    "node-html-parser": "^6.1.4",
     "request": "^2.88.0",
-    "turndown": "^4.0.1"
+    "turndown": "^4.0.1",
+    "turndown-plugin-gfm": "^1.0.2"
   },
   "devDependencies": {
     "@brionmario/eslint-plugin": "^0.2.3",

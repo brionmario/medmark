@@ -1,5 +1,11 @@
 # @brionmario/medmark-basic-sample
 
+## 0.1.3
+
+### Patch Changes
+
+- a9ffdfa: This is the initial release attempt 3
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,7 +1,8 @@
+#!/usr/bin/env node
 /**
  * MIT License
  *
- * Copyright (c) 2022, Brion Mario.
+ * Copyright (c) 2023, Brion Mario.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +23,8 @@
  * SOFTWARE.
  */
 
-module.exports = {
-  render: function (data) {
-    // date is ISO format
+/**
+ * @fileoverview Executable CLI entry point.
+ */
 
-    var template = `\
----
-title: "${data.title}"
-date: ${data.published}
-template: "post"
-draft: false
-slug: "/posts/${data.titleForSlug}/"
-category: ""
-tags: [${data.tags.join(',')}]
-description: "${data.description}"
----
-
-${data.body}
-`;
-
-    // FIXME: list example of output here...
-    return template;
-  },
-  getOptions: function () {
-    return {
-      folderForEachSlug: false, // same folder for all posts
-      imagePath: '/media', // <img src="/media/[filename]" >. Used in the markdown files.
-      // This field is ignored when folderForEachSlug:true. Should be absolute. Location where medium images will be saved.
-      imageFolder: '/Users/dummy/blog/static/media',
-      defaultCodeBlockLanguage: '', // code fenced by default will be ``` with no lang. If most of your code blocks are in a specific lang, set this here.
-    };
-  },
-};
+require('../lib/index');

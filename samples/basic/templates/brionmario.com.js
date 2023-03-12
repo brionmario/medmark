@@ -28,15 +28,15 @@ module.exports = {
   render: function (data) {
     // data.published is Date ISO format: 2018-04-16T14:48:00.000Z
     // We need to convert it to something like 2018-04-16.
-    var date = new Date(data.published);
-    var prettyDate =
+    const date = new Date(data.published);
+    const prettyDate =
       date.getFullYear() +
       '-' +
       (date.getMonth() + 1).toString().padStart(2, 0) +
       '-' +
       date.getDate().toString().padStart(2, 0);
 
-    var frontMatterAsJSON = {
+    const frontMatterAsJSON = {
       slug: `/posts/${data.titleForSlug}/`,
       date: prettyDate,
       title: data.title,
@@ -51,7 +51,7 @@ module.exports = {
       images: data.images.map(image => image.mediumUrl),
     };
 
-    var frontMatter = `\
+    const frontMatter = `\
 ---
 ${YAML.stringify(frontMatterAsJSON)}
 ---

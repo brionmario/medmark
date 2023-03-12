@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "@brionmario/medmark-basic-sample",
+  "version": "0.1.0",
+  "description": "Basic example using medmark to grab my own blog posts from Medium and convert them to markdown.",
+  "keywords": [
+    "medmark",
+    "medmark-sample"
+  ],
+  "homepage": "https://github.com/brionmario/medmark/samples/basic#readme",
+  "bugs": {
+    "url": "https://github.com/brionmario/medmark/issues"
+  },
+  "license": "MIT",
+  "author": "Brion Mario",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brionmario/markdown"
+  },
+  "scripts": {
+    "compile": "node ../../bin/medmark.js medium-export/posts -o output -t templates/brionmario.com.js"
+  }
+}

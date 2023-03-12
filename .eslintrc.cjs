@@ -26,11 +26,11 @@ const path = require('path');
 
 module.exports = {
   env: {
-    node: true,
     es6: true,
+    node: true,
   },
-  plugins: ['@brionmario'],
   extends: [
+    'plugin:@brionmario/javascript',
     'plugin:@brionmario/strict',
     'plugin:@brionmario/internal',
     'plugin:@brionmario/jest',
@@ -39,5 +39,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     project: [path.resolve(__dirname, 'tsconfig.json')],
+  },
+  plugins: ['@brionmario'],
+  rules: {
+    'no-underscore-dangle': 'off',
   },
 };

@@ -1,18 +1,21 @@
 {
-  "name": "@brionmario/medium-to-markdown",
+  "name": "@brionmario/medmark",
   "version": "0.1.0",
   "description": "Export your Medium articles to markdown(md).",
   "keywords": [
     "medium",
     "medium-to-md",
+    "medium-2-md",
+    "m2m",
     "medium-to-markdown",
     "medium-to-mdx",
     "markdown",
+    "medmark",
     "mdx"
   ],
-  "homepage": "https://github.com/brionmario/medium-to-markdown#readme",
+  "homepage": "https://github.com/brionmario/medmark#readme",
   "bugs": {
-    "url": "https://github.com/brionmario/medium-to-markdown/issues"
+    "url": "https://github.com/brionmario/medmark/issues"
   },
   "license": "MIT",
   "author": "Brion Mario",
@@ -22,7 +25,7 @@
     "url": "https://github.com/brionmario/markdown"
   },
   "scripts": {
-    "compile": "node bin/medium-to-markdown.js medium-export/posts -o output -t templates/brionmario.com.js",
+    "compile": "node bin/medmark.js medium-export/posts -o output -t templates/brionmario.com.js -s 'Hi Rohan,IS is blocking CORS requests by default.,Nice catch.'",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -47,6 +50,6 @@
     "prettier": "^2.8.1"
   },
   "bin": {
-    "medium2mdx": "./bin/medium2mdx"
+    "medmark": "./bin/medmark"
   }
 }

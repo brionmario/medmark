@@ -1,6 +1,6 @@
 {
-  "name": "@brionmario/medmark",
-  "version": "0.1.1",
+  "name": "medmark",
+  "version": "0.1.0",
   "description": "Export your Medium articles to markdown(md).",
   "keywords": [
     "medium",

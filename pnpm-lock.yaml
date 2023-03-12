@@ -1,44 +1,48 @@
 lockfileVersion: 5.4
 
-specifiers:
-  '@brionmario/eslint-plugin': ^0.2.9
-  '@brionmario/prettier-config': ^0.1.0
-  '@changesets/changelog-github': ^0.4.8
-  '@changesets/cli': ^2.26.0
-  cheerio: ^1.0.0-rc.2
-  cross-env: ^7.0.3
-  eslint: ^8.30.0
-  fake-useragent: ^1.0.1
-  fs-extra: ^11.1.0
-  json-to-pretty-yaml: ^1.2.2
-  meow: ^5.0.0
-  mkdirp: ^0.5.1
-  node-html-parser: ^6.1.4
-  prettier: ^2.8.1
-  request: ^2.88.0
-  turndown: ^4.0.1
-  turndown-plugin-gfm: ^1.0.2
+importers:
 
-dependencies:
-  '@changesets/changelog-github': 0.4.8
-  '@changesets/cli': 2.26.0
-  cheerio: 1.0.0-rc.12
-  fake-useragent: 1.0.1
-  fs-extra: 11.1.0
-  json-to-pretty-yaml: 1.2.2
-  meow: 5.0.0
-  mkdirp: 0.5.6
-  node-html-parser: 6.1.4
-  request: 2.88.2
-  turndown: 4.0.2
-  turndown-plugin-gfm: 1.0.2
+  .:
+    specifiers:
+      '@brionmario/eslint-plugin': ^0.2.9
+      '@brionmario/prettier-config': ^0.1.0
+      '@changesets/changelog-github': ^0.4.8
+      '@changesets/cli': ^2.26.0
+      cheerio: ^1.0.0-rc.2
+      cross-env: ^7.0.3
+      eslint: ^8.30.0
+      fake-useragent: ^1.0.1
+      fs-extra: ^11.1.0
+      json-to-pretty-yaml: ^1.2.2
+      meow: ^5.0.0
+      mkdirp: ^0.5.1
+      node-html-parser: ^6.1.4
+      prettier: ^2.8.1
+      request: ^2.88.0
+      turndown: ^4.0.1
+      turndown-plugin-gfm: ^1.0.2
+    dependencies:
+      '@changesets/changelog-github': 0.4.8
+      '@changesets/cli': 2.26.0
+      cheerio: 1.0.0-rc.12
+      fake-useragent: 1.0.1
+      fs-extra: 11.1.0
+      json-to-pretty-yaml: 1.2.2
+      meow: 5.0.0
+      mkdirp: 0.5.6
+      node-html-parser: 6.1.4
+      request: 2.88.2
+      turndown: 4.0.2
+      turndown-plugin-gfm: 1.0.2
+    devDependencies:
+      '@brionmario/eslint-plugin': 0.2.9_eslint@8.30.0
+      '@brionmario/prettier-config': 0.1.0_prettier@2.8.1
+      cross-env: 7.0.3
+      eslint: 8.30.0
+      prettier: 2.8.1
 
-devDependencies:
-  '@brionmario/eslint-plugin': 0.2.9_eslint@8.30.0
-  '@brionmario/prettier-config': 0.1.0_prettier@2.8.1
-  cross-env: 7.0.3
-  eslint: 8.30.0
-  prettier: 2.8.1
+  samples/basic:
+    specifiers: {}
 
 packages:
 

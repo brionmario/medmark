@@ -26,7 +26,6 @@
   },
   "scripts": {
     "changeset": "changeset",
-    "compile": "node bin/medmark.js medium-export/posts -o output -t templates/brionmario.com.js -s 'Hi Rohan,IS is blocking CORS requests by default.,Nice catch.'",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

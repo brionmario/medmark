@@ -25,6 +25,7 @@
     "url": "https://github.com/brionmario/markdown"
   },
   "scripts": {
+    "build": "exit 0",
     "changeset": "changeset",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",

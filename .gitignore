@@ -92,7 +92,7 @@ dist
 .DS_Store
 
 # <ROOT>/output folder is used to export the markdown files.
-output
+# output
 
 # <ROOT>/medium-export folder is used to keep the contents of the folder downloaded from the medium profile.
 medium-export

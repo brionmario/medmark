@@ -33,6 +33,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "fake-useragent": "^1.0.1",
+    "fs-extra": "^11.1.0",
     "json-to-pretty-yaml": "^1.2.2",
     "meow": "^5.0.0",
     "mkdirp": "^0.5.1",
@@ -46,7 +47,6 @@
     "@brionmario/prettier-config": "^0.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.30.0",
-    "fs-extra": "^11.1.0",
     "prettier": "^2.8.1"
   },
   "bin": {

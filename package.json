@@ -43,7 +43,7 @@
     "turndown-plugin-gfm": "^1.0.2"
   },
   "devDependencies": {
-    "@brionmario/eslint-plugin": "^0.2.3",
+    "@brionmario/eslint-plugin": "^0.2.9",
     "@brionmario/prettier-config": "^0.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.30.0",

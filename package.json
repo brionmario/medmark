@@ -25,12 +25,17 @@
     "url": "https://github.com/brionmario/markdown"
   },
   "scripts": {
+    "changeset": "changeset",
     "compile": "node bin/medmark.js medium-export/posts -o output -t templates/brionmario.com.js -s 'Hi Rohan,IS is blocking CORS requests by default.,Nice catch.'",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "publish:packages": "pnpm build && changeset publish",
+    "version:packages": "changeset version && pnpm install --lockfile-only"
   },
   "dependencies": {
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.0",
     "cheerio": "^1.0.0-rc.2",
     "fake-useragent": "^1.0.1",
     "fs-extra": "^11.1.0",

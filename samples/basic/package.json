@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@brionmario/medmark-basic-sample",
+  "name": "medmark-basic-sample",
   "version": "0.1.0",
   "description": "Basic example using medmark to grab my own blog posts from Medium and convert them to markdown.",
   "keywords": [

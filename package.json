@@ -1,5 +1,5 @@
 {
-  "name": "@brionmario/medmark",
+  "name": "medmark",
   "version": "0.1.0",
   "description": "Export your Medium articles to markdown(md).",
   "keywords": [
@@ -30,7 +30,7 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "publish:packages": "pnpm build && changeset publish",
+    "publish:packages": "changeset publish",
     "version:packages": "changeset version && pnpm install --lockfile-only"
   },
   "dependencies": {

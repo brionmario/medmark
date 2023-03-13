@@ -10,5 +10,6 @@
   "updateInternalDependencies": "patch",
   "root": {
     "packageDir": "."
-  }
+  },
+  "tagFormat": "medmark@${version}"
 }

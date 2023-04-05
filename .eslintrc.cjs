@@ -38,7 +38,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2018,
-    project: [path.resolve(__dirname, 'tsconfig.json')],
+    project: [path.resolve(__dirname, 'tsconfig.eslint.json')],
   },
   plugins: ['@brionmario'],
   rules: {

@@ -29,8 +29,9 @@
     "url": "https://github.com/brionmario/markdown"
   },
   "scripts": {
-    "build": "exit 0",
+    "build": "tsc -p tsconfig.lib.json",
     "changeset": "changeset",
+    "clean:dist": "rimraf dist",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -58,7 +59,8 @@
     "@brionmario/prettier-config": "^0.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.30.0",
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.1",
+    "rimraf": "^4.4.1"
   },
   "bin": {
     "medmark": "./bin/medmark"

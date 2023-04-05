@@ -6,6 +6,7 @@
     ".",
     "playground"
   ],
+  "type": "module",
   "keywords": [
     "medium",
     "medium-to-md",

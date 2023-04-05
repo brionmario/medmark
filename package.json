@@ -2,6 +2,10 @@
   "name": "medmark",
   "version": "0.1.0",
   "description": "Export your Medium articles to markdown(md).",
+  "workspaces": [
+    ".",
+    "packages/*"
+  ],
   "keywords": [
     "medium",
     "medium-to-md",

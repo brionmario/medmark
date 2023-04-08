@@ -24,11 +24,58 @@
 
 import fs from 'fs-extra';
 import {dirname, join, resolve} from 'path';
+import {MedMarkGlobal} from './models';
 
-const runnerTimestamp = new Date().toISOString();
-const PATHS = {
+/**
+ * Defines the structure of the paths for the logs.
+ */
+interface LogPaths {
+  /**
+   * The path and file name for the apollo state log.
+   * @param articleId The id of the article.
+   */
+  files: {
+    apolloState: (articleId: string) => string;
+    /**
+     * The path and file name for the metadata log.
+     * @param articleId The id of the article.
+     */
+    metaData: (articleId: string) => string;
+  };
+  /**
+   * The root path for the logs.
+   */
+  root: string;
+}
+
+/**
+ * Defines the structure of the debug object that handles logging.
+ */
+interface Debug {
+  /**
+   * Returns whether debugging is enabled or not.
+   * @returns A boolean indicating if debugging is enabled.
+   */
+  enabled: () => boolean;
+  /**
+   * Initializes debugging by creating the root logs folder and setting up the MedMark global object.
+   */
+  initialize: () => void;
+  /**
+   * Saves a log file with the provided content.
+   * @param articleId The id of the article.
+   * @param fileName The type of log file.
+   * @param content The content to write to the log file.
+   */
+  saveLog: (articleId: string, fileName: keyof LogPaths['files'], content: unknown) => void;
+}
+
+const runnerTimestamp: string = new Date().toISOString();
+
+const PATHS: {
+  logs: LogPaths;
+} = {
   logs: {
-    root: resolve(join('logs', runnerTimestamp)),
     files: {
       apolloState(articleId: string) {
         return resolve(join(PATHS.logs.root, articleId, 'apollo-state.json'));
@@ -37,25 +84,42 @@ const PATHS = {
         return resolve(join(PATHS.logs.root, articleId, 'meta.json'));
       },
     },
+    root: resolve(join('logs', runnerTimestamp)),
   },
 };
 
-function enabled() {
+/**
+ * Returns whether debugging is enabled or not.
+ * @returns A boolean indicating if debugging is enabled.
+ */
+function enabled(): boolean {
   return global.__MEDMARK__.debug;
 }
 
-function initialize() {
+/**
+ * Initializes debugging by creating the root logs folder and setting up the MedMark global object.
+ */
+function initialize(): void {
   fs.mkdirpSync(PATHS.logs.root);
 
   if (!global.__MEDMARK__) {
     global.__MEDMARK__ = {};
   }
 
-  global.__MEDMARK__['debug'] = true;
-  global.__MEDMARK__['runnerTimestamp'] = runnerTimestamp;
+  const medMarkGlobal: MedMarkGlobal = {
+    debug: true,
+    runnerTimestamp,
+  };
+  global.__MEDMARK__ = medMarkGlobal;
 }
 
-function saveLog(articleId: string, fileName: keyof typeof PATHS.logs.files, content: unknown) {
+/**
+ * Saves a log file with the provided content.
+ * @param articleId The id of the article.
+ * @param fileName The type of log file.
+ * @param content The content to write to the log file.
+ */
+function saveLog(articleId: string, fileName: keyof LogPaths['files'], content: unknown): void {
   if (!global?.__MEDMARK__?.debug) {
     return;
   }
@@ -65,9 +129,12 @@ function saveLog(articleId: string, fileName: keyof typeof PATHS.logs.files, con
   fs.ensureDirSync(resolve(dirname(filePath)));
   fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
 }
+/* `global.__` is not doing anything in this code. It seems to be a typo or an incomplete statement. */
 
-export default {
-  saveLog,
+const debug: Debug = {
   enabled,
   initialize,
+  saveLog,
 };
+
+export default debug;

@@ -4,3 +4,6 @@ medium-export/*
 
 # The output as markdown.
 output
+
+# Debug logs
+logs

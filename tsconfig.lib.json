@@ -16,5 +16,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": ["lib/**/*.js", "lib/**/*.ts", "lib/logger.s"]
+  "include": ["lib/**/*.js", "lib/**/*.ts", "types/**/*.d.ts"],
 }

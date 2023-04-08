@@ -1,7 +1,7 @@
 /**
  * MIT License
  *
- * Copyright (c) 2022, Brion Mario.
+ * Copyright (c) 2023, Brion Mario
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,16 @@
  * SOFTWARE.
  */
 
-const path = require('path');
-
-module.exports = {
-  env: {
-    es6: true,
-    node: true,
-  },
-  extends: [
-    'plugin:@brionmario/typescript',
-    'plugin:@brionmario/strict',
-    'plugin:@brionmario/internal',
-    'plugin:@brionmario/jest',
-    'plugin:@brionmario/prettier',
-  ],
-  parserOptions: {
-    ecmaVersion: 2018,
-    project: [path.resolve(__dirname, 'tsconfig.eslint.json')],
-  },
-  plugins: ['@brionmario'],
-  rules: {
-    'no-underscore-dangle': 'off',
-  },
-};
+/**
+ * MedMarkGlobal extends the Node.js global object to include additional properties for MedMark-specific global state.
+ */
+export interface MedMarkGlobal {
+  /**
+   * A boolean value indicating whether debugging mode is enabled or not.
+   */
+  debug: boolean;
+  /**
+   * A string value representing the timestamp at which the MedMark runner was started.
+   */
+  runnerTimestamp: string;
+}

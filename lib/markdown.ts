@@ -31,7 +31,8 @@ import {gfm} from 'turndown-plugin-gfm';
 import {EMBEDDED_TWEET_HTML_SPIT_DELIMITER} from './constants';
 
 // global placeholder allowing us to pass in options from the template...
-let templateOptions = {};
+// FIXME: TS ISSUE
+let templateOptions: any = {};
 
 const turnDownOptions = {
   // linkReferenceStyle: 'collapsed',

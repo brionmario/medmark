@@ -46,10 +46,10 @@ export default {
   render(data) {
     // Convert published date to YYYY-MM-DD format.
     const date = new Date(data.published);
-    const prettyDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, 0)}-${date
+    const prettyDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date
       .getDate()
       .toString()
-      .padStart(2, 0)}`;
+      .padStart(2, "0")}`;
 
     /* eslint-disable sort-keys */
     const frontMatterAsJSON = {

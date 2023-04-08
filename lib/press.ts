@@ -34,7 +34,7 @@ function announceCheckpoint(checkpoint) {
   CHECKPOINTS_COUNTER += 1;
 }
 
-function print(message, paddingTop, paddingBottom) {
+function print(message, paddingTop?, paddingBottom?) {
   let _message = message;
 
   if (paddingTop) {
@@ -48,7 +48,7 @@ function print(message, paddingTop, paddingBottom) {
   logger.info(_message);
 }
 
-function printItem(message, paddingTop, paddingBottom, level) {
+function printItem(message, paddingTop?, paddingBottom?, level?) {
   let _message = `    → ${message}`;
 
   if (level === 0) {

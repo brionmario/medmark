@@ -42,7 +42,7 @@ program
       {
         type: 'input',
         name: 'input',
-        message: 'Enter the path to the `posts` folder of the medium exported archive'
+        message: 'Enter the path to the `posts` folder of the medium exported archive',
       },
       {
         type: 'input',
@@ -83,7 +83,7 @@ program
     press.printItem(`❌ TO SKIP (-s): ${_skip || 'none'}`);
     press.printItem(`🚧 SHOULD EXPORT DRAFTS? (-d): ${drafts}`);
 
+    debug.initialize();
     convert(input, output, template, drafts, _skip);
-    debug.init();
   })
   .parse(process.argv);

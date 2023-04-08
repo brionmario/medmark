@@ -23,60 +23,51 @@
  */
 
 import fs from 'fs-extra';
-import {fileURLToPath} from 'url';
 import {dirname, join, resolve} from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
+const runnerTimestamp = new Date().toISOString();
 const PATHS = {
-  debug: join(resolve(__dirname), '..', 'debug'),
-  samples: {
-    apolloState: join(resolve(__dirname), '..', 'debug', 'samples', 'apollo-state.json'),
-    metaData: join(resolve(__dirname), '..', 'debug', 'samples', 'meta.json'),
-    root: join(resolve(__dirname), '..', 'debug', 'samples'),
+  logs: {
+    root: resolve(join('logs', runnerTimestamp)),
+    files: {
+      apolloState(articleId: string) {
+        return resolve(join(PATHS.logs.root, articleId, 'apollo-state.json'));
+      },
+      metaData(articleId: string) {
+        return resolve(join(PATHS.logs.root, articleId, 'meta.json'));
+      },
+    },
   },
 };
 
-const DEBUG_CONTEXT_INITIAL_STATE = {
-  samples: {
-    apolloState: false,
-  },
-};
+function enabled() {
+  return global.__MEDMARK__.debug;
+}
 
-let debugContext = DEBUG_CONTEXT_INITIAL_STATE;
+function initialize() {
+  fs.mkdirpSync(PATHS.logs.root);
 
-const enabled = () => {
-  if (process.env.NODE_ENV === 'debug') {
-    return true;
+  if (!global.__MEDMARK__) {
+    global.__MEDMARK__ = {};
   }
 
-  return false;
-};
+  global.__MEDMARK__['debug'] = true;
+  global.__MEDMARK__['runnerTimestamp'] = runnerTimestamp;
+}
 
-const init = () => {
-  fs.mkdirpSync(PATHS.samples.root);
-};
-
-const getDebugContext = () => debugContext;
-
-const setDebugContext = context => {
-  debugContext = context;
-};
-
-const createSample = (key, content) => {
-  if (debugContext.samples[key]) {
+function saveLog(articleId: string, fileName: keyof typeof PATHS.logs.files, content: unknown) {
+  if (!global?.__MEDMARK__?.debug) {
     return;
   }
 
-  fs.writeFileSync(PATHS.samples[key], JSON.stringify(content, null, 2));
-  debugContext.samples[key] = true;
-};
+  const filePath: string = PATHS.logs.files[fileName](articleId);
+
+  fs.ensureDirSync(resolve(dirname(filePath)));
+  fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
+}
 
 export default {
-  createSample,
+  saveLog,
   enabled,
-  getDebugContext,
-  init,
-  setDebugContext,
+  initialize,
 };

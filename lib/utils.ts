@@ -65,7 +65,8 @@ export const getAuthors = (apolloState, metadata) => {
   let author = null;
   const authorNameFromMeta = metadata.author.name;
 
-  Object.entries(apolloState).forEach(([key, value]) => {
+  // FIXME: TS ISSUE
+  Object.entries(apolloState).forEach(([key, value]: any) => {
     if (key.startsWith('User:') && value.name === authorNameFromMeta) {
       author = {
         bio: value.bio,

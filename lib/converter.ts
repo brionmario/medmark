@@ -41,11 +41,9 @@ import {inlineGists} from './github';
 import logger from './logger';
 import {fileURLToPath} from 'url';
 import {dirname, join, resolve, basename, extname} from 'path';
-import {createRequire} from 'module';
 
-const require = createRequire(import.meta.url);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __internals__filename = resolve(module.filename);
+const __internals__dirname = dirname(__internals__filename);
 
 const reporter = Reporter.getInstance();
 
@@ -160,9 +158,6 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   const isDraft = filename.startsWith('draft');
   const blogTitle = $('.graf--leading').first().text();
 
-  console.log('-----', )
-  console.log('postsToSkippostsToSkippostsToSkip', postsToSkip)
-  console.log('-----', )
   if (postsToSkip && postsToSkip.some(post => blogTitle.startsWith(post))) {
     press.printItem(`This is a reply, not a standalone post. Hence, skipping...`, false, false, 1);
     reporter.report.posts.replies.push(filePath);
@@ -203,11 +198,12 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   const description = $2('meta[name=description]').attr('content'); // from page...
 
   const schemaTags = $2('script[type="application/ld+json"]');
-  const metaData = JSON.parse(schemaTags[0].children[0].data);
+  // FIXME: TS ISSUE
+  const metaData = JSON.parse((schemaTags[0].children[0] as any).data);
   const readingTime = $2('.pw-reading-time').text();
 
   if (debug.enabled) {
-    debug.createSample('metaData', metaData);
+    debug.saveLog(blogTitle, 'metaData', metaData);
   }
 
   const scripts = $2('script');
@@ -216,7 +212,8 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   let tags = [];
   let authors = [];
 
-  Object.values(scripts).forEach(value => {
+  // FIXME: TS ISSUE
+  Object.values(scripts).forEach((value: any) => {
     if (
       value.children &&
       value.children[0] &&
@@ -227,7 +224,7 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
         apolloState = JSON.parse(value.children[0].data.replace('window.__APOLLO_STATE__ = ', ''));
 
         if (debug.enabled) {
-          debug.createSample('apolloState', apolloState);
+          debug.saveLog(blogTitle, 'apolloState', apolloState);
         }
 
         tags = getTags(apolloState);
@@ -387,7 +384,7 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
   // TODO: This is un-used.
   // const isFile = fs.lstatSync(srcPath).isFile();
 
-  const defaultTemplate = resolve(join(__dirname, 'templates', 'default.js'));
+  const defaultTemplate = resolve(join(__internals__dirname, 'templates', 'default.js'));
   let _templatePath = defaultTemplate;
 
   // if template passed in, load that instead of default

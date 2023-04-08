@@ -28,13 +28,15 @@ import MedmarkException from './medmark-exception';
  * Base exception class for the module.
  */
 class MedmarkSilentException extends MedmarkException {
+  type: string;
+
   /**
    * Constructor.
    * @param {string} message - Message for the exception.
    * @param {any} stack - Stack trace for the error.
    */
-  constructor(...args) {
-    super(...args);
+  constructor(message: string, stack?: any) {
+    super(message, stack);
     Error.captureStackTrace(this, MedmarkSilentException);
     this.type = 'silent';
   }

@@ -22,21 +22,28 @@
  * SOFTWARE.
  */
 
-/**
- * Base exception class for the module.
- */
-class MedmarkException extends Error {
-  /**
-   * Constructor.
-   * @param {string} message - Message for the exception.
-   * @param {any} stack - Stack trace for the error.
-   */
-  constructor(message, stack) {
-    super(message);
-    this.name = this.constructor.name;
-    this.stack = stack;
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
+import fetch from 'node-fetch';
+import {EMBEDDED_TWEET_HTML_SPIT_DELIMITER} from './constants';
+
+async function embedTweets($) {
+  const promises = [];
+
+  $('blockquote.twitter-tweet a').each(async function (i, item) {
+    const promise = new Promise<void>(async (resolve, reject) => {
+      const href = $(this).attr('href');
+
+      // FIXME: TS ISSUE
+      const embedded: any = await fetch(`https://publish.twitter.com/oembed?url=${href}`).then(response => response.json());
+
+      $(this).text(`${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}${embedded.html}${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}`);
+
+      resolve();
+    });
+
+    promises.push(promise);
+  });
+
+  return Promise.all(promises);
 }
 
-export default MedmarkException;
+export default embedTweets;

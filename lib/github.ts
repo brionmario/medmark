@@ -48,7 +48,7 @@ export async function getRawGist(gistUrl) {
     return resp.body;
   }
 
-  throw MedmarkSilentException(`An error occured while getting the Gist: ${resp}`);
+  throw new MedmarkSilentException(`An error occured while getting the Gist: ${resp}`);
 }
 
 /**
@@ -64,7 +64,7 @@ export async function inlineGists($, reporter) {
   const promises = [];
 
   $('script').each(async function () {
-    const prom = new Promise(async (resolve, reject) => {
+    const prom = new Promise<void>(async (resolve, reject) => {
       const src = $(this).attr('src');
       const isGist = src.includes('gist');
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * MIT License
  *
@@ -24,7 +23,20 @@
  */
 
 /**
- * @fileoverview Executable CLI entry point.
+ * Base exception class for the module.
  */
+class MedmarkException extends Error {
+  /**
+   * Constructor.
+   * @param {string} message - Message for the exception.
+   * @param {any} stack - Stack trace for the error.
+   */
+  constructor(message: string, stack?: any) {
+    super(message);
+    this.name = this.constructor.name;
+    this.stack = stack;
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
 
-require('../lib/index');
+export default MedmarkException;

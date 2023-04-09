@@ -77,6 +77,9 @@ importers:
       '@types/node':
         specifier: ^18.15.11
         version: 18.15.11
+      '@types/turndown':
+        specifier: ^5.0.1
+        version: 5.0.1
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -935,6 +938,10 @@ packages:
 
   /@types/semver@7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
+    dev: true
+
+  /@types/turndown@5.0.1:
+    resolution: {integrity: sha512-N8Ad4e3oJxh9n9BiZx9cbe/0M3kqDpOTm2wzj13wdDUxDPjfjloWIJaquZzWE1cYTAHpjOH3rcTnXQdpEfS/SQ==}
     dev: true
 
   /@typescript-eslint/eslint-plugin@5.47.1(@typescript-eslint/parser@5.47.1)(eslint@8.30.0)(typescript@4.9.5):

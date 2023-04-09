@@ -35,3 +35,37 @@ export interface MedMarkGlobal {
    */
   runnerTimestamp: string;
 }
+
+// Create an interface from below.
+export interface MedMarkTemplateOptions {
+  /**
+   * Default language to use for code blocks.
+   */
+  defaultCodeBlockLanguage?: 'js' | string;
+  /**
+   * Whether to create a separate folder for each blog post.
+   */
+  folderForEachSlug?: boolean;
+  /**
+   * Path for images referenced in markdown files.
+   */
+  imagePath?: string;
+  /**
+   * Strategy to use for storing images.
+   */
+  imageStorageStrategy?: 'REMOTE' | 'LOCAL';
+}
+
+/**
+ * Enum to specify the image storage strategy for a Medium post converted to markdown.
+ */
+export enum MedMarkImageStorageStrategy {
+  /**
+   * Store images locally in the markdown file directory.
+   */
+  LOCAL = 'LOCAL',
+  /**
+   * Store images remotely, e.g. in a cloud storage service.
+   */
+  REMOTE = 'REMOTE',
+}

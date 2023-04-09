@@ -32,7 +32,6 @@ import transformHtmlToMarkdown from './markdown';
 import press from './press';
 import Reporter from './reporter';
 import debug from './debug';
-import {ImageStorageStrategies} from './constants';
 import embedTweets from './twitter';
 import {convertToSlug, writePostToFile, getAuthors, getTags} from './utils';
 import MedmarkException from './exceptions/medmark-exception';
@@ -41,6 +40,7 @@ import {inlineGists} from './github';
 import logger from './logger';
 import DefaultTemplate from './templates/default';
 import {dirname, join, resolve, basename, extname} from 'path';
+import {MedMarkImageStorageStrategy} from './models';
 
 const __internals__filename = resolve(module.filename);
 const __internals__dirname = dirname(__internals__filename);
@@ -135,7 +135,7 @@ function getMediumImages(imageStorageStrategy, $, imageBasePath, postSlug) {
     images.push(imgData);
 
     // Rewrite img urls in post if the storage strategy is local.
-    if (imageStorageStrategy === ImageStorageStrategies.LOCAL) {
+    if (imageStorageStrategy === MedMarkImageStorageStrategy.LOCAL) {
       $(this).attr('src', localImagePath);
     }
   });
@@ -341,7 +341,7 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
       press.printItem(`Successfully wrote the post to: ${output}`, false, false, 3);
     }
 
-    if (options.imageStorageStrategy === ImageStorageStrategies.LOCAL) {
+    if (options.imageStorageStrategy === MedMarkImageStorageStrategy.LOCAL) {
       try {
         await saveImagesToLocal(imageFolder, postData.images);
       } catch (e) {

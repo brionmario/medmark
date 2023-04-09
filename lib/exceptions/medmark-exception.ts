@@ -23,18 +23,22 @@
  */
 
 /**
- * Base exception class for the module.
+ * Base exception class for the MedMark module.
  */
 class MedmarkException extends Error {
   /**
-   * Constructor.
-   * @param {string} message - Message for the exception.
-   * @param {any} stack - Stack trace for the error.
+   * Creates a new instance of MedmarkException.
+   * @param message - The error message.
+   * @param stack - The error stack trace.
    */
-  constructor(message: string, stack?: any) {
+  constructor(message: string, stack?: string) {
     super(message);
     this.name = this.constructor.name;
-    this.stack = stack;
+
+    if (stack) {
+      this.stack = `${this.stack}\n${stack}`;
+    }
+
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }

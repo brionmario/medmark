@@ -25,10 +25,13 @@
 import MedmarkException from './medmark-exception';
 
 /**
- * Base exception class for the module.
+ * Exception class for handling silent errors, which should not be logged or shown to users.
  */
 class MedmarkSilentException extends MedmarkException {
-  type: string;
+  /**
+   * The type of the exception. Should always be set to 'silent' for this class.
+   */
+  type: string = 'silent';
 
   /**
    * Constructor.
@@ -38,7 +41,6 @@ class MedmarkSilentException extends MedmarkException {
   constructor(message: string, stack?: any) {
     super(message, stack);
     Error.captureStackTrace(this, MedmarkSilentException);
-    this.type = 'silent';
   }
 }
 

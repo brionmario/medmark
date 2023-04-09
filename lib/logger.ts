@@ -22,13 +22,89 @@
  * SOFTWARE.
  */
 
-/* eslint-disable no-console */
+/**
+ * Interface for the logger methods
+ */
+interface ILogger {
+  /**
+   * Log a debug message
+   * @param message The message to log
+   */
+  debug(message: string): void;
 
-const Logger = {
-  debug: console.log,
-  error: console.error,
-  info: console.log,
-  warn: console.warn,
-};
+  /**
+   * Log an error message
+   * @param message The message to log
+   */
+  error(message: string): void;
 
-export default Logger;
+  /**
+   * Log an info message
+   * @param message The message to log
+   */
+  info(message: string): void;
+
+  /**
+   * Log a warning message
+   * @param message The message to log
+   */
+  warn(message: string): void;
+}
+
+/**
+ * Implementation of ILogger using a logger backend library
+ */
+class Logger implements ILogger {
+  /**
+   * The actual logger backend library, e.g. log4js, winston, etc.
+   */
+  private loggerBackend: any;
+
+  /**
+   * Create a new instance of Logger
+   * @param backend The logger backend library to use
+   */
+  constructor(backend: any) {
+    this.loggerBackend = backend;
+  }
+
+  /**
+   * Log a debug message
+   * @param message The message to log
+   */
+  debug(message: string): void {
+    this.loggerBackend.debug(message);
+  }
+
+  /**
+   * Log an error message
+   * @param message The message to log
+   */
+  error(message: string): void {
+    this.loggerBackend.error(message);
+  }
+
+  /**
+   * Log an info message
+   * @param message The message to log
+   */
+  info(message: string): void {
+    this.loggerBackend.info(message);
+  }
+
+  /**
+   * Log a warning message
+   * @param message The message to log
+   */
+  warn(message: string): void {
+    this.loggerBackend.warn(message);
+  }
+}
+
+/**
+ * Creates a new instance of the Logger class that logs messages to the console.
+ */
+const logger: ILogger = new Logger(console);
+
+export default logger;
+export {ILogger as Logger};

@@ -39,7 +39,7 @@ import MedmarkException from './exceptions/medmark-exception';
 import MedmarkSilentException from './exceptions/medmark-silent-exception';
 import {inlineGists} from './github';
 import logger from './logger';
-import {fileURLToPath} from 'url';
+import DefaultTemplate from './templates/default';
 import {dirname, join, resolve, basename, extname} from 'path';
 
 const __internals__filename = resolve(module.filename);
@@ -294,7 +294,9 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
   press.print('Converting: ', true, true);
   press.printItem(`PATH: ${PATHS.file}`);
 
-  const {default: template} = await import(PATHS.template);
+  const loadedTemplateModule = PATHS.template && await import(PATHS.template);
+  const template = loadedTemplateModule?.default ?? DefaultTemplate;
+
   const options = template.getOptions();
 
   const filename = basename(PATHS.file, '.html');
@@ -384,14 +386,6 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
   // TODO: This is un-used.
   // const isFile = fs.lstatSync(srcPath).isFile();
 
-  const defaultTemplate = resolve(join(__internals__dirname, 'templates', 'default.js'));
-  let _templatePath = defaultTemplate;
-
-  // if template passed in, load that instead of default
-  if (PATHS.template) {
-    _templatePath = resolve(PATHS.template);
-  }
-
   let promises = [];
 
   if (isDir) {
@@ -400,13 +394,13 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
       const curFile = join(PATHS.src, file);
 
       if (file.endsWith('.html')) {
-        promises.push(convertMediumFile(curFile, PATHS.output, _templatePath, exportDrafts, postsToSkip));
+        promises.push(convertMediumFile(curFile, PATHS.output, PATHS.template, exportDrafts, postsToSkip));
       } else {
         press.printItem(`Skipping ${curFile} because it is not an html file.`, false, false, 1);
       }
     });
   } else {
-    promises = [convertMediumFile(resolve(PATHS.src), PATHS.output, _templatePath, exportDrafts, postsToSkip)];
+    promises = [convertMediumFile(resolve(PATHS.src), PATHS.output, PATHS.template, exportDrafts, postsToSkip)];
   }
 
   try {

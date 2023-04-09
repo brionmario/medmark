@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
+import fetch from 'node-fetch';
 import fakeUa from 'fake-useragent';
 import request from 'request';
 import fs from 'fs';
 import cheerio from 'cheerio';
 import mkdirp from 'mkdirp';
-import http from './http';
 import transformHtmlToMarkdown from './markdown';
 import press from './press';
 import Reporter from './reporter';
@@ -62,8 +62,8 @@ async function scrapeMetaDetailsFromPost(url) {
   };
 
   // FIXME: add error handling conditions...
-  const resp = await http.get({headers, url});
-  return resp.body;
+  const resp = await fetch(url, {headers});
+  return resp.text();
 }
 
 async function saveImagesToLocal(imageFolder, images) {
@@ -151,7 +151,7 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   try {
     await inlineGists($, reporter);
   } catch (e) {
-    press.printItem(`An error occurred while inlining Gists: ${filePath}`, false, false, 2);
+    press.printItem(`An error occurred while inlining Gists: ${filePath}, ${e}`, false, false, 2);
   }
 
   const filename = basename(filePath, '.html');
@@ -294,7 +294,7 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
   press.print('Converting: ', true, true);
   press.printItem(`PATH: ${PATHS.file}`);
 
-  const loadedTemplateModule = PATHS.template && await import(PATHS.template);
+  const loadedTemplateModule = PATHS.template && await import(resolve(PATHS.template));
   const template = loadedTemplateModule?.default ?? DefaultTemplate;
 
   const options = template.getOptions();

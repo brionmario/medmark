@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-import {extname}  from 'path';
-import http from './http';
+import {extname} from 'path';
+import fetch from 'node-fetch';
 import MedmarkSilentException from './exceptions/medmark-silent-exception';
 
 /**
@@ -43,12 +43,13 @@ export async function getRawGist(gistUrl) {
   newUrl += '/raw';
 
   // make the call
-  const resp = await http.get({url: newUrl});
-  if (resp.statusCode === 200) {
-    return resp.body;
+  const response = await fetch(newUrl);
+
+  if (!response.ok) {
+    throw new MedmarkSilentException(`An error occured while getting the Gist: ${response.statusText}`);
   }
 
-  throw new MedmarkSilentException(`An error occured while getting the Gist: ${resp}`);
+  return response.text();
 }
 
 /**
@@ -99,3 +100,5 @@ export async function inlineGists($, reporter) {
 
   return Promise.all(promises);
 }
+
+export default inlineGists;

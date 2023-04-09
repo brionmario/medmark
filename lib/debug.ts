@@ -129,7 +129,6 @@ function saveLog(articleId: string, fileName: keyof LogPaths['files'], content: 
   fs.ensureDirSync(resolve(dirname(filePath)));
   fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
 }
-/* `global.__` is not doing anything in this code. It seems to be a typo or an incomplete statement. */
 
 const debug: Debug = {
   enabled,

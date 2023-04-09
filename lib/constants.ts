@@ -22,9 +22,24 @@
  * SOFTWARE.
  */
 
-export const EMBEDDED_TWEET_HTML_SPIT_DELIMITER = 'EMBEDDED_TWEET_HTML_SPIT_DELIMITER';
+/**
+ * The delimiter used to split the HTML of embedded tweets
+ */
+export const EMBEDDED_TWEET_HTML_SPIT_DELIMITER: string = 'EMBEDDED_TWEET_HTML_SPIT_DELIMITER';
 
-export const ImageStorageStrategies = Object.freeze({
+/**
+ * Strategies for storing images
+ */
+export const ImageStorageStrategies: {
+  LOCAL: 'LOCAL';
+  REMOTE: 'REMOTE';
+} = Object.freeze({
+  /**
+   * Store images locally
+   */
   LOCAL: 'LOCAL',
+  /**
+   * Store images remotely
+   */
   REMOTE: 'REMOTE',
 });

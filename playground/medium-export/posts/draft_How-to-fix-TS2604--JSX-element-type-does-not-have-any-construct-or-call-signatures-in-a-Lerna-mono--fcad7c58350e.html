@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>How to fix TS2604: JSX element type does not have any construct or call signatures in a Lerna mono…</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">How to fix TS2604: JSX element type does not have any construct or call signatures in a Lerna mono…</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+If you are here, there’s a good chance that you’re scratching your head trying to figure out what caused your code to break suddenly.
+</section>
+<section data-field="body" class="e-content">
+<section name="aed6" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8a0e" id="8a0e" class="graf graf--h3 graf--leading graf--title">How to fix TS2604: JSX element type does not have any construct or call signatures in a Lerna mono repo</h3><p name="b0f2" id="b0f2" class="graf graf--p graf-after--h3">If you are here, there’s a good chance that you’re scratching your head trying to figure out what caused your code to break suddenly.</p><p name="1147" id="1147" class="graf graf--p graf-after--p">We were in the same situation and the following is the stack trace we received when we did a fresh install on our <a href="https://github.com/wso2/identity-apps" data-href="https://github.com/wso2/identity-apps" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">identity-apps</a> l<a href="https://lerna.js.org/" data-href="https://lerna.js.org/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">erna based mono repo</a>.</p><figure name="6eef" id="6eef" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*m_PoCB1bIamFvlfc0IbIgw.png" data-width="6018" data-height="1482" src="https://cdn-images-1.medium.com/max/800/1*m_PoCB1bIamFvlfc0IbIgw.png"><figcaption class="imageCaption">Stacktrace</figcaption></figure><p name="03d2" id="03d2" class="graf graf--p graf-after--figure">In this post, I’ll try to explain the procedure we followed to fix the above-mentioned issue.</p><h3 name="d94f" id="d94f" class="graf graf--h3 graf-after--p">Troubleshooting 🐞</h3><p name="c85c" id="c85c" class="graf graf--p graf-after--h3">By looking at the stack trace, it was evident that the issue was with one of the <code class="markup--code markup--p-code">@types</code> packages and specifically we could narrow it down to <code class="markup--code markup--p-code">@react/types</code> after the discovery of this <a href="https://github.com/facebook/react/issues/24304" data-href="https://github.com/facebook/react/issues/24304" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--p-strong">git issue</strong></a>.</p><p name="799a" id="799a" class="graf graf--p graf-after--p">Apparently, React 18 typings have breaking changes and most libraries use <code class="markup--code markup--p-code">@types/react: &quot;*&quot;</code> as a <a href="https://nodejs.org/en/blog/npm/peer-dependencies/" data-href="https://nodejs.org/en/blog/npm/peer-dependencies/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">peer-dependency</a> that causes the break.</p><figure name="df21" id="df21" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/reactjs/status/1512453230504124420"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><figcaption class="imageCaption">React 18 Typings Breaking Changes</figcaption></figure><h3 name="1fc0" id="1fc0" class="graf graf--h3 graf-after--figure">The Fix ☄️</h3><p name="12f2" id="12f2" class="graf graf--p graf-after--h3">Enough with the causes, let’s look at the fix.</p><p name="c6af" id="c6af" class="graf graf--p graf-after--p">We are not in a position to migrate our codebase to React 18 as of now so we decided to follow the <a href="https://github.com/facebook/react/issues/24304#issuecomment-1092563688" data-href="https://github.com/facebook/react/issues/24304#issuecomment-1092563688" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">suggested workaround</a> on our repo.</p><h4 name="7348" id="7348" class="graf graf--h4 graf-after--p">Find the culprits (@types/react v18+)</h4><p name="6190" id="6190" class="graf graf--p graf-after--h4">First, let’s check the <code class="markup--code markup--p-code">@types/react</code> versions used in our mono-repo.</p><pre name="23aa" id="23aa" class="graf graf--pre graf-after--p">npx lerna exec --no-bail --stream &quot;npm ls <a href="http://twitter.com/types/react" data-href="http://twitter.com/types/react" class="markup--anchor markup--pre-anchor" title="Twitter profile for @types/react" rel="noopener" target="_blank">@types/react</a>&quot;</pre><p name="4930" id="4930" class="graf graf--p graf-after--pre">Following is an output after the execution of the above command on our setup.</p><figure name="49d4" id="49d4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*GbxRcga1WRdTSdCaFx-Sgg.png" data-width="3042" data-height="2451" src="https://cdn-images-1.medium.com/max/800/1*GbxRcga1WRdTSdCaFx-Sgg.png"><figcaption class="imageCaption">@types/react usage</figcaption></figure><p name="dc1a" id="dc1a" class="graf graf--p graf-after--figure">As you can see, there are quite a few occurrences of <code class="markup--code markup--p-code">@types/react</code> <strong class="markup--strong markup--p-strong">v18.x in our project.</strong></p><blockquote name="1504" id="1504" class="graf graf--blockquote graf-after--p">If you’re not on a different mono-repo tool like nx or turbo, find the similar command to exec. Or execute <code class="markup--code markup--blockquote-code u-paddingRight0 u-marginRight0"><em class="markup--em markup--blockquote-em">npm ls </em><a href="http://twitter.com/types/react" data-href="http://twitter.com/types/react" class="markup--anchor markup--blockquote-anchor" title="Twitter profile for @types/react" rel="noopener" target="_blank"><em class="markup--em markup--blockquote-em">@types/react</em></a></code> manually inside the packages.</blockquote><p name="74b3" id="74b3" class="graf graf--p graf-after--blockquote"><strong class="markup--strong markup--p-strong">Install </strong><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">force-resolutions</strong></code><strong class="markup--strong markup--p-strong"> package</strong></p><p name="f401" id="f401" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code"><a href="https://www.npmjs.com/package/force-resolutions" data-href="https://www.npmjs.com/package/force-resolutions" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">force-resolutions</a></code> was installed instead of the suggested <code class="markup--code markup--p-code"><a href="https://www.npmjs.com/package/npm-force-resolutions" data-href="https://www.npmjs.com/package/npm-force-resolutions" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">npm-force-resolutions</a></code> package due to <a href="https://github.com/rogeriochaves/npm-force-resolutions/issues/36" data-href="https://github.com/rogeriochaves/npm-force-resolutions/issues/36" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">this issue</a>.</p><p name="6990" id="6990" class="graf graf--p graf-after--p">Since we have quite a few packages, we went ahead and installed it as a dev dependency in the affected modules (where @types/react had been used).</p><pre name="bb3e" id="bb3e" class="graf graf--pre graf-after--p">npm install --save-dev force-resolutions</pre><blockquote name="93b5" id="93b5" class="graf graf--blockquote graf-after--pre">It was mentioned that this step is optional if you’re using yarn. But I couldn’t personally validate.</blockquote><h4 name="8310" id="8310" class="graf graf--h4 graf-after--blockquote">Add resolutions</h4><p name="8d2e" id="8d2e" class="graf graf--p graf-after--h4">In the <code class="markup--code markup--p-code">package.json</code> files of the affected packages, add a <code class="markup--code markup--p-code">resolutions</code> section and force the package manager to use a specific version of <code class="markup--code markup--p-code">@types/react</code> . In our case, we stick with <code class="markup--code markup--p-code">16.9.0</code> .</p><p name="8d56" id="8d56" class="graf graf--p graf-after--p">And also add a <code class="markup--code markup--p-code">preinstall</code> script to run the <code class="markup--code markup--p-code">npm-force-resolutions</code> package. As mentioned in the above step, this would be optional if you’re using yarn.</p><figure name="3a12" id="3a12" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/brionmario/2cef8d8c1a193d6f12d7b16df627a4dc.js"></script></figure><h4 name="07cd" id="07cd" class="graf graf--h4 graf-after--figure">Re-Validating using npm ls</h4><p name="a4d3" id="a4d3" class="graf graf--p graf-after--h4">Then we went ahead and re-installed all our packages once more. And executed the <code class="markup--code markup--p-code">ls</code> command to verify whether our workaround is actually picked up or not.</p><figure name="b35a" id="b35a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*jaebDloPezr_-xW7mb3bzg.png" data-width="3042" data-height="1869" src="https://cdn-images-1.medium.com/max/800/1*jaebDloPezr_-xW7mb3bzg.png"><figcaption class="imageCaption">npm ls with the fix</figcaption></figure><p name="0436" id="0436" class="graf graf--p graf-after--figure">As you can see, <code class="markup--code markup--p-code">@types/react</code> is now resolving to the version <code class="markup--code markup--p-code">16.9.0</code> as intended 🎉</p><h4 name="8f23" id="8f23" class="graf graf--h4 graf-after--p">Re-validating the Typings</h4><p name="ca47" id="ca47" class="graf graf--p graf-after--h4">Now that the packages are resolving properly, lets do a build and see if the fix is working.</p><p name="912e" id="912e" class="graf graf--p graf-after--p">We have a command to do a type check on our modules so we are going to use that command instead to save some time.</p><pre name="26f4" id="26f4" class="graf graf--pre graf-after--p"># Execute the relevant build command or typecheck command<br>npm run typecheck</pre><p name="ca95" id="ca95" class="graf graf--p graf--empty graf-after--pre graf--trailing"><br></p></div></div></section>
+</section>
+<footer><p><a href="https://medium.com/p/fcad7c58350e">View original.</a></p><p>Exported from <a href="https://medium.com">Medium</a> on April 5, 2023.</p></footer></article></body></html>

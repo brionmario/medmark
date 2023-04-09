@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>OAuth 2.0 Authorization code flow React SPA demo using WSO2 Identity Server</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">OAuth 2.0 Authorization code flow React SPA demo using WSO2 Identity Server</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+This blog post will help you test out the OAuth2 authorization code flow in a React SPA application using the WSO2 Identity Server.
+</section>
+<section data-field="body" class="e-content">
+<section name="80fb" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="1452" id="1452" class="graf graf--h3 graf--leading graf--title">OAuth 2.0 Authorization code flow React SPA demo using WSO2 Identity Server</h3><p name="2ba1" id="2ba1" class="graf graf--p graf-after--h3">This blog post will help you test out the OAuth2 authorization code flow in a React SPA application using the WSO2 Identity Server.</p><blockquote name="834a" id="834a" class="graf graf--blockquote graf-after--p">Read more about the OAuth 2.0 Authorization Code Grant from <a href="https://is.docs.wso2.com/en/latest/learn/authorization-code-grant/" data-href="https://is.docs.wso2.com/en/latest/learn/authorization-code-grant/" class="markup--anchor markup--blockquote-anchor" rel="noopener" target="_blank">here</a></blockquote><p name="0517" id="0517" class="graf graf--p graf-after--blockquote"><strong class="markup--strong markup--p-strong">Pre-requisites</strong></p><ol class="postList"><li name="92c5" id="92c5" class="graf graf--li graf-after--p">Install <a href="https://nodejs.org/en/download/" data-href="https://nodejs.org/en/download/" class="markup--anchor markup--li-anchor" rel="noopener nofollow noopener" target="_blank">node</a> if you haven’t already(npm is already bundled with node).</li><li name="60a6" id="60a6" class="graf graf--li graf-after--li">A running Identity Server. (If you want to build from source follow the instructions listed <a href="https://github.com/wso2/product-is" data-href="https://github.com/wso2/product-is" class="markup--anchor markup--li-anchor" rel="noopener nofollow noopener" target="_blank">here</a>).</li><li name="9df2" id="9df2" class="graf graf--li graf-after--li">IDE or code editor of your choice.</li></ol><p name="4115" id="4115" class="graf graf--p graf-after--li"><strong class="markup--strong markup--p-strong">Setting up a service provider in WSO2 Identity Server.</strong></p><p name="ded7" id="ded7" class="graf graf--p graf-after--p">Log in to the management console <a href="https://localhost:9443/carbon" data-href="https://localhost:9443/carbon" class="markup--anchor markup--p-anchor" target="_blank">https://localhost:9443/carbon</a></p><p name="56df" id="56df" class="graf graf--p graf-after--p">User Service Providers, click on +Add and create a new service provider.</p><figure name="4935" id="4935" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Z7rCncgTk8CyubIxl2bj_Q.png" data-width="3824" data-height="2006" src="https://cdn-images-1.medium.com/max/800/1*Z7rCncgTk8CyubIxl2bj_Q.png"><figcaption class="imageCaption">Create a Service Provider</figcaption></figure><p name="80f6" id="80f6" class="graf graf--p graf-after--figure">In the edit view, expand the “Inbound Authentication Configuration” section, and further expand the “OAuth/OpenID Connect Configuration”.And click on “Configure”.</p><figure name="380a" id="380a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*SynoQXI02y06qiOioh3HEw.png" data-width="3826" data-height="1968" src="https://cdn-images-1.medium.com/max/800/1*SynoQXI02y06qiOioh3HEw.png"><figcaption class="imageCaption">Configuring OAuth/OIDC</figcaption></figure><p name="6752" id="6752" class="graf graf--p graf-after--figure">In the settings page,</p><ol class="postList"><li name="bcb5" id="bcb5" class="graf graf--li graf-after--p">Select OAuth Version as 2.0</li><li name="db48" id="db48" class="graf graf--li graf-after--li">Select “Code” as the grant type.</li><li name="237a" id="237a" class="graf graf--li graf-after--li">And add the callback URL. (The sample runs on <a href="https://localhost:9000" data-href="https://localhost:9000" class="markup--anchor markup--li-anchor" target="_blank">https://localhost:9000</a>, therefore the callback URL has to be <a href="https://localhost:9000/login" data-href="https://localhost:9000/login" class="markup--anchor markup--li-anchor" target="_blank">https://localhost:9000/login</a>).</li><li name="5f83" id="5f83" class="graf graf--li graf-after--li">Click on the “Update” button.</li></ol><figure name="db30" id="db30" class="graf graf--figure graf-after--li"><img class="graf-image" data-image-id="1*0thnBBAvC9rwZRsSitIDdQ.png" data-width="3826" data-height="2010" src="https://cdn-images-1.medium.com/max/800/1*0thnBBAvC9rwZRsSitIDdQ.png"><figcaption class="imageCaption">OAuth/OIDC Settings</figcaption></figure><p name="814f" id="814f" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Setting up the demo app.</strong></p><p name="8a9c" id="8a9c" class="graf graf--p graf-after--p">You can fork the sample repo or directly clone and start working on it, but I suggest you create your own fork.</p><pre name="6e22" id="6e22" class="graf graf--pre graf-after--p">git clone <a href="https://github.com/brionmario/is-samples.git" data-href="https://github.com/brionmario/is-samples.git" class="markup--anchor markup--pre-anchor" rel="nofollow noopener" target="_blank">https://github.com/brionmario/is-samples.git</a><br>cd is-samples/react-oidc<br>npm install</pre><p name="d2f4" id="d2f4" class="graf graf--p graf-after--pre">After all the node dependencies are being installed, you can configure the app settings.</p><p name="1fc5" id="1fc5" class="graf graf--p graf-after--p">Open the source code using an IDE/code editor and all the app configurations are available under the config.js file.</p><p name="df5e" id="df5e" class="graf graf--p graf-after--p">Follow the below steps to set up the application.</p><ol class="postList"><li name="693f" id="693f" class="graf graf--li graf-after--p">Copy the “OAuth Client Key” and “OAuth Client Secret” from the service provider that you just created.</li></ol><figure name="e26d" id="e26d" class="graf graf--figure graf-after--li"><img class="graf-image" data-image-id="1*3r0blRF6ZJYOn8pKIMSqEQ.png" data-width="3290" data-height="1214" src="https://cdn-images-1.medium.com/max/800/1*3r0blRF6ZJYOn8pKIMSqEQ.png"><figcaption class="imageCaption">Retrieving the Client ID and Client Secret</figcaption></figure><p name="9859" id="9859" class="graf graf--p graf-after--figure">2. Modify the CLIENT_ID and CLIENT_SECRET attributes of the config.js file.</p><figure name="5514" id="5514" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/brionmario/9e0f83f09ba7294ae5982cc98bba9375.js"></script><figcaption class="imageCaption">App Config</figcaption></figure><p name="1533" id="1533" class="graf graf--p graf-after--figure">3. Configure IS to allow our application to access the APIs.</p><p name="b44f" id="b44f" class="graf graf--p graf-after--p">Since we are running our application on <a href="https://localhost:9000" data-href="https://localhost:9000" class="markup--anchor markup--p-anchor" target="_blank">https://localhost:9000</a>, IS will automatically block requests made to the IS endpoints. In order to allow CORS requests, please put the following CORS filter to the following config file in WSO2 Identity Server distribution pack.</p><pre name="90aa" id="90aa" class="graf graf--pre graf-after--p">&lt;IS_HOME&gt;/repository/resources/conf/templates/repository/conf/tomcat/web.xml.j2</pre><figure name="6927" id="6927" class="graf graf--figure graf--iframe graf-after--pre"><script src="https://gist.github.com/brionmario/304f9e6391a38067c7b10f3a11f61e28.js"></script><figcaption class="imageCaption">CORS Filter</figcaption></figure><p name="b851" id="b851" class="graf graf--p graf-after--figure">4. Run the application.</p><p name="167c" id="167c" class="graf graf--p graf-after--p">From inside the react-oidc folder, execute the following command to run the application using webpack dev server.</p><pre name="03db" id="03db" class="graf graf--pre graf-after--p">npm run demo</pre><p name="3cb0" id="3cb0" class="graf graf--p graf-after--pre">or if you are using command prompt or powershell, use the following commands.</p><pre name="ddf1" id="ddf1" class="graf graf--pre graf-after--p"># For command prompt<br>npm run demo-cmd</pre><pre name="f744" id="f744" class="graf graf--pre graf-after--pre">#For power shell<br>npm run demo-pshell</pre><p name="e5f2" id="e5f2" class="graf graf--p graf-after--pre">If the browser window doesn’t open automatically, manually navigate to the <a href="https://localhost:9000" data-href="https://localhost:9000" class="markup--anchor markup--p-anchor" target="_blank">https://localhost:9000</a>.</p><p name="f580" id="f580" class="graf graf--p graf-after--p">The blow screen will initially be presented to you if everything goes as expected 😁.</p><figure name="464a" id="464a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*XHiIlzNedeFFI2Fuk8hRVw.png" data-width="3818" data-height="2140" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*XHiIlzNedeFFI2Fuk8hRVw.png"><figcaption class="imageCaption">Initial Window</figcaption></figure><p name="2617" id="2617" class="graf graf--p graf-after--figure">Click on the “LOGIN” button and you will be redirected to the WSO2 Identity Server authentication page. Enter your credentials and click on “CONTINUE”.</p><figure name="7a7e" id="7a7e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*6qO406jZxs7tOMECH0oqVg.png" data-width="3826" data-height="2148" src="https://cdn-images-1.medium.com/max/800/1*6qO406jZxs7tOMECH0oqVg.png"><figcaption class="imageCaption">WSO2 Identity Server authentication page</figcaption></figure><p name="4690" id="4690" class="graf graf--p graf-after--figure">If the login is successful, you will see the “Token Response” and the “ID Token Response” on the UI.</p><figure name="057a" id="057a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*9n5bY6aCMryqcu6SVDE6tw.png" data-width="3816" data-height="2144" src="https://cdn-images-1.medium.com/max/800/1*9n5bY6aCMryqcu6SVDE6tw.png"><figcaption class="imageCaption">Responses</figcaption></figure><p name="e1ca" id="e1ca" class="graf graf--p graf-after--figure">Explore the source code further especially the API requests under the actions folder. If you have any issues or concerns, feel free to raise them at <a href="https://github.com/brionmario/is-samples/issues" data-href="https://github.com/brionmario/is-samples/issues" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://github.com/brionmario/is-samples/issues</a>.</p><p name="7395" id="7395" class="graf graf--p graf-after--p graf--trailing">Signing off… ✌️❤️</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@brionmario" class="p-author h-card">Brion Mario</a> on <a href="https://medium.com/p/5829b890a6d4"><time class="dt-published" datetime="2020-03-17T08:10:29.723Z">March 17, 2020</time></a>.</p><p><a href="https://medium.com/@brionmario/oauth-2-0-authorization-code-flow-react-spa-demo-using-wso2-identity-server-5829b890a6d4" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on April 5, 2023.</p></footer></article></body></html>

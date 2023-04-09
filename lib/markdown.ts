@@ -29,50 +29,54 @@ import {
   addEmbeddedYoutubeRule,
   addFencedLinkRule,
   addImageFigcaptionRule,
+  addParseCodeBlocksRule,
+  addParseFigcaptionLinksRule,
   addPreAndCodeRule,
   addTitleRule,
   removeTags,
   registerPlugins,
-  addParseCodeBlocksRule,
-  addParseFigcaptionLinksRule,
 } from './turndown';
 import {MedMarkTemplateOptions} from './models';
 
-// global placeholder allowing us to pass in options from the template...
-let templateOptions: MedMarkTemplateOptions = {};
-
 const turnDownOptions: TurndownService.Options = {
-  /**
-   * Code block style to use. Can be set to "indented" | "fenced".
-   */
   codeBlockStyle: 'fenced',
 };
 
-const turndownService: TurndownService = new TurndownService(turnDownOptions);
+/**
+ * Creates a new TurndownService instance with the default plugins and options.
+ * @param plugins - Additional Turndown plugins to use.
+ * @param options - Additional options to pass to the template.
+ * @returns The TurndownService instance.
+ */
+function createTurndownService(plugins: TurndownService.Plugin[], options: MedMarkTemplateOptions): TurndownService {
+  const turndownService: TurndownService = new TurndownService(turnDownOptions);
 
-// Register plugins
-registerPlugins(turndownService, [gfm]);
+  registerPlugins(turndownService, plugins);
+  removeTags(turndownService, ['style', 'script', 'meta', 'img']);
+  addEmbeddedYoutubeRule(turndownService);
+  addEmbeddedTweetRule(turndownService);
+  addImageFigcaptionRule(turndownService);
+  addParseFigcaptionLinksRule(turndownService);
+  addParseCodeBlocksRule(turndownService, options);
+  addFencedLinkRule(turndownService);
+  addPreAndCodeRule(turndownService);
+  addTitleRule(turndownService);
+  return turndownService;
+}
 
-// Removals.
-removeTags(turndownService, ['style', 'script', 'meta', 'img']);
-
-// Addition Rules.
-addEmbeddedYoutubeRule(turndownService);
-addEmbeddedTweetRule(turndownService);
-addImageFigcaptionRule(turndownService);
-addParseFigcaptionLinksRule(turndownService);
-addParseCodeBlocksRule(turndownService, templateOptions);
-addFencedLinkRule(turndownService);
-addPreAndCodeRule(turndownService);
-addTitleRule(turndownService);
-
-// takes the code from the jobs page and turns it into markdown so we can show it on the posting page
-// TODO: keep headings, lists, etc... everything else should be stripped
-// No buttons, no links, no images...
-function transformHtmlToMarkdown(code: string, templateOpts: MedMarkTemplateOptions): string {
-  templateOptions = templateOpts;
+/**
+ * Transforms the input HTML code into Markdown.
+ * @param code - The HTML code to transform.
+ * @param options - Additional options to pass to the template.
+ * @param plugins - Additional Turndown plugins to use.
+ * @returns The transformed Markdown code.
+ */
+export function transformHtmlToMarkdown(
+  code: string,
+  options: MedMarkTemplateOptions = {},
+  plugins: TurndownService.Plugin[] = [gfm],
+): string {
+  const turndownService: TurndownService = createTurndownService(plugins, options);
 
   return turndownService.turndown(code);
 }
-
-export default transformHtmlToMarkdown;

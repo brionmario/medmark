@@ -28,7 +28,7 @@ import request from 'request';
 import fs from 'fs';
 import cheerio from 'cheerio';
 import mkdirp from 'mkdirp';
-import transformHtmlToMarkdown from './markdown';
+import {transformHtmlToMarkdown} from './markdown';
 import press from './press';
 import Reporter from './reporter';
 import debug from './debug';

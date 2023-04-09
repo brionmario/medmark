@@ -23,30 +23,34 @@
  */
 
 import {extname} from 'path';
-import fetch from 'node-fetch';
+import fetch, {Response} from 'node-fetch';
 import MedmarkSilentException from './exceptions/medmark-silent-exception';
 
 /**
- * Get the raw gist from github.
+ * Get the raw gist from GitHub.
+ *
+ * @param gistUrl - URL of the gist.
+ * @returns Promise containing the raw gist text.
+ * @throws MedmarkSilentException if the request fails.
  */
-export async function getRawGist(gistUrl) {
-  let newUrl = gistUrl.replace('github.com', 'githubusercontent.com');
+async function getRawGist(gistUrl: string): Promise<string> {
+  let url: string = gistUrl.replace('github.com', 'githubusercontent.com');
 
-  // remove suffix (like .js) (maybe use it for code fencing later...)
-  // FIXME: this is hacky
-  const gistID = newUrl.split('/')[4]; // FIXME: guard for error
+  // Remove suffix (like .js) (maybe use it for code fencing later...)
+  // FIXME: This is hacky
+  const gistID: string = url.split('/')[4]; // FIXME: Guard for error
+
   if (gistID.includes('.')) {
-    const ext = extname(gistID);
-    newUrl = newUrl.replace(ext, ''); // srip extension (needed for raw fetch to work)
+    const ext: string = extname(gistID);
+    url = url.replace(ext, ''); // Strip extension (needed for raw fetch to work)
   }
 
-  newUrl += '/raw';
+  url = `${url}/raw`;
 
-  // make the call
-  const response = await fetch(newUrl);
+  const response: Response = await fetch(url);
 
   if (!response.ok) {
-    throw new MedmarkSilentException(`An error occured while getting the Gist: ${response.statusText}`);
+    throw new MedmarkSilentException(`An error occurred while getting the Gist: ${response.statusText}`);
   }
 
   return response.text();
@@ -54,15 +58,16 @@ export async function getRawGist(gistUrl) {
 
 /**
  * Attempts to take gist script tags, then downloads the raw content, and places in <pre> tag which will be converted to
- * fenced block (```) by turndown
+ * fenced block (```) by Turndown.
  *
- * @param {*} $ - Document.
- * @returns Gists.
+ * @param $ - Document.
+ * @param reporter - The reporter object.
+ * @returns Promise containing an array of resolved Promises.
  */
-export async function inlineGists($, reporter) {
-  // get all script tags on thet page
-  // FIXME: can do away with promises here entirely?
-  const promises = [];
+export async function inlineGists($: any, reporter: any): Promise<Array<Promise<void>>> {
+  // Get all script tags on the page
+  // FIXME: Can do away with promises here entirely?
+  const promises: Array<Promise<void>> = [];
 
   $('script').each(async function () {
     const prom = new Promise<void>(async (resolve, reject) => {
@@ -71,16 +76,16 @@ export async function inlineGists($, reporter) {
 
       if (isGist) {
         try {
-          // console.log('feching raw gist source for: ', src);
+          // console.log('Fetching raw gist source for: ', src);
           reporter.report.gists.attempted.push(src);
           const rawGist = await getRawGist(src);
           reporter.report.gists.succeeded.push(src);
 
-          // replace rawGist in markup
-          // FIXME: just modify this in turndown?
-          const inlineCode = $(`<pre>${rawGist}</pre>`); // this turns into ``` codefence
+          // Replace rawGist in markup
+          // FIXME: Just modify this in Turndown?
+          const inlineCode = $(`<pre>${rawGist}</pre>`); // This turns into ``` codefence
 
-          // FIXME: guard to ensure <figure> parent is removed
+          // FIXME: Guard to ensure <figure> parent is removed
           // Replace the <figure> parent node with code fence
           $(this).parent().replaceWith(inlineCode);
 
@@ -91,7 +96,7 @@ export async function inlineGists($, reporter) {
         }
       }
 
-      // FIXME: if this is not a Gist, resole(). Else the operation will hang if there are no Gists in the post.
+      // FIXME: If this is not a Gist, resolve(). Else the operation will hang if there are no Gists in the post.
       resolve();
     });
 
@@ -100,5 +105,3 @@ export async function inlineGists($, reporter) {
 
   return Promise.all(promises);
 }
-
-export default inlineGists;

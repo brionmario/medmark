@@ -69,3 +69,117 @@ export enum MedMarkImageStorageStrategy {
    */
   REMOTE = 'REMOTE',
 }
+
+/**
+ * Interface for the front matter object.
+ */
+export interface MedMarkTemplateFrontMatter {
+  /**
+   * The authors of the blog post.
+   */
+  authors?: string[];
+  /**
+   * The URL for the banner image of the blog post.
+   */
+  bannerImage?: string;
+  /**
+   * The categories associated with the blog post.
+   */
+  categories?: string[];
+  /**
+   * The date the blog post was published.
+   */
+  date: string;
+  /**
+   * The description of the blog post.
+   */
+  description?: string;
+  /**
+   * Indicates whether the blog post is a draft.
+   */
+  draft?: boolean;
+  /**
+   * The URLs for all the images in the blog post.
+   */
+  images?: string[];
+  /**
+   * The URL for the Open Graph image of the blog post.
+   */
+  ogImage?: string;
+  /**
+   * The estimated reading time of the blog post in minutes.
+   */
+  readingTime?: number;
+  /**
+   * The slug for the blog post.
+   */
+  slug: string;
+  /**
+   * The tags associated with the blog post.
+   */
+  tags?: string[];
+  /**
+   * The title of the blog post.
+   */
+  title: string;
+}
+
+/**
+ * Interface for the template render options object.
+ */
+export interface MedMarkTemplateRenderOptions {
+  /**
+   * The authors of the blog post.
+   */
+  authors?: string[];
+  /**
+   * THe body of the blog post.
+   */
+  body?: string;
+  /**
+   * The categories associated with the blog post.
+   */
+  categories?: string[];
+  /**
+   * The description of the blog post.
+   */
+  description?: string;
+  /**
+   * Indicates whether the blog post is a draft.
+   */
+  draft?: boolean;
+  /**
+   * Images associated with the blog post.
+   */
+  images?: MedMarkTemplateRenderOptionsImage[];
+  /**
+   * Published date of the blog post.
+   */
+  published?: string;
+  /**
+   * The estimated reading time of the blog post in minutes.
+   */
+  readingTime?: number;
+  /**
+   * The tags associated with the blog post.
+   */
+  tags?: string[];
+  /**
+   * The title of the blog post.
+   */
+  title: string;
+  /**
+   * The title of the blog post for the slug.
+   */
+  titleForSlug?: string;
+}
+
+/**
+ * Interface for the template render options object.
+ */
+export interface MedMarkTemplateRenderOptionsImage {
+  /**
+   * The URL for the image.
+   */
+  mediumUrl: string;
+}

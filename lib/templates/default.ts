@@ -23,57 +23,75 @@
  */
 
 import YAML from 'json-to-pretty-yaml';
+import {
+  MedMarkTemplateOptions,
+  MedMarkTemplateFrontMatter,
+  MedMarkTemplateRenderOptions,
+  MedMarkTemplateRenderOptionsImage,
+} from '../models';
 
 export default {
   /**
    * Returns an object with default options for rendering markdown.
-   * @returns {Object} Object containing default options.
+   * @returns Object containing default options.
    */
-  getOptions() {
+  getOptions(): MedMarkTemplateOptions {
     return {
-      defaultCodeBlockLanguage: 'js', // Set default language for code blocks.
-      folderForEachSlug: true, // Create a separate folder for each blog post.
-      imagePath: '/resources', // Path for images referenced in markdown files.
-      imageStorageStrategy: 'REMOTE', // Where to store images.
+      defaultCodeBlockLanguage: 'js',
+      folderForEachSlug: true,
+      imagePath: '/resources',
+      imageStorageStrategy: 'REMOTE',
     };
   },
-
   /**
    * Takes a data object and returns a string of front matter and markdown body.
-   * @param {Object} data Data object containing blog post information.
-   * @returns {string} String containing front matter and markdown.
+   * @param data Data object containing blog post information.
+   * @returns String containing front matter and markdown.
    */
-  render(data) {
-    // Convert published date to YYYY-MM-DD format.
-    const date = new Date(data.published);
-    const prettyDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date
+  render({
+    published,
+    titleForSlug,
+    title,
+    description,
+    authors,
+    readingTime,
+    draft,
+    categories,
+    tags,
+    images,
+    body,
+  }: MedMarkTemplateRenderOptions): string {
+    const date: Date = new Date(published);
+    const prettyDate: string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
       .getDate()
       .toString()
-      .padStart(2, "0")}`;
+      .padStart(2, '0')}`;
+
+    const {mediumUrl: bannerImage = '', mediumUrl: ogImage = ''} = images[0] ?? {};
 
     /* eslint-disable sort-keys */
-    const frontMatterAsJSON = {
-      slug: `/posts/${data.titleForSlug}/`,
+    const frontMatterAsJSON: MedMarkTemplateFrontMatter = {
+      slug: `/posts/${titleForSlug}/`,
       date: prettyDate,
-      title: data.title,
-      description: data.description,
-      authors: data.authors,
-      readingTime: data.readingTime,
-      draft: data.draft,
-      categories: data.categories,
-      tags: data.tags,
-      bannerImage: data.images.map(image => image.mediumUrl)[0],
-      ogImage: data.images.map(image => image.mediumUrl)[0],
-      images: data.images.map(image => image.mediumUrl),
+      title,
+      description,
+      authors,
+      readingTime,
+      draft,
+      categories,
+      tags,
+      bannerImage,
+      ogImage,
+      images: images.map((image: MedMarkTemplateRenderOptionsImage) => image.mediumUrl),
     };
     /* eslint-enable sort-keys */
 
-    const frontMatter = `\
+    const frontMatter: string = `\
 ---
 ${YAML.stringify(frontMatterAsJSON)}
 ---
 
-${data.body}
+${body}
 `;
 
     return frontMatter;

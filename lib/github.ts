@@ -60,47 +60,49 @@ async function getRawGist(gistUrl: string): Promise<string> {
  * Attempts to take gist script tags, then downloads the raw content, and places in <pre> tag which will be converted to
  * fenced block (```) by Turndown.
  *
- * @param $ - Document.
+ * @param document - Document.
  * @param reporter - The reporter object.
  * @returns Promise containing an array of resolved Promises.
  */
-export async function inlineGists($: any, reporter: any): Promise<Array<Promise<void>>> {
+export async function inlineGists(document: any, reporter: any): Promise<void[]> {
   // Get all script tags on the page
   // FIXME: Can do away with promises here entirely?
   const promises: Array<Promise<void>> = [];
 
-  $('script').each(async function () {
-    const prom = new Promise<void>(async (resolve, reject) => {
-      const src = $(this).attr('src');
-      const isGist = src.includes('gist');
+  document('script').each(async function () {
+    const gistPromise: Promise<void> = new Promise<void>(
+      async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => {
+        const src: string = document(this).attr('src') || '';
+        const isGist: boolean = src.includes('gist');
 
-      if (isGist) {
-        try {
-          // console.log('Fetching raw gist source for: ', src);
-          reporter.report.gists.attempted.push(src);
-          const rawGist = await getRawGist(src);
-          reporter.report.gists.succeeded.push(src);
+        if (isGist) {
+          try {
+            // console.log('Fetching raw gist source for: ', src);
+            reporter.report.gists.attempted.push(src);
+            const rawGist: string = await getRawGist(src);
+            reporter.report.gists.succeeded.push(src);
 
-          // Replace rawGist in markup
-          // FIXME: Just modify this in Turndown?
-          const inlineCode = $(`<pre>${rawGist}</pre>`); // This turns into ``` codefence
+            // Replace rawGist in markup.  This turns into ``` codefence.
+            // FIXME: Just modify this in Turndown?
+            const inlineCode: string = document(`<pre>${rawGist}</pre>`);
 
-          // FIXME: Guard to ensure <figure> parent is removed
-          // Replace the <figure> parent node with code fence
-          $(this).parent().replaceWith(inlineCode);
+            // FIXME: Guard to ensure <figure> parent is removed
+            // Replace the <figure> parent node with code fence
+            document(this).parent().replaceWith(inlineCode);
 
-          resolve();
-        } catch (e) {
-          reporter.report.gists.failed.push(src);
-          reject(e);
+            resolve();
+          } catch (e) {
+            reporter.report.gists.failed.push(src);
+            reject(e);
+          }
         }
-      }
 
-      // FIXME: If this is not a Gist, resolve(). Else the operation will hang if there are no Gists in the post.
-      resolve();
-    });
+        // FIXME: If this is not a Gist, resolve(). Else the operation will hang if there are no Gists in the post.
+        resolve();
+      },
+    );
 
-    promises.push(prom);
+    promises.push(gistPromise);
   });
 
   return Promise.all(promises);

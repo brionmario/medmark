@@ -40,31 +40,31 @@ program
   .action(async () => {
     const {output, input, template, drafts, skip} = await inquirer.prompt([
       {
-        type: 'input',
-        name: 'input',
         message: 'Enter the path to the `posts` folder of the medium exported archive',
+        name: 'input',
+        type: 'input',
       },
       {
-        type: 'input',
-        name: 'output',
-        message: 'Enter destination folder for output files (default is "./")',
         default: 'output',
+        message: 'Enter destination folder for output files (default is "./")',
+        name: 'output',
+        type: 'input',
       },
       {
-        type: 'input',
-        name: 'template',
         message: 'Enter the path to the template file',
-      },
-      {
-        type: 'confirm',
-        name: 'drafts',
-        message: 'Do you want to export drafts as well?',
-        default: false,
-      },
-      {
+        name: 'template',
         type: 'input',
-        name: 'skip',
+      },
+      {
+        default: false,
+        message: 'Do you want to export drafts as well?',
+        name: 'drafts',
+        type: 'confirm',
+      },
+      {
         message: 'Enter a comma-separated list of files to skip',
+        name: 'skip',
+        type: 'input',
       },
     ]);
 
@@ -74,16 +74,16 @@ program
       true,
     );
 
-    const _skip = skip && skip.split(',');
+    const toSkip: string[] = skip && skip.split(',');
 
     press.print('💡 Following context has been initialized:');
     press.printItem(`⬇️ INPUT: ${input}`, true);
     press.printItem(`⬆️ OUTPUT (-o): ${output}`);
     press.printItem(`💅 TEMPLATE (-t): ${template || 'none'}`);
-    press.printItem(`❌ TO SKIP (-s): ${_skip || 'none'}`);
+    press.printItem(`❌ TO SKIP (-s): ${toSkip || 'none'}`);
     press.printItem(`🚧 SHOULD EXPORT DRAFTS? (-d): ${drafts}`);
 
     debug.initialize();
-    convert(input, output, template, drafts, _skip);
+    convert(input, output, template, drafts, toSkip);
   })
   .parse(process.argv);

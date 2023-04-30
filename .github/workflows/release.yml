@@ -10,6 +10,10 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 jobs:
   release:
     name: 📦 Release
@@ -57,5 +61,5 @@ jobs:
           version: pnpm version:packages
           commit: 'chore(release): version packages 🦋'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+          NPM_TOKEN: ${{ env.NPM_TOKEN }}

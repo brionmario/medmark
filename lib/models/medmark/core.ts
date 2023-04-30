@@ -66,7 +66,7 @@ export interface MedmarkOptions {
   /**
    * Strategy to use for storing images.
    */
-  imageStorageStrategy?: 'REMOTE' | 'LOCAL';
+  imageStorageStrategy?: MedmarkImageStorageStrategy;
 }
 
 export type MedmarkParsedDocument = any;

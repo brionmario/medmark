@@ -44,9 +44,13 @@ export interface MedmarkTemplate {
  */
 export interface MedmarkTemplateRenderOptions extends Omit<MedmarkFrontMatter, 'images'> {
   /**
-   * THe body of the blog post.
+   * The body of the blog post.
    */
   body?: string;
+  /**
+   * The raw body of the blog post.
+   */
+  bodyRaw?: string;
   /**
    * Images associated with the blog post.
    */
@@ -55,6 +59,10 @@ export interface MedmarkTemplateRenderOptions extends Omit<MedmarkFrontMatter, '
    * Published date of the blog post.
    */
   published?: string;
+  /**
+   * Sub title of the blog post.
+   */
+  subtitle?: string;
   /**
    * The title of the blog post for the slug.
    */

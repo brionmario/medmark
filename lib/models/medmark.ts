@@ -183,3 +183,33 @@ export interface MedMarkTemplateRenderOptionsImage {
    */
   mediumUrl: string;
 }
+
+/**
+ * Represents the author information in the front matter of a Medmark document.
+ */
+export interface MedmarkFrontMatterAuthor {
+  /**
+   * The author's bio.
+   */
+  bio: string;
+  /**
+   * The author's unique identifier.
+   */
+  id: string;
+  /**
+   * The URL or path to the author's profile image.
+   */
+  image: string;
+  /**
+   * The author's name.
+   */
+  name: string;
+  /**
+   * The author's Twitter screen name.
+   */
+  twitterScreenName: string;
+  /**
+   * The author's username.
+   */
+  username: string;
+}

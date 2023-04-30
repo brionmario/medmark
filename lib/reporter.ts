@@ -25,78 +25,155 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-const Reporter = (function () {
-  let instance;
-  const report = {
-    gists: {
-      attempted: [],
-      failed: [],
-      succeeded: [],
-    },
-    images: {
-      attempted: [],
-      failed: [],
-      succeeded: [],
-    },
-    posts: {
-      attempted: [],
-      drafts: [],
-      failed: [],
-      replies: [],
-      succeeded: [],
-    },
+/**
+ * Represents a report object with statistics for different types of content.
+ */
+interface Report {
+  /**
+   * Contains statistics for gists.
+   */
+  gists: {
+    /**
+     * Contains the number of attempted gists.
+     */
+    attempted: number[];
+    /**
+     * Contains the number of failed gists.
+     */
+    failed: number[];
+    /**
+     * Contains the number of succeeded gists.
+     */
+    succeeded: number[];
   };
+  /**
+   * Contains statistics for images.
+   */
+  images: {
+    /**
+     * Contains the number of attempted images.
+     */
+    attempted: number[];
+    /**
+     * Contains the number of failed images.
+     */
+    failed: number[];
+    /**
+     * Contains the number of succeeded images.
+     */
+    succeeded: number[];
+  };
+  /**
+   * Contains statistics for posts.
+   */
+  posts: {
+    /**
+     * Contains the number of attempted posts.
+     */
+    attempted: number[];
+    /**
+     * Contains the number of drafts.
+     */
+    drafts: number[];
+    /**
+     * Contains the number of failed posts.
+     */
+    failed: number[];
+    /**
+     * Contains the number of replies.
+     */
+    replies: number[];
+    /**
+     * Contains the number of succeeded posts.
+     */
+    succeeded: number[];
+  };
+}
 
-  function createInstance() {
-    const object = {
-      printPrettyReport() {
-        const _report = {
-          drafts: {
-            attempted: report.posts.drafts.length,
-          },
-          gists: {
-            attempted: report.gists.attempted.length,
-            failed: report.gists.failed.length,
-            failureReasons: report.gists.failed,
-            succeeded: report.gists.succeeded.length,
-          },
-          images: {
-            attempted: report.images.attempted.length,
-            failed: report.images.failed.length,
-            failureReasons: report.images.failed,
-            succeeded: report.images.succeeded.length,
-          },
-          posts: {
-            attempted: report.posts.attempted.length,
-            failed: report.posts.failed.length,
-            failureReasons: report.posts.failed,
-            succeeded: report.posts.succeeded.length,
-          },
-          replied: {
-            attempted: report.posts.replies.length,
-          },
-        };
+/**
+ * The Reporter class is a singleton that can be used to store and output reports on a variety of data types.
+ */
+class Reporter {
+  private static instance: Reporter;
 
-        console.table(_report);
+  report: Report;
+
+  private constructor() {
+    this.report = {
+      gists: {
+        attempted: [],
+        failed: [],
+        succeeded: [],
       },
-      report,
-      saveReportToFile(outputFolder) {
-        fs.writeFileSync(path.join(outputFolder, 'conversion_report.json'), JSON.stringify(report));
+      images: {
+        attempted: [],
+        failed: [],
+        succeeded: [],
+      },
+      posts: {
+        attempted: [],
+        drafts: [],
+        failed: [],
+        replies: [],
+        succeeded: [],
       },
     };
-
-    return object;
   }
 
-  return {
-    getInstance() {
-      if (!instance) {
-        instance = createInstance();
-      }
+  /**
+   * Returns the singleton instance of the Reporter class. If an instance does not exist, it will be created.
+   *
+   * @returns The Reporter singleton instance.
+   */
+  static getInstance(): Reporter {
+    if (!Reporter.instance) {
+      Reporter.instance = new Reporter();
+    }
 
-      return instance;
-    },
-  };
-})();
+    return Reporter.instance;
+  }
+
+  /**
+   * Outputs the current report in a pretty format to the console.
+   */
+  printPrettyReport(): void {
+    // eslint-disable-next-line no-console
+    console.table({
+      drafts: {
+        attempted: this.report.posts.drafts.length,
+      },
+      gists: {
+        attempted: this.report.gists.attempted.length,
+        failed: this.report.gists.failed.length,
+        failureReasons: this.report.gists.failed,
+        succeeded: this.report.gists.succeeded.length,
+      },
+      images: {
+        attempted: this.report.images.attempted.length,
+        failed: this.report.images.failed.length,
+        failureReasons: this.report.images.failed,
+        succeeded: this.report.images.succeeded.length,
+      },
+      posts: {
+        attempted: this.report.posts.attempted.length,
+        failed: this.report.posts.failed.length,
+        failureReasons: this.report.posts.failed,
+        succeeded: this.report.posts.succeeded.length,
+      },
+      replied: {
+        attempted: this.report.posts.replies.length,
+      },
+    });
+  }
+
+  /**
+   * Saves the current report to a file in JSON format.
+   *
+   * @param outputFolder - The folder where the report file should be saved.
+   */
+  saveReportToFile(outputFolder: string): void {
+    fs.writeFileSync(path.join(outputFolder, 'conversion_report.json'), JSON.stringify(this.report));
+  }
+}
 
 export default Reporter;

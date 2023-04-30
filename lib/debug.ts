@@ -24,7 +24,7 @@
 
 import fs from 'fs-extra';
 import {dirname, join, resolve} from 'path';
-import {MedMarkGlobal} from './models';
+import {MedMarkGlobal} from './models/medmark';
 
 /**
  * Defines the structure of the paths for the logs.

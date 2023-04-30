@@ -42,6 +42,7 @@ module.exports = {
   },
   plugins: ['@brionmario'],
   rules: {
+    'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
     'no-underscore-dangle': 'off',
   },
 };

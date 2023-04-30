@@ -28,7 +28,7 @@
 
 import TurndownService, {Node} from 'turndown';
 import {EMBEDDED_TWEET_HTML_SPIT_DELIMITER} from './constants';
-import {MedMarkTemplateOptions} from './models';
+import {MedMarkTemplateOptions} from './models/medmark';
 
 /**
  * Removes the specified HTML tags and their contents from the input HTML string using Turndown Service.

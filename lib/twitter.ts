@@ -22,20 +22,22 @@
  * SOFTWARE.
  */
 
-import fetch from 'node-fetch';
+import fetch, {Response} from 'node-fetch';
 import {EMBEDDED_TWEET_HTML_SPIT_DELIMITER} from './constants';
 
-async function embedTweets($) {
-  const promises = [];
+async function embedTweets(document: any): Promise<void[]> {
+  const promises: Promise<void>[] = [];
 
-  $('blockquote.twitter-tweet a').each(async function (i, item) {
-    const promise = new Promise<void>(async (resolve, reject) => {
-      const href = $(this).attr('href');
+  document('blockquote.twitter-tweet a').each(async function () {
+    const promise: Promise<void> = new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void) => {
+      const href: string = document(this).attr('href');
 
       // FIXME: TS ISSUE
-      const embedded: any = await fetch(`https://publish.twitter.com/oembed?url=${href}`).then(response => response.json());
+      const embedded: any = await fetch(`https://publish.twitter.com/oembed?url=${href}`).then((response: Response) =>
+        response.json(),
+      );
 
-      $(this).text(`${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}${embedded.html}${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}`);
+      document(this).text(`${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}${embedded.html}${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}`);
 
       resolve();
     });

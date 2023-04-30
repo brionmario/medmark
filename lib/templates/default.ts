@@ -28,7 +28,7 @@ import {
   MedMarkTemplateFrontMatter,
   MedMarkTemplateRenderOptions,
   MedMarkTemplateRenderOptionsImage,
-} from '../models';
+} from '../models/medmark';
 
 export default {
   /**

@@ -27,6 +27,7 @@ import {program} from 'commander';
 import inquirer from 'inquirer';
 import convert from './converter';
 import debug from './debug';
+import output from './output';
 import press from './press';
 
 program
@@ -38,7 +39,13 @@ program
   .option('-d, --drafts', 'Set flag to export drafts along with other posts')
   .option('-s, --skip <comma_separated_files>', 'Comma-separated list of files to skip')
   .action(async () => {
-    const {output, input, template, drafts, skip} = await inquirer.prompt([
+    const {
+      output: outputPath,
+      input: inputPath,
+      template: templatePath,
+      drafts,
+      skip,
+    } = await inquirer.prompt([
       {
         message: 'Enter the path to the `posts` folder of the medium exported archive',
         name: 'input',
@@ -68,22 +75,20 @@ program
       },
     ]);
 
-    press.print(
-      '=======================  💥 Welcome to Medium to md(x) converter 💥  =======================',
-      true,
-      true,
-    );
-
     const toSkip: string[] = skip && skip.split(',');
 
-    press.print('💡 Following context has been initialized:');
-    press.printItem(`⬇️ INPUT: ${input}`, true);
-    press.printItem(`⬆️ OUTPUT (-o): ${output}`);
-    press.printItem(`💅 TEMPLATE (-t): ${template || 'none'}`);
-    press.printItem(`❌ TO SKIP (-s): ${toSkip || 'none'}`);
-    press.printItem(`🚧 SHOULD EXPORT DRAFTS? (-d): ${drafts}`);
+    output.log({
+      bodyLines: [
+        `→ ⬇️ INPUT: ${inputPath}`,
+        `→ ⬆️ OUTPUT (-o): ${outputPath}`,
+        `→ 💅 TEMPLATE (-t): ${templatePath || 'none'}`,
+        `→ ❌ TO SKIP (-s): ${toSkip || 'none'}`,
+        `→ 🚧 SHOULD EXPORT DRAFTS? (-d): ${drafts}`,
+      ],
+      title: '💡 Following context has been initialized:',
+    });
 
     debug.initialize();
-    convert(input, output, template, drafts, toSkip);
+    convert(inputPath, outputPath, templatePath, drafts, toSkip);
   })
   .parse(process.argv);

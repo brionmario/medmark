@@ -24,6 +24,8 @@
 
 import fs from 'fs-extra';
 import {basename, join, resolve} from 'path';
+import {MediumApolloState, MediumPostMetadata} from './models/medium';
+import {MedmarkFrontMatterAuthor} from './models/medmark';
 
 /**
  * Scrape tags from the Apollo state from scraped metadata.
@@ -36,13 +38,13 @@ import {basename, join, resolve} from 'path';
  *    }
  * }
  *
- * @param {string} apolloState - Apollo state from scraped Medium Page.
+ * @param apolloState - Apollo state from scraped Medium Page.
  * @returns Set of tags as string arrays.
  */
-export const getTags = apolloState => {
-  const tags = [];
+export const getTags = (apolloState: MediumApolloState): string[] => {
+  const tags: string[] = [];
 
-  Object.keys(apolloState).forEach(key => {
+  Object.keys(apolloState).forEach((key: string) => {
     if (key.startsWith('Tag:')) {
       tags.push(key.split(':')[1]);
     }
@@ -57,13 +59,16 @@ export const getTags = apolloState => {
  * @remarks Medium currently doesn't support multiple authors.
  * Hence this function currently outputs only one author.
  *
- * @param {string} apolloState - Apollo state from scraped Medium Page.
- * @param {object} metadata - Metadata scraped Medium Page.
- * @returns Set of tags as string arrays.
+ * @param apolloState - Apollo state from scraped Medium Page.
+ * @param metadata - Metadata scraped Medium Page.
+ * @returns Set of authors as an array.
  */
-export const getAuthors = (apolloState, metadata) => {
-  let author = null;
-  const authorNameFromMeta = metadata.author.name;
+export const getAuthors = (
+  apolloState: MediumApolloState,
+  metadata: MediumPostMetadata,
+): MedmarkFrontMatterAuthor[] => {
+  let author: MedmarkFrontMatterAuthor = null;
+  const authorNameFromMeta: string = metadata.author.name;
 
   // FIXME: TS ISSUE
   Object.entries(apolloState).forEach(([key, value]: any) => {
@@ -73,8 +78,7 @@ export const getAuthors = (apolloState, metadata) => {
         id: value.id,
         image: `https://miro.medium.com/fit/c/176/176/${value.imageId}`,
         name: value.name,
-        // FIXME: Remove hardcoded value.
-        twitterScreenName: 'brion_mario',
+        twitterScreenName: value.twitterScreenName,
         username: value.username,
       };
     }
@@ -86,24 +90,26 @@ export const getAuthors = (apolloState, metadata) => {
 /**
  * Converts a text to a slug.
  *
- * @param {string} text - Text to convert.
+ * @param text - Text to convert.
  * @returns Slug.
  */
-export const convertToSlug = text =>
+export const convertToSlug = (text: string): string =>
   text
     .toLowerCase()
     .replace(/ /g, '-')
     .replace(/[^\w-]+/g, '');
 
 /**
+ * Writes the post to a file.
+ *
  * FIXME: get name from date + slug
- * @param {*} content
- * @param {*} oldFilePath
- * @param {*} outputFolder
+ * @param content
+ * @param oldFilePath
+ * @param outputFolder
  */
-export const writePostToFile = (content, oldFilePath, outputFolder) => {
-  const fileName = basename(oldFilePath, '.html');
-  const newPath = resolve(`${join(outputFolder, fileName)}.md`);
+export const writePostToFile = (content: string, oldFilePath: string, outputFolder: string): void => {
+  const fileName: string = basename(oldFilePath, '.html');
+  const newPath: string = resolve(`${join(outputFolder, fileName)}.md`);
 
   fs.writeFileSync(newPath, content);
 };

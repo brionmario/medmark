@@ -36,7 +36,7 @@ import {
   removeTags,
   registerPlugins,
 } from './turndown';
-import {MedMarkTemplateOptions} from './models';
+import {MedMarkTemplateOptions} from './models/medmark';
 
 const turnDownOptions: TurndownService.Options = {
   codeBlockStyle: 'fenced',

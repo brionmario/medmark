@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+import output from './output';
 import fetch from 'node-fetch';
 import fakeUa from 'fake-useragent';
 import request from 'request';
@@ -29,7 +30,6 @@ import fs from 'fs';
 import cheerio from 'cheerio';
 import mkdirp from 'mkdirp';
 import {transformHtmlToMarkdown} from './markdown';
-import press from './press';
 import Reporter from './reporter';
 import debug from './debug';
 import embedTweets from './twitter';
@@ -40,7 +40,7 @@ import {inlineGists} from './github';
 import logger from './logger';
 import DefaultTemplate from './templates/default';
 import {dirname, join, resolve, basename, extname} from 'path';
-import {MedMarkImageStorageStrategy} from './models';
+import {MedMarkImageStorageStrategy} from './models/medmark';
 
 const __internals__filename = resolve(module.filename);
 const __internals__dirname = dirname(__internals__filename);
@@ -48,7 +48,7 @@ const __internals__dirname = dirname(__internals__filename);
 const reporter = Reporter.getInstance();
 
 // handle promise errors
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error: string) => {
   logger.error(error);
 });
 
@@ -73,7 +73,7 @@ async function saveImagesToLocal(imageFolder, images) {
         const filePath = join(imageFolder, image.localName);
         mkdirp.sync(imageFolder); // fs.writeFileSync(p, images[0].binary, 'binary');
 
-        press.printItem(`Downloading image : ${image.mediumUrl} -> ${filePath}`, false, false, 0);
+        logger.info(`Downloading image : ${image.mediumUrl} -> ${filePath}`);
         reporter.report.images.attempted.push(image.mediumUrl);
         // request(image.mediumUrl).pipe(fs.createWriteStream(filePath)); // request image from medium CDN and save locally. TODO: add err handling
 
@@ -89,12 +89,7 @@ async function saveImagesToLocal(imageFolder, images) {
           .on('error', err => {
             logger.error(err);
 
-            press.printItem(
-              `An error occurred while downloading image : ${image.mediumUrl} -> ${filePath}`,
-              false,
-              false,
-              2,
-            );
+            logger.error(`An error occurred while downloading image : ${image.mediumUrl} -> ${filePath}`);
             reporter.report.images.failed.push(`${image.mediumUrl}->${filePath}`);
             reject(err);
           })
@@ -144,14 +139,20 @@ function getMediumImages(imageStorageStrategy, $, imageBasePath, postSlug) {
 }
 
 async function gatherPostData(content, options, filePath, postsToSkip) {
-  press.printItem(`Gathering post data started: ${filePath}`, false, false, 0);
+  output.note({
+    bodyLines: [filePath],
+    title: 'Gathering post data started',
+  });
 
   const $ = cheerio.load(content);
 
   try {
     await inlineGists($, reporter);
   } catch (e) {
-    press.printItem(`An error occurred while inlining Gists: ${filePath}, ${e}`, false, false, 2);
+    output.error({
+      bodyLines: [`File Path: ${filePath}`, `Stack Trace: ${e}`],
+      title: 'An error occurred while inlining Gists',
+    });
   }
 
   const filename = basename(filePath, '.html');
@@ -159,7 +160,7 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   const blogTitle = $('.graf--leading').first().text();
 
   if (postsToSkip && postsToSkip.some(post => blogTitle.startsWith(post))) {
-    press.printItem(`This is a reply, not a standalone post. Hence, skipping...`, false, false, 1);
+    logger.warn(`This is a reply, not a standalone post. Hence, skipping...`);
     reporter.report.posts.replies.push(filePath);
     // FIXME: consider setting type of err and then ignoring it at the higher level
     throw new MedmarkSilentException(`Reply post. Skip over this one: ${blogTitle}`);
@@ -188,7 +189,7 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   const isReplyPost = postBody.match(/inResponseToPostId":"[0-9a-z]+"/); // this is in markup for reply posts
 
   if (isReplyPost) {
-    press.printItem(`This is a reply, not a standalone post. Hence, skipping...`, false, false, 1);
+    logger.warn(`This is a reply, not a standalone post. Hence, skipping...`);
     reporter.report.posts.replies.push(filePath);
     // FIXME: consider setting type of err and then ignoring it at the higher level
     throw new MedmarkSilentException(`reply post. Skip over this one: ${titleForSlug}`);
@@ -230,7 +231,7 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
         tags = getTags(apolloState);
         authors = getAuthors(apolloState, metaData);
       } catch (e) {
-        press.printItem(`An error ocurred while parsing Apollo state from scaped metadata: ${e}`, false, false, 2);
+        logger.error(`An error ocurred while parsing Apollo state from scaped metadata: ${e}`);
       }
     }
   });
@@ -256,14 +257,14 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   try {
     await embedTweets($);
   } catch (e) {
-    press.printItem(`An error occurred while embedding tweets: ${filePath}`, false, false, 2);
+    logger.error(`An error occurred while embedding tweets: ${filePath}`);
   }
 
   let posts = null;
   try {
     posts = transformHtmlToMarkdown($('.section-content').html(), options);
   } catch (e) {
-    press.printItem(`An error occured while converting Html to Markdown: ${e}`, false, false, 2);
+    logger.error(`An error occured while converting Html to Markdown: ${e}`);
   }
 
   const post = {
@@ -291,23 +292,25 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
     template: templatePath,
   };
 
-  press.print('Converting: ', true, true);
-  press.printItem(`PATH: ${PATHS.file}`);
-
-  const loadedTemplateModule = PATHS.template && await import(resolve(PATHS.template));
+  const loadedTemplateModule = PATHS.template && (await import(resolve(PATHS.template)));
   const template = loadedTemplateModule?.default ?? DefaultTemplate;
 
   const options = template.getOptions();
 
   const filename = basename(PATHS.file, '.html');
 
-  press.printItem(`FILE: ${filename}`, false, true);
+  output.note({
+    bodyLines: [`PATH: ${PATHS.file}`, `FILE: ${filename}`],
+    title: 'Converting',
+  });
 
   if (filename.startsWith('draft')) {
     reporter.report.posts.drafts.push(PATHS.file);
 
     if (!exportDrafts) {
-      press.printItem(`This is a Draft. Export draft feature was not set. Hence, skipping...`, false, false, 1);
+      output.warn({
+        title: `This is a Draft. Export draft feature was not set. Hence, skipping...`,
+      });
       return;
     }
   }
@@ -338,28 +341,23 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
       // render post file to folder
       writePostToFile(output, PATHS.file, PATHS.output);
     } catch (e) {
-      press.printItem(`Successfully wrote the post to: ${output}`, false, false, 3);
+      logger.error(`Couldn't write the post to: ${output}`);
     }
 
     if (options.imageStorageStrategy === MedMarkImageStorageStrategy.LOCAL) {
       try {
         await saveImagesToLocal(imageFolder, postData.images);
       } catch (e) {
-        press.printItem(
-          `An error occurred while saving the images to local directory. Blog: ${postData.titleForSlug}`,
-          false,
-          false,
-          2,
-        );
+        logger.error(`An error occurred while saving the images to local directory. Blog: ${postData.titleForSlug}`);
       }
     }
 
     reporter.report.posts.succeeded.push(PATHS.file);
   } catch (error) {
     if (error instanceof MedmarkSilentException) {
-      press.printItem(error, false, false, 1);
+      logger.warn(error.toString());
     } else {
-      press.printItem(`An error occurred while performing the markdown conversion. Blog: ${error}`, false, false, 2);
+      logger.error(`An error occurred while performing the markdown conversion. Blog: ${error}`);
     }
 
     // re-throw if you want it to bubble up
@@ -376,7 +374,7 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
     template: templatePath,
   };
 
-  press.announceCheckpoint('🐱 Started converting.');
+  output.announceCheckpoint('🐱 Started converting.');
 
   if (!outputPath) {
     PATHS.output = '.';
@@ -396,7 +394,7 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
       if (file.endsWith('.html')) {
         promises.push(convertMediumFile(curFile, PATHS.output, PATHS.template, exportDrafts, postsToSkip));
       } else {
-        press.printItem(`Skipping ${curFile} because it is not an html file.`, false, false, 1);
+        logger.warn(`Skipping ${curFile} because it is not an html file.`);
       }
     });
   } else {
@@ -404,9 +402,9 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
   }
 
   try {
-    const result = await Promise.all(promises);
+    const result: any[] = await Promise.all(promises);
 
-    press.printItem(`Successfully converted ${result.length} files.`, false, true, 0);
+    output.success({title: `Successfully converted ${result.length} files.`});
     reporter.printPrettyReport();
     reporter.saveReportToFile(PATHS.output);
 
@@ -417,7 +415,7 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
     );
     logger.info(`Detailed output report named "conversion_report.json" can be found in the output folder.`);
   } catch (e) {
-    logger.error('Error during conversion!', e);
+    logger.error(`Error during conversion!: ${e}`);
   }
 }
 

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import {MedMarkGlobal} from '../lib/models';
+import {MedMarkGlobal} from '../lib/models/medmark';
 
 declare global {
   namespace NodeJS {

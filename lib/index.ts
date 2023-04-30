@@ -91,3 +91,5 @@ program
     convert(inputPath, outputPath, templatePath, drafts, toSkip);
   })
   .parse(process.argv);
+
+export * from './public-api';

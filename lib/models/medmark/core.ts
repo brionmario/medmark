@@ -37,18 +37,9 @@ export interface MedmarkGlobal {
 }
 
 /**
- * Enum to specify the image storage strategy for a Medium post converted to markdown.
+ * Type to specify the image storage strategy for a Medium post converted to markdown.
  */
-export enum MedmarkImageStorageStrategy {
-  /**
-   * Store images locally in the markdown file directory.
-   */
-  LOCAL = 'LOCAL',
-  /**
-   * Store images remotely, e.g. in a cloud storage service.
-   */
-  REMOTE = 'REMOTE',
-}
+export type MedmarkImageStorageStrategy = 'LOCAL' | 'REMOTE';
 
 export interface MedmarkOptions {
   /**
@@ -68,5 +59,3 @@ export interface MedmarkOptions {
    */
   imageStorageStrategy?: MedmarkImageStorageStrategy;
 }
-
-export type MedmarkParsedDocument = any;

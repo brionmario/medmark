@@ -22,31 +22,4 @@
  * SOFTWARE.
  */
 
-import fetch, {Response} from 'node-fetch';
-import {CheerioAPI} from 'cheerio';
-import {EMBEDDED_TWEET_HTML_SPIT_DELIMITER} from './constants';
-
-async function embedTweets($cheerio: CheerioAPI): Promise<void[]> {
-  const promises: Promise<void>[] = [];
-
-  $cheerio('blockquote.twitter-tweet a').each(async function () {
-    const promise: Promise<void> = new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void) => {
-      const href: string = $cheerio(this).attr('href');
-
-      // FIXME: TS ISSUE
-      const embedded: any = await fetch(`https://publish.twitter.com/oembed?url=${href}`).then((response: Response) =>
-        response.json(),
-      );
-
-      $cheerio(this).text(`${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}${embedded.html}${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}`);
-
-      resolve();
-    });
-
-    promises.push(promise);
-  });
-
-  return Promise.all(promises);
-}
-
-export default embedTweets;
+export {frontMatterToYaml} from './utils';

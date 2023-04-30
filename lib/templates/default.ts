@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-import YAML from 'json-to-pretty-yaml';
 import {MedmarkOptions} from '../models/medmark/core';
 import {
   MedmarkTemplate,
@@ -30,6 +29,7 @@ import {
   MedmarkTemplateRenderOptionsImage,
 } from '../models/medmark/template';
 import {MedmarkFrontMatter} from '../models/medmark/front-matter';
+import {frontMatterToYaml} from '../utils';
 
 const DefaultTemplate: MedmarkTemplate = {
   /**
@@ -89,7 +89,7 @@ const DefaultTemplate: MedmarkTemplate = {
 
     const frontMatter: string = `\
 ---
-${YAML.stringify(frontMatterAsJSON)}
+${frontMatterToYaml(frontMatterAsJSON)}
 ---
 
 ${body}

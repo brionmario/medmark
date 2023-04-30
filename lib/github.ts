@@ -24,6 +24,7 @@
 
 import {extname} from 'path';
 import fetch, {Response} from 'node-fetch';
+import {AnyNode, CheerioAPI, Cheerio} from 'cheerio';
 import MedmarkSilentException from './exceptions/medmark-silent-exception';
 
 /**
@@ -38,11 +39,11 @@ async function getRawGist(gistUrl: string): Promise<string> {
 
   // Remove suffix (like .js) (maybe use it for code fencing later...)
   // FIXME: This is hacky
-  const gistID: string = url.split('/')[4]; // FIXME: Guard for error
+  const gistId: string = url.split('/')[4]; // FIXME: Guard for error
 
-  if (gistID.includes('.')) {
-    const ext: string = extname(gistID);
-    url = url.replace(ext, ''); // Strip extension (needed for raw fetch to work)
+  if (gistId.includes('.')) {
+    const fileExtension: string = extname(gistId);
+    url = url.replace(fileExtension, ''); // Strip extension (needed for raw fetch to work)
   }
 
   url = `${url}/raw`;
@@ -60,19 +61,19 @@ async function getRawGist(gistUrl: string): Promise<string> {
  * Attempts to take gist script tags, then downloads the raw content, and places in <pre> tag which will be converted to
  * fenced block (```) by Turndown.
  *
- * @param document - Document.
+ * @param $cheerio - Document.
  * @param reporter - The reporter object.
  * @returns Promise containing an array of resolved Promises.
  */
-export async function inlineGists(document: any, reporter: any): Promise<void[]> {
+export async function inlineGists($cheerio: CheerioAPI, reporter: any): Promise<void[]> {
   // Get all script tags on the page
   // FIXME: Can do away with promises here entirely?
   const promises: Array<Promise<void>> = [];
 
-  document('script').each(async function () {
+  $cheerio('script').each(async function () {
     const gistPromise: Promise<void> = new Promise<void>(
       async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => {
-        const src: string = document(this).attr('src') || '';
+        const src: string = $cheerio(this).attr('src') || '';
         const isGist: boolean = src.includes('gist');
 
         if (isGist) {
@@ -84,11 +85,11 @@ export async function inlineGists(document: any, reporter: any): Promise<void[]>
 
             // Replace rawGist in markup.  This turns into ``` codefence.
             // FIXME: Just modify this in Turndown?
-            const inlineCode: string = document(`<pre>${rawGist}</pre>`);
+            const inlineCode: Cheerio<AnyNode> = $cheerio(`<pre>${rawGist}</pre>`);
 
             // FIXME: Guard to ensure <figure> parent is removed
             // Replace the <figure> parent node with code fence
-            document(this).parent().replaceWith(inlineCode);
+            $cheerio(this).parent().replaceWith(inlineCode);
 
             resolve();
           } catch (e) {

@@ -24,7 +24,6 @@
 
 import fetch, {Response} from 'node-fetch';
 import fakeUa from 'fake-useragent';
-import request from 'request';
 import fs, {WriteStream} from 'fs';
 import cheerio, {CheerioAPI, Element, Cheerio} from 'cheerio';
 import mkdirp from 'mkdirp';
@@ -40,7 +39,7 @@ import MedmarkSilentException from './exceptions/medmark-silent-exception';
 import {inlineGists} from './github';
 import logger from './logger';
 import DefaultTemplate from './templates/default';
-import {MedmarkImageStorageStrategy, MedmarkOptions, MedmarkParsedDocument} from './models/medmark/core';
+import {MedmarkImageStorageStrategy, MedmarkOptions} from './models/medmark/core';
 import {
   MedmarkTemplate,
   MedmarkTemplateRenderOptions,
@@ -113,21 +112,24 @@ async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRend
 
         const writer: WriteStream = fs.createWriteStream(imageFilePath);
 
-        request
-          .get(image.mediumUrl)
-          .on('complete', (response: any) => {
-            // FIXME: how do we measure success / failure here?
-            reporter.report.images.succeeded.push(`${image.mediumUrl}->${imageFilePath}`);
-            _resolve(response);
+        fetch(image.mediumUrl)
+          .then((response: Response) => {
+            if (response.ok) {
+              response.body.pipe(writer);
+              response.body.on('end', () => {
+                reporter.report.images.succeeded.push(`${image.mediumUrl}->${imageFilePath}`);
+                resolve();
+              });
+            } else {
+              throw new Error(`Received response status ${response.status}`);
+            }
           })
-          .on('error', (err: any) => {
-            logger.error(err);
-
+          .catch((error: string) => {
+            logger.error(error);
             logger.error(`An error occurred while downloading image : ${image.mediumUrl} -> ${imageFilePath}`);
             reporter.report.images.failed.push(`${image.mediumUrl}->${imageFilePath}`);
-            reject(err);
-          })
-          .pipe(writer);
+            reject(error);
+          });
       }),
   );
 
@@ -138,40 +140,38 @@ async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRend
  * Returns an array of image data for all images in a Medium post.
  *
  * @param imageStorageStrategy The strategy for storing images.
- * @param document The parsed HTML document of the Medium post.
+ * @param $cheerio The parsed HTML document of the Medium post.
  * @param imageBasePath The base path for saving images.
  * @param postSlug The slug of the Medium post.
  * @returns An array of image data objects.
  */
 function getMediumImages(
   imageStorageStrategy: MedmarkImageStorageStrategy,
-  document: MedmarkParsedDocument,
+  $cheerio: CheerioAPI,
   imageBasePath: string,
   postSlug: string,
 ): MedmarkTemplateRenderOptionsImage[] {
   const images: MedmarkTemplateRenderOptionsImage[] = [];
 
-  document('img.graf-image').each(async function (index: number) {
-    const imageName: string = document(this).attr('data-image-id');
-    const ext: string = extname(imageName);
+  $cheerio('img.graf-image').each(async function (index: number) {
+    const imageName: string = $cheerio(this).attr('data-image-id');
+    const imageExtension: string = extname(imageName);
 
     // get max resolution of image
-    const imgUrl: string = `https://cdn-images-1.medium.com/max/2600/${imageName}`;
+    const imageUrl: string = `https://cdn-images-1.medium.com/max/2600/${imageName}`;
 
-    const localImageName: string = `${postSlug}-${index}${ext}`; // some-post-name-01.jpg
+    const localImageName: string = `${postSlug}-${index}${imageExtension}`; // some-post-name-01.jpg
     const localImagePath: string = join(imageBasePath, localImageName); // full path including folder
 
-    const imgData: MedmarkTemplateRenderOptionsImage = {
+    images.push({
       localName: localImageName,
       localPath: localImagePath, // local path including filename we'll save it as
-      mediumUrl: imgUrl,
-    };
-
-    images.push(imgData);
+      mediumUrl: imageUrl,
+    });
 
     // Rewrite img urls in post if the storage strategy is local.
-    if (imageStorageStrategy === MedmarkImageStorageStrategy.LOCAL) {
-      document(this).attr('src', localImagePath);
+    if (imageStorageStrategy === 'LOCAL') {
+      $cheerio(this).attr('src', localImagePath);
     }
   });
 
@@ -198,9 +198,7 @@ async function gatherPostData(
     title: 'Gathering post data started',
   });
 
-  const $cheerio: /* The above code is not valid as it contains three different programming languages:
-  TypeScript, CheerioAPI, and */
-  CheerioAPI = cheerio.load(content);
+  const $cheerio: CheerioAPI = cheerio.load(content);
 
   try {
     await inlineGists($cheerio, reporter);
@@ -261,11 +259,11 @@ async function gatherPostData(
 
   const schemaTags: Cheerio<Element> = $cheerioBody('script[type="application/ld+json"]');
   // FIXME: TS ISSUE
-  const metaData: MediumPostMetadata = JSON.parse((schemaTags[0].children[0] as any).data);
+  const metadata: MediumPostMetadata = JSON.parse((schemaTags[0].children[0] as any).data);
   const readingTime: string = $cheerioBody('.pw-reading-time').text();
 
   if (debug.enabled) {
-    debug.saveLog(blogTitle, 'metaData', metaData);
+    debug.saveLog(blogTitle, 'metaData', metadata);
   }
 
   const scripts: Cheerio<Element> = $cheerioBody('script');
@@ -290,7 +288,7 @@ async function gatherPostData(
         }
 
         tags = getTags(apolloState);
-        authors = getAuthors(apolloState, metaData);
+        authors = getAuthors(apolloState, metadata);
       } catch (e) {
         logger.error(`An error ocurred while parsing Apollo state from scaped metadata: ${e}`);
       }
@@ -311,8 +309,7 @@ async function gatherPostData(
     let codeBlockContent: string = $cheerio(this).html();
     codeBlockContent = `<code>${codeBlockContent}</code>`;
 
-    const newEl: Cheerio<Element> = $cheerio(this).html(codeBlockContent);
-    return newEl;
+    return $cheerio(this).html(codeBlockContent);
   });
 
   try {
@@ -421,7 +418,7 @@ async function convertMediumFile(
       logger.error(`Couldn't write the post to: ${PATHS.output}`);
     }
 
-    if (options.imageStorageStrategy === MedmarkImageStorageStrategy.LOCAL) {
+    if (options.imageStorageStrategy === 'LOCAL') {
       try {
         await saveImagesToLocal(imageFolder, postData.images);
       } catch (e) {
@@ -468,19 +465,19 @@ async function convert(
 
   output.announceCheckpoint('🐱 Started converting.');
 
-  const isDir: boolean = fs.lstatSync(PATHS.input).isDirectory();
+  const isDirectory: boolean = fs.lstatSync(PATHS.input).isDirectory();
 
   const promises: Promise<void>[] = [];
 
-  if (isDir) {
+  if (isDirectory) {
     // folder was passed in, so get all html files for folders
     fs.readdirSync(PATHS.input).forEach((file: string) => {
-      const curFile: string = join(PATHS.input, file);
+      const evaluatingFile: string = join(PATHS.input, file);
 
       if (file.endsWith('.html')) {
-        promises.push(convertMediumFile(curFile, PATHS.output, PATHS.template, exportDrafts, postsToSkip));
+        promises.push(convertMediumFile(evaluatingFile, PATHS.output, PATHS.template, exportDrafts, postsToSkip));
       } else {
-        logger.warn(`Skipping ${curFile} because it is not an html file.`);
+        logger.warn(`Skipping ${evaluatingFile} because it is not an html file.`);
       }
     });
   } else {

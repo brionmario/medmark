@@ -61,6 +61,7 @@ function createTurndownService(plugins: TurndownService.Plugin[], options: Medma
   addFencedLinkRule(turndownService);
   addPreAndCodeRule(turndownService);
   addTitleRule(turndownService);
+
   return turndownService;
 }
 

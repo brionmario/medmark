@@ -24,7 +24,7 @@
 
 import fs from 'fs-extra';
 import {dirname, join, resolve} from 'path';
-import {MedMarkGlobal} from './models/medmark';
+import {MedmarkGlobal} from './models/medmark/core';
 
 /**
  * Defines the structure of the paths for the logs.
@@ -58,7 +58,7 @@ interface Debug {
    */
   enabled: () => boolean;
   /**
-   * Initializes debugging by creating the root logs folder and setting up the MedMark global object.
+   * Initializes debugging by creating the root logs folder and setting up the Medmark global object.
    */
   initialize: () => void;
   /**
@@ -97,7 +97,7 @@ function enabled(): boolean {
 }
 
 /**
- * Initializes debugging by creating the root logs folder and setting up the MedMark global object.
+ * Initializes debugging by creating the root logs folder and setting up the Medmark global object.
  */
 function initialize(): void {
   fs.mkdirpSync(PATHS.logs.root);
@@ -106,7 +106,7 @@ function initialize(): void {
     global.__MEDMARK__ = {};
   }
 
-  const medMarkGlobal: MedMarkGlobal = {
+  const medMarkGlobal: MedmarkGlobal = {
     debug: true,
     runnerTimestamp,
   };

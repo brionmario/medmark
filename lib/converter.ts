@@ -22,13 +22,15 @@
  * SOFTWARE.
  */
 
-import output from './output';
-import fetch from 'node-fetch';
+import fetch, {Response} from 'node-fetch';
 import fakeUa from 'fake-useragent';
 import request from 'request';
-import fs from 'fs';
+import fs, {WriteStream} from 'fs';
 import cheerio from 'cheerio';
 import mkdirp from 'mkdirp';
+import {join, resolve, basename, extname} from 'path';
+import Module from 'module';
+import output from './output';
 import {transformHtmlToMarkdown} from './markdown';
 import Reporter from './reporter';
 import debug from './debug';
@@ -39,54 +41,59 @@ import MedmarkSilentException from './exceptions/medmark-silent-exception';
 import {inlineGists} from './github';
 import logger from './logger';
 import DefaultTemplate from './templates/default';
-import {dirname, join, resolve, basename, extname} from 'path';
-import {MedMarkImageStorageStrategy} from './models/medmark';
+import {MedmarkImageStorageStrategy, MedmarkOptions, MedmarkParsedDocument} from './models/medmark/core';
+import {
+  MedmarkTemplate,
+  MedmarkTemplateRenderOptions,
+  MedmarkTemplateRenderOptionsImage,
+} from './models/medmark/template';
 
-const __internals__filename = resolve(module.filename);
-const __internals__dirname = dirname(__internals__filename);
-
-const reporter = Reporter.getInstance();
+const reporter: Reporter = Reporter.getInstance();
 
 // handle promise errors
 process.on('unhandledRejection', (error: string) => {
   logger.error(error);
 });
 
-function convertHtmlToMarkdown(html, templateOptions) {
-  return transformHtmlToMarkdown(html, templateOptions);
+/**
+ * Retrieves the meta details of a webpage from the given URL.
+ * FIXME: add error handling conditions..
+ *
+ * @param url The URL of the webpage to scrape.
+ * @returns A promise that resolves with the HTML text of the response.
+ * @throws {TypeError} If `url` is not a string.
+ * @throws {Error} If there is an issue with the fetch request.
+ */
+async function scrapeMetaDetailsFromPost(url: string): Promise<string> {
+  const response: Response = await fetch(url, {
+    headers: {
+      'User-Agent': fakeUa(),
+    },
+  });
+
+  return response.text();
 }
 
-async function scrapeMetaDetailsFromPost(url) {
-  const headers = {
-    'User-Agent': fakeUa(),
-  };
-
-  // FIXME: add error handling conditions...
-  const resp = await fetch(url, {headers});
-  return resp.text();
-}
-
-async function saveImagesToLocal(imageFolder, images) {
-  const imagePromises = images.map(
-    image =>
-      new Promise((resolve, reject) => {
-        const filePath = join(imageFolder, image.localName);
-        mkdirp.sync(imageFolder); // fs.writeFileSync(p, images[0].binary, 'binary');
+async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRenderOptionsImage[]): Promise<any> {
+  const imagePromises: Promise<void>[] = images.map(
+    (image: MedmarkTemplateRenderOptionsImage) =>
+      new Promise((_resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => {
+        const filePath: string = join(folderPath, image.localName);
+        mkdirp.sync(folderPath);
 
         logger.info(`Downloading image : ${image.mediumUrl} -> ${filePath}`);
         reporter.report.images.attempted.push(image.mediumUrl);
-        // request(image.mediumUrl).pipe(fs.createWriteStream(filePath)); // request image from medium CDN and save locally. TODO: add err handling
 
-        const writer = fs.createWriteStream(filePath);
+        const writer: WriteStream = fs.createWriteStream(filePath);
 
         request
           .get(image.mediumUrl)
-          .on('complete', response => {
+          .on('complete', (response: any) => {
             // FIXME: how do we measure success / failure here?
             reporter.report.images.succeeded.push(`${image.mediumUrl}->${filePath}`);
-            resolve(response);
+            _resolve(response);
           })
-          .on('error', err => {
+          .on('error', (err: any) => {
             logger.error(err);
 
             logger.error(`An error occurred while downloading image : ${image.mediumUrl} -> ${filePath}`);
@@ -103,25 +110,30 @@ async function saveImagesToLocal(imageFolder, images) {
 /**
  * Returns urls of images to download and re-writes post urls to point locally.
  * @param {*} imageStorageStrategy
- * @param {*} $
+ * @param {*} document
  * @param {*} imageBasePath
  * @param {*} postSlug
  * @returns
  */
-function getMediumImages(imageStorageStrategy, $, imageBasePath, postSlug) {
-  const images = [];
+function getMediumImages(
+  imageStorageStrategy: MedmarkImageStorageStrategy,
+  document: MedmarkParsedDocument,
+  imageBasePath: string,
+  postSlug: string,
+): MedmarkTemplateRenderOptionsImage[] {
+  const images: MedmarkTemplateRenderOptionsImage[] = [];
 
-  $('img.graf-image').each(async function (i) {
-    const imageName = $(this).attr('data-image-id');
-    const ext = extname(imageName);
+  document('img.graf-image').each(async function (index: number) {
+    const imageName: string = document(this).attr('data-image-id');
+    const ext: string = extname(imageName);
 
     // get max resolution of image
-    const imgUrl = `https://cdn-images-1.medium.com/max/2600/${imageName}`;
+    const imgUrl: string = `https://cdn-images-1.medium.com/max/2600/${imageName}`;
 
-    const localImageName = `${postSlug}-${i}${ext}`; // some-post-name-01.jpg
-    const localImagePath = join(imageBasePath, localImageName); // full path including folder
+    const localImageName: string = `${postSlug}-${index}${ext}`; // some-post-name-01.jpg
+    const localImagePath: string = join(imageBasePath, localImageName); // full path including folder
 
-    const imgData = {
+    const imgData: MedmarkTemplateRenderOptionsImage = {
       localName: localImageName,
       localPath: localImagePath, // local path including filename we'll save it as
       mediumUrl: imgUrl,
@@ -130,8 +142,8 @@ function getMediumImages(imageStorageStrategy, $, imageBasePath, postSlug) {
     images.push(imgData);
 
     // Rewrite img urls in post if the storage strategy is local.
-    if (imageStorageStrategy === MedMarkImageStorageStrategy.LOCAL) {
-      $(this).attr('src', localImagePath);
+    if (imageStorageStrategy === MedmarkImageStorageStrategy.LOCAL) {
+      document(this).attr('src', localImagePath);
     }
   });
 
@@ -285,19 +297,26 @@ async function gatherPostData(content, options, filePath, postsToSkip) {
   return post;
 }
 
-async function convertMediumFile(filePath, outputPath, templatePath, exportDrafts, postsToSkip) {
+async function convertMediumFile(
+  filePath: string,
+  outputPath: string,
+  templatePath: string,
+  exportDrafts: boolean,
+  postsToSkip: string[],
+): Promise<void> {
   const PATHS = {
     file: filePath,
     output: outputPath,
     template: templatePath,
   };
 
-  const loadedTemplateModule = PATHS.template && (await import(resolve(PATHS.template)));
-  const template = loadedTemplateModule?.default ?? DefaultTemplate;
+  const loadedTemplateModule: {default: MedmarkTemplate} | null =
+    PATHS.template && (await import(resolve(PATHS.template)));
+  const template: MedmarkTemplate = loadedTemplateModule?.default ?? DefaultTemplate;
 
-  const options = template.getOptions();
+  const options: MedmarkOptions = template.getOptions();
 
-  const filename = basename(PATHS.file, '.html');
+  const filename: string = basename(PATHS.file, '.html');
 
   output.note({
     bodyLines: [`PATH: ${PATHS.file}`, `FILE: ${filename}`],
@@ -317,15 +336,15 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
 
   reporter.report.posts.attempted.push(PATHS.file);
 
-  const srcFilepath = PATHS.file;
-  const content = fs.readFileSync(PATHS.file);
+  const srcFilepath: string = PATHS.file;
+  const content: Buffer = fs.readFileSync(PATHS.file);
 
   try {
-    const postData = await gatherPostData(content, options, srcFilepath, postsToSkip);
+    const postData: MedmarkTemplateRenderOptions = await gatherPostData(content, options, srcFilepath, postsToSkip);
     postData.draft = exportDrafts;
 
-    let imageFolder = resolve(options.imagePath);
-    const output = template.render(postData);
+    let imageFolder: string = resolve(options.imagePath);
+    const templateRenderOutput: string = template.render(postData);
 
     // if true, make folder for each slug, and name it '[slug]/index.md'
     if (options.folderForEachSlug) {
@@ -339,12 +358,12 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
 
     try {
       // render post file to folder
-      writePostToFile(output, PATHS.file, PATHS.output);
+      writePostToFile(templateRenderOutput, PATHS.file, PATHS.output);
     } catch (e) {
-      logger.error(`Couldn't write the post to: ${output}`);
+      logger.error(`Couldn't write the post to: ${PATHS.output}`);
     }
 
-    if (options.imageStorageStrategy === MedMarkImageStorageStrategy.LOCAL) {
+    if (options.imageStorageStrategy === MedmarkImageStorageStrategy.LOCAL) {
       try {
         await saveImagesToLocal(imageFolder, postData.images);
       } catch (e) {
@@ -367,7 +386,13 @@ async function convertMediumFile(filePath, outputPath, templatePath, exportDraft
   }
 }
 
-async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToSkip) {
+async function convert(
+  srcPath: string,
+  outputPath: string,
+  templatePath: string,
+  exportDrafts: boolean,
+  postsToSkip: string[],
+): Promise<void> {
   const PATHS = {
     output: outputPath,
     src: srcPath,
@@ -380,16 +405,14 @@ async function convert(srcPath, outputPath, templatePath, exportDrafts, postsToS
     PATHS.output = '.';
   }
 
-  const isDir = fs.lstatSync(PATHS.src).isDirectory();
-  // TODO: This is un-used.
-  // const isFile = fs.lstatSync(srcPath).isFile();
+  const isDir: boolean = fs.lstatSync(PATHS.src).isDirectory();
 
   let promises = [];
 
   if (isDir) {
     // folder was passed in, so get all html files for folders
-    fs.readdirSync(PATHS.src).forEach(file => {
-      const curFile = join(PATHS.src, file);
+    fs.readdirSync(PATHS.src).forEach((file: string) => {
+      const curFile: string = join(PATHS.src, file);
 
       if (file.endsWith('.html')) {
         promises.push(convertMediumFile(curFile, PATHS.output, PATHS.template, exportDrafts, postsToSkip));

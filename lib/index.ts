@@ -28,7 +28,6 @@ import inquirer from 'inquirer';
 import convert from './converter';
 import debug from './debug';
 import output from './output';
-import press from './press';
 
 program
   .version('0.1.0')

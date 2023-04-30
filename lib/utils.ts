@@ -25,7 +25,7 @@
 import fs from 'fs-extra';
 import {basename, join, resolve} from 'path';
 import {MediumApolloState, MediumPostMetadata} from './models/medium';
-import {MedmarkFrontMatterAuthor} from './models/medmark';
+import {MedmarkFrontMatterAuthor} from './models/medmark/front-matter';
 
 /**
  * Scrape tags from the Apollo state from scraped metadata.

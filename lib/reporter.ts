@@ -36,15 +36,15 @@ interface Report {
     /**
      * Contains the number of attempted gists.
      */
-    attempted: number[];
+    attempted: string[];
     /**
      * Contains the number of failed gists.
      */
-    failed: number[];
+    failed: string[];
     /**
      * Contains the number of succeeded gists.
      */
-    succeeded: number[];
+    succeeded: string[];
   };
   /**
    * Contains statistics for images.
@@ -53,15 +53,15 @@ interface Report {
     /**
      * Contains the number of attempted images.
      */
-    attempted: number[];
+    attempted: string[];
     /**
      * Contains the number of failed images.
      */
-    failed: number[];
+    failed: string[];
     /**
      * Contains the number of succeeded images.
      */
-    succeeded: number[];
+    succeeded: string[];
   };
   /**
    * Contains statistics for posts.
@@ -70,23 +70,23 @@ interface Report {
     /**
      * Contains the number of attempted posts.
      */
-    attempted: number[];
+    attempted: string[];
     /**
      * Contains the number of drafts.
      */
-    drafts: number[];
+    drafts: string[];
     /**
      * Contains the number of failed posts.
      */
-    failed: number[];
+    failed: string[];
     /**
      * Contains the number of replies.
      */
-    replies: number[];
+    replies: string[];
     /**
      * Contains the number of succeeded posts.
      */
-    succeeded: number[];
+    succeeded: string[];
   };
 }
 

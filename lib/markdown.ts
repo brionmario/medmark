@@ -36,7 +36,7 @@ import {
   removeTags,
   registerPlugins,
 } from './turndown';
-import {MedMarkTemplateOptions} from './models/medmark';
+import {MedmarkOptions} from './models/medmark/core';
 
 const turnDownOptions: TurndownService.Options = {
   codeBlockStyle: 'fenced',
@@ -48,7 +48,7 @@ const turnDownOptions: TurndownService.Options = {
  * @param options - Additional options to pass to the template.
  * @returns The TurndownService instance.
  */
-function createTurndownService(plugins: TurndownService.Plugin[], options: MedMarkTemplateOptions): TurndownService {
+function createTurndownService(plugins: TurndownService.Plugin[], options: MedmarkOptions): TurndownService {
   const turndownService: TurndownService = new TurndownService(turnDownOptions);
 
   registerPlugins(turndownService, plugins);
@@ -73,7 +73,7 @@ function createTurndownService(plugins: TurndownService.Plugin[], options: MedMa
  */
 export function transformHtmlToMarkdown(
   code: string,
-  options: MedMarkTemplateOptions = {},
+  options: MedmarkOptions = {},
   plugins: TurndownService.Plugin[] = [gfm],
 ): string {
   const turndownService: TurndownService = createTurndownService(plugins, options);

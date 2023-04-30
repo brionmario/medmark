@@ -23,19 +23,20 @@
  */
 
 import YAML from 'json-to-pretty-yaml';
+import {MedmarkOptions} from '../models/medmark/core';
 import {
-  MedMarkTemplateOptions,
-  MedMarkTemplateFrontMatter,
-  MedMarkTemplateRenderOptions,
-  MedMarkTemplateRenderOptionsImage,
-} from '../models/medmark';
+  MedmarkTemplate,
+  MedmarkTemplateRenderOptions,
+  MedmarkTemplateRenderOptionsImage,
+} from '../models/medmark/template';
+import {MedmarkFrontMatter} from '../models/medmark/front-matter';
 
-export default {
+const DefaultTemplate: MedmarkTemplate = {
   /**
    * Returns an object with default options for rendering markdown.
    * @returns Object containing default options.
    */
-  getOptions(): MedMarkTemplateOptions {
+  getOptions(): MedmarkOptions {
     return {
       defaultCodeBlockLanguage: 'js',
       folderForEachSlug: true,
@@ -60,7 +61,7 @@ export default {
     tags,
     images,
     body,
-  }: MedMarkTemplateRenderOptions): string {
+  }: MedmarkTemplateRenderOptions): string {
     const date: Date = new Date(published);
     const prettyDate: string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
       .getDate()
@@ -70,7 +71,7 @@ export default {
     const {mediumUrl: bannerImage = '', mediumUrl: ogImage = ''} = images[0] ?? {};
 
     /* eslint-disable sort-keys */
-    const frontMatterAsJSON: MedMarkTemplateFrontMatter = {
+    const frontMatterAsJSON: MedmarkFrontMatter = {
       slug: `/posts/${titleForSlug}/`,
       date: prettyDate,
       title,
@@ -82,7 +83,7 @@ export default {
       tags,
       bannerImage,
       ogImage,
-      images: images.map((image: MedMarkTemplateRenderOptionsImage) => image.mediumUrl),
+      images: images.map((image: MedmarkTemplateRenderOptionsImage) => image.mediumUrl),
     };
     /* eslint-enable sort-keys */
 
@@ -97,3 +98,5 @@ ${body}
     return frontMatter;
   },
 };
+
+export default DefaultTemplate;

@@ -28,7 +28,7 @@
 
 import TurndownService, {Node} from 'turndown';
 import {EMBEDDED_TWEET_HTML_SPIT_DELIMITER} from './constants';
-import {MedMarkTemplateOptions} from './models/medmark';
+import {MedmarkOptions} from './models/medmark/core';
 
 /**
  * Removes the specified HTML tags and their contents from the input HTML string using Turndown Service.
@@ -213,10 +213,7 @@ export function addParseFigcaptionLinksRule(turndownService: TurndownService): v
  * @param templateOptions - The options containing the default code block language.
  * @returns void
  */
-export function addParseCodeBlocksRule(
-  turndownService: TurndownService,
-  templateOptions: MedMarkTemplateOptions,
-): void {
+export function addParseCodeBlocksRule(turndownService: TurndownService, templateOptions: MedmarkOptions): void {
   turndownService.addRule('pre', {
     /**
      * Determines if a node is a <pre> tag.

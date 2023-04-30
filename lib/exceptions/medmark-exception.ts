@@ -23,7 +23,7 @@
  */
 
 /**
- * Base exception class for the MedMark module.
+ * Base exception class for the Medmark module.
  */
 class MedmarkException extends Error {
   /**

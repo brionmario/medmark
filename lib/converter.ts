@@ -94,30 +94,37 @@ async function scrapeMetaDetailsFromPost(url: string): Promise<string> {
   return response.text();
 }
 
+/**
+ * Saves images to a local directory.
+ *
+ * @param folderPath - The path to the local directory where images will be saved.
+ * @param images - The array of image objects to download and save.
+ * @returns A promise that resolves when all images have been downloaded and saved.
+ */
 async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRenderOptionsImage[]): Promise<any> {
   const imagePromises: Promise<void>[] = images.map(
     (image: MedmarkTemplateRenderOptionsImage) =>
       new Promise((_resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => {
-        const filePath: string = join(folderPath, image.localName);
+        const imageFilePath: string = join(folderPath, image.localName);
         mkdirp.sync(folderPath);
 
-        logger.info(`Downloading image : ${image.mediumUrl} -> ${filePath}`);
+        logger.info(`Downloading image : ${image.mediumUrl} -> ${imageFilePath}`);
         reporter.report.images.attempted.push(image.mediumUrl);
 
-        const writer: WriteStream = fs.createWriteStream(filePath);
+        const writer: WriteStream = fs.createWriteStream(imageFilePath);
 
         request
           .get(image.mediumUrl)
           .on('complete', (response: any) => {
             // FIXME: how do we measure success / failure here?
-            reporter.report.images.succeeded.push(`${image.mediumUrl}->${filePath}`);
+            reporter.report.images.succeeded.push(`${image.mediumUrl}->${imageFilePath}`);
             _resolve(response);
           })
           .on('error', (err: any) => {
             logger.error(err);
 
-            logger.error(`An error occurred while downloading image : ${image.mediumUrl} -> ${filePath}`);
-            reporter.report.images.failed.push(`${image.mediumUrl}->${filePath}`);
+            logger.error(`An error occurred while downloading image : ${image.mediumUrl} -> ${imageFilePath}`);
+            reporter.report.images.failed.push(`${image.mediumUrl}->${imageFilePath}`);
             reject(err);
           })
           .pipe(writer);
@@ -128,12 +135,13 @@ async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRend
 }
 
 /**
- * Returns urls of images to download and re-writes post urls to point locally.
- * @param {*} imageStorageStrategy
- * @param {*} document
- * @param {*} imageBasePath
- * @param {*} postSlug
- * @returns
+ * Returns an array of image data for all images in a Medium post.
+ *
+ * @param imageStorageStrategy The strategy for storing images.
+ * @param document The parsed HTML document of the Medium post.
+ * @param imageBasePath The base path for saving images.
+ * @param postSlug The slug of the Medium post.
+ * @returns An array of image data objects.
  */
 function getMediumImages(
   imageStorageStrategy: MedmarkImageStorageStrategy,
@@ -170,6 +178,15 @@ function getMediumImages(
   return images;
 }
 
+/**
+ * Asynchronously gathers data from a Medium post.
+ *
+ * @param content - The HTML content of the Medium post.
+ * @param options - Options for gathering post data.
+ * @param filePath - The path of the file containing the Medium post.
+ * @param postsToSkip - An array of titles of posts to skip.
+ * @returns A Promise that resolves with an object containing data to render a Medmark template.
+ */
 async function gatherPostData(
   content: Buffer,
   options: MedmarkOptions,
@@ -327,6 +344,17 @@ async function gatherPostData(
   };
 }
 
+/**
+ * Converts a Medium file to markdown.
+ *
+ * @param filePath - The path to the Medium file.
+ * @param outputPath - The path to write the output file to.
+ * @param templatePath - The path to the template file to use.
+ * @param exportDrafts - Whether to export drafts or not.
+ * @param postsToSkip - An array of post slugs to skip.
+ * @returns A Promise that resolves when the conversion is complete.
+ * @throws A MedmarkException if an error occurs while converting the Medium file.
+ */
 async function convertMediumFile(
   filePath: string,
   outputPath: string,

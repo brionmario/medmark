@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-const YAML = require('json-to-pretty-yaml');
+const {frontMatterToYaml} = require('medmark');
 
 module.exports = {
   /**
@@ -70,7 +70,7 @@ module.exports = {
 
     const frontMatter = `\
 ---
-${YAML.stringify(frontMatterAsJSON)}
+${frontMatterToYaml(frontMatterAsJSON)}
 ---
 
 ${data.body}

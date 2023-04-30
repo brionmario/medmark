@@ -24,8 +24,9 @@
 
 import fs from 'fs-extra';
 import {basename, join, resolve} from 'path';
+import YAML from 'json-to-pretty-yaml';
 import {MediumApolloState, MediumPostMetadata} from './models/medium';
-import {MedmarkFrontMatterAuthor} from './models/medmark/front-matter';
+import {MedmarkFrontMatter, MedmarkFrontMatterAuthor} from './models/medmark/front-matter';
 
 /**
  * Scrape tags from the Apollo state from scraped metadata.
@@ -113,3 +114,13 @@ export const writePostToFile = (content: string, oldFilePath: string, outputFold
 
   fs.writeFileSync(newPath, content);
 };
+
+/**
+ * Converts front matter JSON to YAML.
+ *
+ * @param frontMatter - Front matter object to convert.
+ * @returns Front matter as YAML.
+ */
+export function frontMatterToYaml(frontMatter: MedmarkFrontMatter): string {
+  return YAML.stringify(frontMatter);
+}

@@ -386,14 +386,29 @@ async function convertMediumFile(
   }
 }
 
+interface Paths {
+  output: string;
+  src: string;
+  template?: string;
+}
+
+/**
+ * Converts Medium post(s) from an input file or directory of files to a HTML file(s) using a template.
+ *
+ * @param srcPath - The file path to the input file or directory of files.
+ * @param outputPath - The file path to the output directory for the converted file(s).
+ * @param templatePath - The file path to the template file to use for the conversion.
+ * @param exportDrafts - Whether to include draft posts in the conversion.
+ * @param postsToSkip - An array of post URLs to skip during the conversion.
+ */
 async function convert(
   srcPath: string,
   outputPath: string,
-  templatePath: string,
+  templatePath: string | undefined,
   exportDrafts: boolean,
   postsToSkip: string[],
 ): Promise<void> {
-  const PATHS = {
+  const PATHS: Paths = {
     output: outputPath,
     src: srcPath,
     template: templatePath,
@@ -407,7 +422,7 @@ async function convert(
 
   const isDir: boolean = fs.lstatSync(PATHS.src).isDirectory();
 
-  let promises = [];
+  let promises: Promise<void>[] = [];
 
   if (isDir) {
     // folder was passed in, so get all html files for folders
@@ -425,7 +440,7 @@ async function convert(
   }
 
   try {
-    const result: any[] = await Promise.all(promises);
+    const result: void[] = await Promise.all(promises);
 
     output.success({title: `Successfully converted ${result.length} files.`});
     reporter.printPrettyReport();

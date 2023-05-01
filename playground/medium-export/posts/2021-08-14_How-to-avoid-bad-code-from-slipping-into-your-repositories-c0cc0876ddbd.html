@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>How to avoid bad code from slipping into your repositories</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">How to avoid bad code from slipping into your repositories</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Adding static code analysis tools like ESLint is considered a best practice in front-end Ecmascript based project development. These tools…
+</section>
+<section data-field="body" class="e-content">
+<section name="114f" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="e6cd" id="e6cd" class="graf graf--h3 graf--leading graf--title">How to avoid bad code from slipping into your repositories</h3><figure name="25a7" id="25a7" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*r-qkOyGrghFGU23p6yRmGw@2x.png" data-width="2120" data-height="800" data-is-featured="true" alt="Post Banner" src="https://cdn-images-1.medium.com/max/800/1*r-qkOyGrghFGU23p6yRmGw@2x.png"></figure><p name="814e" id="814e" class="graf graf--p graf--hasDropCapModel graf--hasDropCap graf-after--figure"><span class="graf-dropCap">A</span>dding static code analysis tools like <a href="https://eslint.org/" data-href="https://eslint.org/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">ESLint</a> is considered a best practice in front-end Ecmascript based project development. These tools make sure that the code we write adheres to a certain standard defined by the team.</p><p name="cfd4" id="cfd4" class="graf graf--p graf-after--p">But when there are several developers working on one code base, the code quality could get out of hand. Oftentimes, code that violates the linting rules gets pushed to the repositories. This is not ideal for large projects and could render the usage of linting tools redundant.</p><p name="e87c" id="e87c" class="graf graf--p graf-after--p">To fix this we can use the awesome two tools <a href="https://www.npmjs.com/package/lint-staged" data-href="https://www.npmjs.com/package/lint-staged" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Lint Staged</a> and <a href="https://typicode.github.io/husky/" data-href="https://typicode.github.io/husky/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Husky</a>.</p><p name="23bb" id="23bb" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">What is Husky?</strong></p><p name="d610" id="d610" class="graf graf--p graf-after--p">Husky can be used to run scripts before certain Git Hooks are executed. Read the <a href="https://typicode.github.io/husky/#/" data-href="https://typicode.github.io/husky/#/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">docs</a>.</p><p name="cb0f" id="cb0f" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">What is Lint Staged?</strong></p><p name="717c" id="717c" class="graf graf--p graf-after--p">Runs linters against staged git files.</p><h3 name="356c" id="356c" class="graf graf--h3 graf-after--p">Pre-requisites</h3><p name="a088" id="a088" class="graf graf--p graf-after--h3">You will need a Javascript or Typescript application with a static code analyzing tool configured to try this out. I will be using the <a href="https://github.com/brionmario/gatsby-starter" data-href="https://github.com/brionmario/gatsby-starter" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Gatsby Starter</a> project that I built. Feel free to use the same if you would like.</p><h3 name="d22e" id="d22e" class="graf graf--h3 graf-after--p">Versions</h3><p name="baf2" id="baf2" class="graf graf--p graf-after--h3">Please note that I’m using the following versions at the time of writing this post.</p><ul class="postList"><li name="7695" id="7695" class="graf graf--li graf-after--p">Lint Staged : 11.1.2</li><li name="06b5" id="06b5" class="graf graf--li graf-after--li">Husky: 7.0.0</li></ul><blockquote name="3c62" id="3c62" class="graf graf--blockquote graf-after--li">Note: With previous version of Husky, the configuring mechanism was different than the approach I will be following in this guide.</blockquote><h3 name="bfde" id="bfde" class="graf graf--h3 graf-after--blockquote">Let’s get started</h3><h4 name="d8bd" id="d8bd" class="graf graf--h4 graf-after--h3">Install dependencies</h4><ol class="postList"><li name="a26f" id="a26f" class="graf graf--li graf-after--h4">Install Husky</li></ol><pre name="21ef" id="21ef" class="graf graf--pre graf-after--li">npx husky-init &amp;&amp; npm install</pre><p name="1b8d" id="1b8d" class="graf graf--p graf-after--pre">2. Install lint-staged.</p><pre name="6a4b" id="6a4b" class="graf graf--pre graf-after--p">npm install --save-dev lint-staged</pre><h4 name="abb1" id="abb1" class="graf graf--h4 graf-after--pre">Configure lint staged</h4><ol class="postList"><li name="ad5e" id="ad5e" class="graf graf--li graf-after--h4">Create a lint-staged configuration file.</li></ol><pre name="3fcd" id="3fcd" class="graf graf--pre graf-after--li">touch lint-staged.config.js</pre><blockquote name="297d" id="297d" class="graf graf--blockquote graf-after--pre">There are many ways you can add the configuration file. I prefer the JS config. Check out the <a href="https://github.com/okonet/lint-staged#configuration" data-href="https://github.com/okonet/lint-staged#configuration" class="markup--anchor markup--blockquote-anchor" rel="noopener" target="_blank">documentation</a> for alternatives.</blockquote><p name="a23f" id="a23f" class="graf graf--p graf-after--blockquote">2. Add the configuration.</p><figure name="0a94" id="0a94" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/brionmario/fd7ad4a40771af514ff33c3063782be7.js"></script><figcaption class="imageCaption">Lint Staged Configuration</figcaption></figure><p name="d994" id="d994" class="graf graf--p graf-after--figure">Since I’m using a TypeScript project, I have added <code class="markup--code markup--p-code">ts</code> and <code class="markup--code markup--p-code">tsx</code><strong class="markup--strong markup--p-strong"> </strong>to the blob pattern. You can skip this if you are configuring on a JavaScript project.</p><blockquote name="248c" id="248c" class="graf graf--blockquote graf-after--p">I’m only running the lint command against the matched files. Obviously you can append any script you want to the array and lint-staged will run that for you.</blockquote><h4 name="e1b5" id="e1b5" class="graf graf--h4 graf-after--blockquote">Add an npm script to run lint staged</h4><p name="f7c2" id="f7c2" class="graf graf--p graf-after--h4">Add the following script under the <strong class="markup--strong markup--p-strong">script</strong> section in <code class="markup--code markup--p-code">package.json</code>.</p><pre name="11d4" id="11d4" class="graf graf--pre graf-after--p">&quot;lint:staged&quot;: &quot;lint-staged&quot;,</pre><blockquote name="6860" id="6860" class="graf graf--blockquote graf-after--pre">Without this, husky will complain about lint-staged command being missing. I guess you can use npx to run lint staged, but this method is cleaner IMO 😉.</blockquote><h4 name="f792" id="f792" class="graf graf--h4 graf-after--blockquote">Add a pre-commit hook</h4><p name="60f2" id="60f2" class="graf graf--p graf-after--h4">I want to make sure that before every commit, linting is being run against the staged files.</p><p name="c763" id="c763" class="graf graf--p graf-after--p">For this purpose, I can use a pre-commit Git hook. There are other Git hooks that husky supports.</p><pre name="0dc8" id="0dc8" class="graf graf--pre graf-after--p">npx husky add .husky/pre-commit &quot;npm run lint:staged&quot;</pre><h4 name="2e70" id="2e70" class="graf graf--h4 graf-after--pre">Testing the flow</h4><p name="3810" id="3810" class="graf graf--p graf-after--h4">I intentionally made a lint violation in one of my files and tried to commit a file.</p><p name="22dc" id="22dc" class="graf graf--p graf-after--p">I got the bellow error as expected and I wasn’t allowed to commit to the repository.</p><figure name="04dc" id="04dc" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*oo7gjgIuuLNGIj4euQz-tA.png" data-width="2554" data-height="838" src="https://cdn-images-1.medium.com/max/800/1*oo7gjgIuuLNGIj4euQz-tA.png"><figcaption class="imageCaption">Husky &amp; Lint Staged in Action</figcaption></figure><p name="e1ad" id="e1ad" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">All Done….. 🥳</strong></p><h3 name="2b51" id="2b51" class="graf graf--h3 graf-after--p">Conclusion</h3><p name="a47a" id="a47a" class="graf graf--p graf-after--h3">Hope you found this blog post useful. Feel free to try this out and if you have any suggestions regarding the blog you can log an issue in <a href="https://github.com/brionmario/blog-resources/issues" data-href="https://github.com/brionmario/blog-resources/issues" class="markup--anchor markup--p-anchor" rel="noopener nofollow noopener noopener noopener" target="_blank">this repo</a>.</p><h4 name="e25f" id="e25f" class="graf graf--h4 graf-after--p">Resources</h4><ul class="postList"><li name="ed10" id="ed10" class="graf graf--li graf-after--h4"><a href="https://github.com/brionmario/gatsby-starter/tree/init-lint-staged-and-husky" data-href="https://github.com/brionmario/gatsby-starter/tree/init-lint-staged-and-husky" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank">Source Code</a></li></ul><p name="97c7" id="97c7" class="graf graf--p graf-after--li graf--trailing">Signing off… ✌️❤️</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@brionmario" class="p-author h-card">Brion Mario</a> on <a href="https://medium.com/p/c0cc0876ddbd"><time class="dt-published" datetime="2021-08-14T07:57:22.665Z">August 14, 2021</time></a>.</p><p><a href="https://medium.com/@brionmario/how-to-avoid-bad-code-from-slipping-into-your-repositories-c0cc0876ddbd" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on April 5, 2023.</p></footer></article></body></html>

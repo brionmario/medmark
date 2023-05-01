@@ -14,12 +14,13 @@
     "sourceMap": true,
     "target": "es2015",
     "forceConsistentCasingInFileNames": true,
-    // TODO: Enable this once issues are fixed.
+    // FIXME: Enable this once issues are fixed.
     // "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "tmp", "dist"],
   "files": [],

@@ -30,7 +30,7 @@ module.exports = {
     node: true,
   },
   extends: [
-    'plugin:@brionmario/javascript',
+    'plugin:@brionmario/typescript',
     'plugin:@brionmario/strict',
     'plugin:@brionmario/internal',
     'plugin:@brionmario/jest',
@@ -42,6 +42,11 @@ module.exports = {
   },
   plugins: ['@brionmario'],
   rules: {
+    '@typescript-eslint/no-empty-function': ['error', {allow: ['private-constructors']}],
+    'func-names': 'off',
+    // FIXME: Remove this once the issues are fixed in `github.ts`, etc.
+    'no-async-promise-executor': 'off',
+    'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
     'no-underscore-dangle': 'off',
   },
 };

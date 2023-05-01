@@ -21,6 +21,6 @@
     "compile": "node ../../bin/medmark.js export/posts -o output -t templates/brionmario.com.js"
   },
   "devDependencies": {
-    "json-to-pretty-yaml": "^1.2.2"
+    "medmark": "workspace:*"
   }
 }

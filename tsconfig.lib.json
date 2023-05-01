@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "dist",
-    "declarationDir": "dist",
+    "outDir": "./dist",
+    "declarationDir": "dist/types",
     "types": ["node"]
   },
   "exclude": [
@@ -16,5 +16,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": ["lib/**/*.js", "lib/**/*.ts"]
+  "include": ["lib/**/*.js", "lib/**/*.ts", "types/**/*.d.ts"],
 }

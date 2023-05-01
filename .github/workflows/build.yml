@@ -1,12 +1,15 @@
 # This workflow will build main branch when a PR is merged.
 
-name: 🐳 Build
+name: 🧱 Builder
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -53,6 +56,10 @@ jobs:
       - name: 🧩 Install Dependencies
         id: install-dependencies
         run: pnpm install
+
+      - name: ⏳ Lint All Files
+        id: lint
+        run: pnpm lint
 
       - name: 🏗️ Build
         id: build

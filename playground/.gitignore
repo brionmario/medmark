@@ -1,6 +1,6 @@
-# The extracted archive from Medium.com
+# Exclude everything but the posts from the extracted archive from Medium.com
 medium-export/*
-!medium-export/.gitkeep
+!medium-export/posts
 
-# The output as markdown.
-output
+# Debug logs
+logs

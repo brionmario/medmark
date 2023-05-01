@@ -58,6 +58,10 @@ jobs:
         id: install-dependencies
         run: pnpm install
 
+      - name: 🏗️ Build
+        id: build
+        run: pnpm build
+
       - name: 🦄 Lint All Files
         id: lint-with-eslint
         run: pnpm lint
@@ -151,6 +155,10 @@ jobs:
       - name: 🧩 Install Dependencies
         id: install-dependencies
         run: pnpm install
+
+      - name: 🏗️ Build
+        id: build
+        run: pnpm build
 
       - name: 🃏 Run Jest & Collect Coverage
         id: run-jest-test-and-coverage

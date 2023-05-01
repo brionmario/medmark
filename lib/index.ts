@@ -29,15 +29,17 @@ import convert from './converter';
 import ConfigurationService from './configuration-service';
 import output from './output';
 import debug from './debug';
+import pkg from '../package.json';
 
 program
-  .version('0.1.0')
+  .version(pkg.version)
   .description('Converts Medium exported archive to markdown')
   .option('-i, --input <path_to_posts_folder>', 'Path to the folder containing posts from the medium export')
   .option('-o, --output <destination_folder>', 'Destination folder for output files. Defaults to "output"')
   .option('-t, --template <template_file>', 'Template used to generate post files')
   .option('-d, --drafts', 'Set flag to export drafts along with other posts')
   .option('-s, --skip <comma_separated_files>', 'Comma-separated list of files to skip')
+  .option('-D, --debug', 'Whether to run the tool in debug mode')
   .action(async () => {
     const {
       output: outputPath,

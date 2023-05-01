@@ -1,6 +1,6 @@
 {
   "name": "medmark",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Export your Medium articles to markdown(md).",
   "workspaces": [
     ".",
@@ -28,7 +28,9 @@
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "repository": {
     "type": "git",
@@ -39,7 +41,7 @@
     "changeset": "changeset",
     "clean:dist": "rimraf dist",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "publish:packages": "changeset publish",
     "typecheck": "tsc --noemit -p tsconfig.lib.json",

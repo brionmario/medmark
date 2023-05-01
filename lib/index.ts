@@ -29,10 +29,9 @@ import convert from './converter';
 import ConfigurationService from './configuration-service';
 import output from './output';
 import debug from './debug';
-import pkg from '../package.json';
 
 program
-  .version(pkg.version)
+  .version('0.1.0')
   .description('Converts Medium exported archive to markdown')
   .option('-i, --input <path_to_posts_folder>', 'Path to the folder containing posts from the medium export')
   .option('-o, --output <destination_folder>', 'Destination folder for output files. Defaults to "output"')

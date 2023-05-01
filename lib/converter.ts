@@ -153,7 +153,7 @@ function getMediumImages(
 ): MedmarkTemplateRenderOptionsImage[] {
   const images: MedmarkTemplateRenderOptionsImage[] = [];
 
-  $cheerio('img.graf-image').each(async function (index: number) {
+  $cheerio('img.graf-image').each(function (index: number) {
     const imageName: string = $cheerio(this).attr('data-image-id');
     const imageExtension: string = extname(imageName);
 
@@ -216,14 +216,13 @@ async function gatherPostData(
   if (postsToSkip && postsToSkip.some((post: string) => blogTitle.startsWith(post))) {
     logger.warn(`This is a reply, not a standalone post. Hence, skipping...`);
     reporter.report.posts.replies.push(filePath);
-    // FIXME: consider setting type of err and then ignoring it at the higher level
+
     throw new MedmarkSilentException(`Reply post. Skip over this one: ${blogTitle}`);
   }
 
   let canonicalLink: string = $cheerio('footer > p > a').attr('href');
   let titleForSlug: string = convertToSlug(blogTitle);
 
-  // TODO: add no match condition...
   if (!isDraft) {
     canonicalLink = $cheerio('.p-canonical').attr('href');
 
@@ -250,7 +249,7 @@ async function gatherPostData(
   if (isReplyPost) {
     logger.warn(`This is a reply, not a standalone post. Hence, skipping...`);
     reporter.report.posts.replies.push(filePath);
-    // FIXME: consider setting type of err and then ignoring it at the higher level
+
     throw new MedmarkSilentException(`reply post. Skip over this one: ${titleForSlug}`);
   }
 
@@ -258,7 +257,6 @@ async function gatherPostData(
   const description: string = $cheerioBody('meta[name=description]').attr('content'); // from page...
 
   const schemaTags: Cheerio<Element> = $cheerioBody('script[type="application/ld+json"]');
-  // FIXME: TS ISSUE
   const metadata: MediumPostMetadata = JSON.parse((schemaTags[0].children[0] as any).data);
   const readingTime: string = $cheerioBody('.pw-reading-time').text();
 
@@ -272,7 +270,6 @@ async function gatherPostData(
   let tags: string[] = [];
   let authors: MedmarkFrontMatterAuthor[] = [];
 
-  // FIXME: TS ISSUE
   Object.values(scripts).forEach((value: Element & {children: (Element & {data: string})[]}) => {
     if (
       value.children &&
@@ -297,9 +294,9 @@ async function gatherPostData(
 
   const title: string = $cheerio('h1').text();
 
-  // FIXME: put this in fn
-  // REMOVE h1 and avatar section
-  $cheerio('h1').next().remove(); // remove div avatar domEl right after h1
+  // FIXME: Move this inside a function.
+  // REMOVES: h1 and avatar section. (div avatar domEl right after h1)
+  $cheerio('h1').next().remove();
   $cheerio('h1').remove();
 
   // process code blocks

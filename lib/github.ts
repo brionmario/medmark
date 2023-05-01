@@ -70,7 +70,7 @@ export async function inlineGists($cheerio: CheerioAPI, reporter: any): Promise<
   // FIXME: Can do away with promises here entirely?
   const promises: Array<Promise<void>> = [];
 
-  $cheerio('script').each(async function () {
+  $cheerio('script').each(function () {
     const gistPromise: Promise<void> = new Promise<void>(
       async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => {
         const src: string = $cheerio(this).attr('src') || '';

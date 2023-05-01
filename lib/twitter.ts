@@ -29,7 +29,7 @@ import {EMBEDDED_TWEET_HTML_SPIT_DELIMITER} from './constants';
 async function embedTweets($cheerio: CheerioAPI): Promise<void[]> {
   const promises: Promise<void>[] = [];
 
-  $cheerio('blockquote.twitter-tweet a').each(async function () {
+  $cheerio('blockquote.twitter-tweet a').each(function () {
     const promise: Promise<void> = new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void) => {
       const href: string = $cheerio(this).attr('href');
 

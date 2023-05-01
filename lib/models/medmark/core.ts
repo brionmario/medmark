@@ -23,20 +23,6 @@
  */
 
 /**
- * MedmarkGlobal extends the Node.js global object to include additional properties for Medmark-specific global state.
- */
-export interface MedmarkGlobal {
-  /**
-   * A boolean value indicating whether debugging mode is enabled or not.
-   */
-  debug: boolean;
-  /**
-   * A string value representing the timestamp at which the Medmark runner was started.
-   */
-  runnerTimestamp: string;
-}
-
-/**
  * Type to specify the image storage strategy for a Medium post converted to markdown.
  */
 export type MedmarkImageStorageStrategy = 'LOCAL' | 'REMOTE';

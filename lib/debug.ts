@@ -24,7 +24,7 @@
 
 import fs from 'fs-extra';
 import {dirname, join, resolve} from 'path';
-import {MedmarkGlobal} from './models/medmark/core';
+import ConfigurationService from './configuration-service';
 
 /**
  * Defines the structure of the paths for the logs.
@@ -58,7 +58,8 @@ interface Debug {
    */
   enabled: () => boolean;
   /**
-   * Initializes debugging by creating the root logs folder and setting up the Medmark global object.
+   * Initializes debugging by creating the root logs folder and setting the
+   * debug mode to true in configuration service if not already set.
    */
   initialize: () => void;
   /**
@@ -69,8 +70,6 @@ interface Debug {
    */
   saveLog: (articleId: string, fileName: keyof LogPaths['files'], content: unknown) => void;
 }
-
-const runnerTimestamp: string = new Date().toISOString();
 
 const PATHS: {
   logs: LogPaths;
@@ -84,7 +83,7 @@ const PATHS: {
         return resolve(join(PATHS.logs.root, articleId, 'meta.json'));
       },
     },
-    root: resolve(join('logs', runnerTimestamp)),
+    root: resolve(join('logs', ConfigurationService.getInstance().getRunnerTimestamp())),
   },
 };
 
@@ -93,24 +92,19 @@ const PATHS: {
  * @returns A boolean indicating if debugging is enabled.
  */
 function enabled(): boolean {
-  return global.__MEDMARK__.debug;
+  return ConfigurationService.getInstance().getDebug();
 }
 
 /**
- * Initializes debugging by creating the root logs folder and setting up the Medmark global object.
+ * Initializes debugging by creating the root logs folder and setting the
+ * debug mode to true in configuration service if not already set.
  */
 function initialize(): void {
   fs.mkdirpSync(PATHS.logs.root);
 
-  if (!global.__MEDMARK__) {
-    global.__MEDMARK__ = {};
+  if (!ConfigurationService.getInstance().getDebug()) {
+    ConfigurationService.getInstance().setDebug(true);
   }
-
-  const medMarkGlobal: MedmarkGlobal = {
-    debug: true,
-    runnerTimestamp,
-  };
-  global.__MEDMARK__ = medMarkGlobal;
 }
 
 /**
@@ -120,7 +114,7 @@ function initialize(): void {
  * @param content The content to write to the log file.
  */
 function saveLog(articleId: string, fileName: keyof LogPaths['files'], content: unknown): void {
-  if (!global?.__MEDMARK__?.debug) {
+  if (!ConfigurationService.getInstance().getDebug()) {
     return;
   }
 

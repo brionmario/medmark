@@ -26,8 +26,9 @@
 import {program} from 'commander';
 import inquirer from 'inquirer';
 import convert from './converter';
-import debug from './debug';
+import ConfigurationService from './configuration-service';
 import output from './output';
+import debug from './debug';
 
 program
   .version('0.1.0')
@@ -44,6 +45,7 @@ program
       template: templatePath,
       drafts,
       skip,
+      debug: debugMode,
     } = await inquirer.prompt([
       {
         message: 'Enter the path to the `posts` folder of the medium exported archive',
@@ -72,6 +74,12 @@ program
         name: 'skip',
         type: 'input',
       },
+      {
+        default: true,
+        message: 'Do you want to run in debug mode?',
+        name: 'debug',
+        type: 'confirm',
+      },
     ]);
 
     const toSkip: string[] = skip && skip.split(',');
@@ -87,7 +95,13 @@ program
       title: '💡 Following context has been initialized:',
     });
 
-    debug.initialize();
+    const config: ConfigurationService = ConfigurationService.getInstance();
+
+    if (debugMode) {
+      config.setDebug(true);
+      debug.initialize();
+    }
+
     convert(inputPath, outputPath, templatePath, drafts, toSkip);
   })
   .parse(process.argv);

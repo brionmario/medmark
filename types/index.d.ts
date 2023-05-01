@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import {MedMarkGlobal} from '../lib/models/medmark';
+import {MedmarkGlobal} from '../lib/models/medmark/core';
 
 declare global {
   namespace NodeJS {
     interface Global {
-      __MEDMARK__: MedMarkGlobal;
+      __MEDMARK__: MedmarkGlobal;
     }
   }
 }

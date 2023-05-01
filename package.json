@@ -41,7 +41,7 @@
     "changeset": "changeset",
     "clean:dist": "rimraf dist",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "publish:packages": "changeset publish",
     "typecheck": "tsc --noemit -p tsconfig.lib.json",

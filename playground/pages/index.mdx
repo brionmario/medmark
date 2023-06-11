@@ -1,0 +1,94 @@
+---
+type: page
+title: Home
+date: 2020-01-01
+---
+
+![Image](../public/assets/images/medmark-banner.png)
+
+<h2 style={{textAlign: 'center'}}>Welcome to Medmark Playground! 🎉</h2>
+
+🎈 The Medmark Playground is an application that allows users to try out Medmark, a tool for converting Medium exports
+to a static site. Follow the steps below to set up and use the Medmark Playground:
+
+## Step 1: Prepare the Medium Export Archive 📚
+
+1. 📥 Download your Medium archive. For more information, see
+   [our guide on exporting a Medium Archive](https://github.com/brionmario/medmark#medium-archive).
+2. 📂 Extract the `.zip` archive and move it to the `.medmark` folder.
+
+```bash
+unzip medium-export-18db8f8a43103a84c063310f8ee1c24fa04369cada4bc909b35643df8676bc3b.zip -d medium-export
+mv medium-export /:REPO_PATH/playground/.medmark
+```
+
+3. 📁 The folder structure of a typical Medium export archive should look like this:
+
+```
+.
+├── README.html
+├── blocks
+│   └── blocked-users-0001.html
+├── bookmarks
+│   └── bookmarks-0001.html
+├── posts
+│   ├── 2020-03-17_How-to-set-up-WSO2-Identity-Server-User-Portal-in-an-development-environment-d406d15ec703.html
+│   ├── 2020-03-17_OAuth-2-0-Authorization-code-flow-React-SPA-demo-using-WSO2-Identity-Server-5829b890a6d4.html
+│   ├── ...
+...
+```
+
+## Step 2: Modify or Create a Template (Optional) 🖌️
+
+1. ✏️ Modify the existing template(`.medmark/templates/playground.js`) or create a new one based on your requirements.
+
+🔗 Follow this guide for more information on
+[creating a custom template](https://github.com/brionmario/medmark#custom-template).
+
+> **Note** This step is optional. Medmark will work with a default inbuilt template if no custom template is defined.
+
+## Step 3: Fire up the Medmark CLI. ⚡️
+
+1. 💻 Open your terminal or command prompt.
+2. 📂 Navigate to the root directory of Medmark Playground.
+3. 🏃 Run the following command:
+
+```bash
+pnpm medmark
+```
+
+> **Note** Make sure you have PNPM installed globally on your system.
+
+## Step 4: Answer the Prompts ✅
+
+When running the pnpm medmark command, you will be prompted to provide some information. Answer the prompts as follows:
+
+1. **Enter the path to the `posts` folder of the `medium exported archive`** .medmark/medium-export/posts`
+2. **Enter the destination folder for output files** `pages/blog`
+3. **Enter the path to the template file** `.medmark/templates/playground.js`
+
+- If you have modified the existing template or created a new one, provide the path to the template file. Otherwise,
+  press Enter to use the default inbuilt template.
+
+4. **Do you want to export drafts as well?** No
+5. **Enter a comma-separated list of files to skip:** `Press Enter to skip`
+
+- If there are any specific files you want to skip during the conversion process, enter their filenames separated by
+  commas (IS is blocking CORS requests by default.,Nice catch. I've fixed the typo.). Otherwise, press Enter.
+
+6. **Do you want to run in debug mode?** No
+
+## Step 6: Explore
+
+You can explore the generated output in the specified destination folder (e.g., pages/blog). The Medmark Playground will
+converted the Medium export into a static site, allowing you to navigate through the blog posts and other content.
+
+That's it! Start the application with the following command.
+
+```bash
+pnpm dev
+```
+
+And go to the `Posts` from the navigation.
+
+Enjoy exploring and testing Medmark!

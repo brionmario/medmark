@@ -1,26 +1,44 @@
 {
   "private": true,
-  "name": "medmark-basic-sample",
+  "name": "medmark-playground",
   "version": "0.1.0",
-  "description": "Basic example using medmark to grab my own blog posts from Medium and convert them to markdown.",
-  "keywords": [
-    "medmark",
-    "medmark-sample"
-  ],
+  "description": "Playground to test out Medmark features",
+  "author": "Brion Mario <me@brionmario.com> (https://brionmario.com/)",
+  "license": "MIT",
+  "main": "index.js",
   "homepage": "https://github.com/brionmario/medmark/samples/basic#readme",
   "bugs": {
     "url": "https://github.com/brionmario/medmark/issues"
   },
-  "license": "MIT",
-  "author": "Brion Mario",
   "repository": {
     "type": "git",
     "url": "https://github.com/brionmario/markdown"
   },
+  "keywords": [
+    "medmark",
+    "medmark-sample"
+  ],
   "scripts": {
-    "compile": "node ../../bin/medmark.js export/posts -o output -t templates/brionmario.com.js"
+    "dev": "next",
+    "build": "next build",
+    "lint": "next lint",
+    "start": "next start",
+    "debug": "NODE_OPTIONS='--inspect' next dev",
+    "clean": "rimraf .next .turbo"
+  },
+  "dependencies": {
+    "next": "^13.4.3",
+    "nextra": "^2.5.2",
+    "nextra-theme-blog": "^2.5.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "medmark": "workspace:*"
+    "@brionmario/eslint-plugin": "^0.2.9",
+    "@brionmario/prettier-config": "^0.1.0",
+    "eslint": "^8.30.0",
+    "eslint-plugin-mdx": "^2.0.5",
+    "medmark": "workspace:*",
+    "prettier": "^2.8.1"
   }
 }

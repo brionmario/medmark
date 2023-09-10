@@ -33,7 +33,7 @@
     "publish:packages": "changeset publish",
     "publish:release": "semantic-release",
     "test": "turbo run test",
-    "typecheck": "tsc --noemit -p tsconfig.lib.json",
+    "typecheck": "turbo run typecheck",
     "version:packages": "changeset version && pnpm install --lockfile-only"
   },
   "devDependencies": {

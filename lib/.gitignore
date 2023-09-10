@@ -91,5 +91,8 @@ dist
 # OS Specific files
 .DS_Store
 
+# <ROOT>/debug folder is used to store files nedded for debugging when `debug` mode is enabled.
+debug
+
 # turbo
 .turbo

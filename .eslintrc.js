@@ -22,25 +22,11 @@
  * SOFTWARE.
  */
 
-import Image from 'next/image';
-import {useTheme} from 'nextra-theme-blog';
-import {useEffect, useState} from 'react';
-
-const PoweredByMedmark = () => {
-  const {resolvedTheme} = useTheme();
-  const [logo, setLogo] = useState('/assets/images/medmark-logo.svg');
-
-  useEffect(
-    () =>
-      setLogo(resolvedTheme === 'dark' ? '/assets/images/medmark-logo-light.svg' : '/assets/images/medmark-logo.svg'),
-    [resolvedTheme],
-  );
-
-  return (
-    <span className="powered-by-medmark">
-      Powered by <Image width="65" height="12" src={logo} title="Medmark" />.
-    </span>
-  );
+module.exports = {
+  env: {
+    es6: true,
+    node: true,
+  },
+  extends: ['turbo', 'plugin:@brionmario/internal', 'plugin:@brionmario/prettier'],
+  plugins: ['@brionmario'],
 };
-
-export default PoweredByMedmark;

@@ -257,7 +257,9 @@ async function gatherPostData(
   const description: string = $cheerioBody('meta[name=description]').attr('content'); // from page...
 
   const schemaTags: Cheerio<Element> = $cheerioBody('script[type="application/ld+json"]');
-  const metadata: MediumPostMetadata = JSON.parse((schemaTags[0].children[0] as any).data);
+  const metadata: MediumPostMetadata = schemaTags[0]?.children[0]
+    ? JSON.parse((schemaTags[0].children[0] as any)?.data)
+    : {};
   const readingTime: string = $cheerioBody('.pw-reading-time').text();
 
   if (debug.enabled) {
@@ -433,7 +435,7 @@ async function convertMediumFile(
 
     // re-throw if you want it to bubble up
     if (error.type !== 'silent') {
-      throw new MedmarkException(`Error occurred while converting medium: ${error}`);
+      throw new MedmarkException(`Error occurred while converting medium: ${PATHS.file}`);
     }
   }
 }

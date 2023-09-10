@@ -69,7 +69,7 @@ export const getAuthors = (
   metadata: MediumPostMetadata,
 ): MedmarkFrontMatterAuthor[] => {
   let author: MedmarkFrontMatterAuthor = null;
-  const authorNameFromMeta: string = metadata.author.name;
+  const authorNameFromMeta: string = metadata?.author?.name;
 
   // FIXME: TS ISSUE
   Object.entries(apolloState).forEach(([key, value]: any) => {

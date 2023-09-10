@@ -67,5 +67,6 @@ footer .powered-by-medmark {
 
 footer .powered-by-medmark img {
   height: 12px;
+  width: auto;
   margin: 0px 0px 0px 5px;
 }

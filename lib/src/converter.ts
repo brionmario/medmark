@@ -28,6 +28,7 @@ import fs, {WriteStream} from 'fs';
 import cheerio, {CheerioAPI, Element, Cheerio} from 'cheerio';
 import mkdirp from 'mkdirp';
 import {join, resolve, basename, extname} from 'path';
+import chalk from 'chalk';
 import output from './output';
 import {transformHtmlToMarkdown} from './markdown';
 import Reporter from './reporter';
@@ -47,7 +48,6 @@ import {
 } from './models/medmark/template';
 import {MediumApolloState, MediumPostMetadata} from './models/medium';
 import {MedmarkFrontMatterAuthor} from './models/medmark/front-matter';
-import chalk from 'chalk';
 
 interface Paths {
   /**

@@ -23,3 +23,6 @@
  */
 
 export {frontMatterToYaml} from './utils';
+export {default as chalk} from 'chalk';
+export * from './constants';
+export {default as logger} from './output';

@@ -77,6 +77,17 @@ export interface CLISuccessMessageConfig {
   title: string;
 }
 
+export interface CLILogMessageConfig {
+  /**
+   * An array of strings representing the body of the log message.
+   */
+  bodyLines?: string[] | void[];
+  /**
+   * The title of the log message.
+   */
+  title?: string;
+}
+
 class CLIOutput {
   readonly X_PADDING: string = ' ';
 
@@ -148,12 +159,12 @@ class CLIOutput {
    * @param body - The body to write to the response. If `null` or `undefined`, no body will be written.
    * @returns A Promise that resolves once the body has been written to the response.
    */
-  private writeOptionalOutputBody(bodyLines?: string[]): void {
+  private writeOptionalOutputBody(bodyLines?: string[] | void[]): void {
     if (!bodyLines) {
       return;
     }
-    this.addNewline();
-    bodyLines.forEach((bodyLine: string) => this.writeToStdOut(`   ${bodyLine}${EOL}`));
+
+    bodyLines.forEach((bodyLine: string | void) => this.writeToStdOut(`       ${bodyLine}${EOL}`));
   }
 
   /**
@@ -318,17 +329,31 @@ class CLIOutput {
    * @param config.bodyLines - The body lines of the log message. Optional.
    * @param config.color - The color of the log message. Optional.
    */
-  log({title, bodyLines, color}: CLIWarnMessageConfig & {color?: string}): void {
-    this.addNewline();
+  log({title, bodyLines, color}: CLILogMessageConfig & {color?: string}): void {
+    if (title) {
+      this.addNewline();
 
-    this.writeOutputTitle({
-      color: 'cyan',
-      title: color ? (chalk as any)[color](title) : title,
-    });
+      this.writeOutputTitle({
+        color: 'cyan',
+        title: color ? (chalk as any)[color](title) : title,
+      });
+
+      this.addNewline();
+    }
 
     this.writeOptionalOutputBody(bodyLines);
 
     this.addNewline();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  check({text, color}: {color?: string; text: string}): string {
+    return `${chalk.green('✔')} ${color ? (chalk as any)[color](text) : text}`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  skip({text, color}: {color?: string; text: string}): string {
+    return `${chalk.yellow('🚸')} ${color ? (chalk as any)[color](text) : text}`;
   }
 }
 

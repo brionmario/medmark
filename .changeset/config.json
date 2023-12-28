@@ -7,9 +7,9 @@
   "fixed": [],
   "ignore": [],
   "linked": [],
-  "updateInternalDependencies": "patch",
   "root": {
     "packageDir": "."
   },
-  "tagFormat": "medmark@${version}"
+  "tagFormat": "medmark@${version}",
+  "updateInternalDependencies": "patch"
 }

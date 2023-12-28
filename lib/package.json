@@ -25,7 +25,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "README.md",
+    "../README.md",
     "LICENSE"
   ],
   "repository": {

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "medmark-playground",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Playground to test out Medmark features",
   "author": "Brion Mario <me@brionmario.com> (https://brionmario.com/)",
   "license": "MIT",

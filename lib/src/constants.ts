@@ -26,3 +26,11 @@
  * The delimiter used to split the HTML of embedded tweets
  */
 export const EMBEDDED_TWEET_HTML_SPIT_DELIMITER: string = 'EMBEDDED_TWEET_HTML_SPIT_DELIMITER';
+
+export const DEFAULT_MEDMARK_FOLDER_NAME: string = '.medmark';
+export const DEFAULT_MEDMARK_LOGS_FOLDER_NAME: string = 'logs';
+export const DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME: string = 'medium-export';
+export const DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME: string = 'output';
+export const DEFAULT_TEMPLATES_FOLDER_NAME: string = 'templates';
+export const DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME: string = 'sample-medmark-template.js';
+export const MEDIUM_EXPORT_POSTS_FOLDER_NAME: string = 'posts';

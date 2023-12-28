@@ -25,6 +25,7 @@
 import fs from 'fs-extra';
 import {dirname, join, resolve} from 'path';
 import ConfigurationService from './configuration-service';
+import {DEFAULT_MEDMARK_FOLDER_NAME, DEFAULT_MEDMARK_LOGS_FOLDER_NAME} from './constants';
 
 /**
  * Defines the structure of the paths for the logs.
@@ -83,7 +84,13 @@ const PATHS: {
         return resolve(join(PATHS.logs.root, articleId, 'meta.json'));
       },
     },
-    root: resolve(join('logs', ConfigurationService.getInstance().getRunnerTimestamp())),
+    root: resolve(
+      join(
+        DEFAULT_MEDMARK_FOLDER_NAME,
+        DEFAULT_MEDMARK_LOGS_FOLDER_NAME,
+        ConfigurationService.getInstance().getRunnerTimestamp(),
+      ),
+    ),
   },
 };
 

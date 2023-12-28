@@ -23,12 +23,24 @@
  * SOFTWARE.
  */
 
-import {program} from 'commander';
+import {Command} from 'commander';
 import inquirer from 'inquirer';
+import path from 'path';
 import convert from './converter';
 import ConfigurationService from './configuration-service';
 import output from './output';
 import debug from './debug';
+import init from './init';
+import {
+  DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME,
+  DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME,
+  DEFAULT_MEDMARK_FOLDER_NAME,
+  DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME,
+  DEFAULT_TEMPLATES_FOLDER_NAME,
+  MEDIUM_EXPORT_POSTS_FOLDER_NAME,
+} from './constants';
+
+const program: Command = new Command();
 
 program
   .version('0.1.0')
@@ -49,18 +61,28 @@ program
       debug: debugMode,
     } = await inquirer.prompt([
       {
-        message: 'Enter the path to the `posts` folder of the medium exported archive',
+        default: path.join(
+          DEFAULT_MEDMARK_FOLDER_NAME,
+          DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME,
+          MEDIUM_EXPORT_POSTS_FOLDER_NAME,
+        ),
+        message: 'Enter the path to the `posts` folder of the medium exported archive.',
         name: 'input',
         type: 'input',
       },
       {
-        default: 'output',
-        message: 'Enter destination folder for output files (default is "./")',
+        default: path.join(DEFAULT_MEDMARK_FOLDER_NAME, DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME),
+        message: 'Enter destination folder for output files.',
         name: 'output',
         type: 'input',
       },
       {
-        message: 'Enter the path to the template file',
+        default: path.join(
+          DEFAULT_MEDMARK_FOLDER_NAME,
+          DEFAULT_TEMPLATES_FOLDER_NAME,
+          DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME,
+        ),
+        message: 'Enter the path to the template file.',
         name: 'template',
         type: 'input',
       },
@@ -71,7 +93,7 @@ program
         type: 'confirm',
       },
       {
-        message: 'Enter a comma-separated list of files to skip',
+        message: 'Enter a comma-separated list of files to skip.',
         name: 'skip',
         type: 'input',
       },
@@ -87,11 +109,12 @@ program
 
     output.log({
       bodyLines: [
-        `→ ⬇️ INPUT: ${inputPath}`,
-        `→ ⬆️ OUTPUT (-o): ${outputPath}`,
+        `→ ⬇️  INPUT: ${inputPath}`,
+        `→ ⬆️  OUTPUT (-o): ${outputPath}`,
         `→ 💅 TEMPLATE (-t): ${templatePath || 'none'}`,
         `→ ❌ TO SKIP (-s): ${toSkip || 'none'}`,
         `→ 🚧 SHOULD EXPORT DRAFTS? (-d): ${drafts}`,
+        `→ 🐞 DEBUG MODE? (-D): ${debugMode}`,
       ],
       title: '💡 Following context has been initialized:',
     });
@@ -104,7 +127,15 @@ program
     }
 
     convert(inputPath, outputPath, templatePath, drafts, toSkip);
-  })
-  .parse(process.argv);
+  });
+
+program
+  .command('init')
+  .description('Initialize Medmark')
+  .action(async () => {
+    init();
+  });
+
+program.parse(process.argv);
 
 export * from './public-api';

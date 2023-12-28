@@ -22,7 +22,7 @@
   "author": "Brion Mario",
   "repository": {
     "type": "git",
-    "url": "https://github.com/brionmario/markdown"
+    "url": "https://github.com/brionmario/medmark"
   },
   "scripts": {
     "build": "turbo run build",

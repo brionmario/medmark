@@ -46,6 +46,6 @@ module.exports = {
     project: [path.resolve(__dirname, 'tsconfig.eslint.json')],
   },
   rules: {
-    'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': ['error', {devDependencies: ['**/*.config.*cjs', '**/scripts/*.js']}],
   },
 };

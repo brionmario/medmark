@@ -36,6 +36,7 @@
   "scripts": {
     "build": "pnpm clean:dist && rollup -c rollup.config.cjs",
     "clean:dist": "rimraf dist",
+    "dev": "pnpm clean:dist && rollup -c rollup.config.cjs --watch --watch.buildDelay 500",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 0",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

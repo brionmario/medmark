@@ -19,12 +19,14 @@
     "medmark-sample"
   ],
   "scripts": {
-    "dev": "next",
     "build": "next build",
-    "lint": "next lint",
-    "start": "next start",
+    "clean": "rimraf .next .turbo",
     "debug": "NODE_OPTIONS='--inspect' next dev",
-    "clean": "rimraf .next .turbo"
+    "predev": "node scripts/pre-dev.js",
+    "dev": "next",
+    "lint": "next lint",
+    "medmark": "medmark",
+    "start": "next start"
   },
   "dependencies": {
     "next": "^13.4.3",
@@ -38,6 +40,7 @@
     "@brionmario/prettier-config": "^0.1.0",
     "eslint": "^8.30.0",
     "eslint-plugin-mdx": "^2.0.5",
+    "fs-extra": "^11.1.0",
     "medmark": "workspace:*",
     "prettier": "^2.8.1"
   }

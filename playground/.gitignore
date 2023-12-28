@@ -42,5 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 # Medmark
-!.medmark/templates
+# TODO: Modify these as necessary if you are planning to use the playground for an actual project.
 .medmark
+pages/blogs

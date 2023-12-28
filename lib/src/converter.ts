@@ -47,6 +47,7 @@ import {
 } from './models/medmark/template';
 import {MediumApolloState, MediumPostMetadata} from './models/medium';
 import {MedmarkFrontMatterAuthor} from './models/medmark/front-matter';
+import chalk from 'chalk';
 
 interface Paths {
   /**
@@ -194,7 +195,7 @@ async function gatherPostData(
   postsToSkip: string[],
 ): Promise<MedmarkTemplateRenderOptions> {
   output.note({
-    bodyLines: [filePath],
+    bodyLines: [`${chalk.gray('[path]')} ${filePath}`],
     title: 'Gathering post data started',
   });
 
@@ -204,7 +205,7 @@ async function gatherPostData(
     await inlineGists($cheerio, reporter);
   } catch (e) {
     output.error({
-      bodyLines: [`File Path: ${filePath}`, `Stack Trace: ${e}`],
+      bodyLines: [`${chalk.gray('[path]')} ${chalk.red(filePath)}`, `${chalk.gray('[stack]')} ${chalk.red(e)}`],
       title: 'An error occurred while inlining Gists',
     });
   }
@@ -373,7 +374,7 @@ async function convertMediumFile(
   const filename: string = basename(PATHS.file, '.html');
 
   output.note({
-    bodyLines: [`PATH: ${PATHS.file}`, `FILE: ${filename}`],
+    bodyLines: [`${chalk.gray('[path]')} ${PATHS.file}`, `${chalk.gray('[output]')} ${filename}`],
     title: 'Converting',
   });
 

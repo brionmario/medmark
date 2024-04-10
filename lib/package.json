@@ -30,8 +30,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/brionmario/markdown/",
-    "directory": "packages/cli"
+    "url": "https://github.com/brionmario/medmark",
+    "directory": "lib"
   },
   "scripts": {
     "build": "pnpm clean:dist && rollup -c rollup.config.cjs",

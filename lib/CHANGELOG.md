@@ -1,5 +1,13 @@
 # medmark
 
+## 0.2.2
+
+### Patch Changes
+
+- [#25](https://github.com/brionmario/medmark/pull/25)
+  [`d53a850`](https://github.com/brionmario/medmark/commit/d53a850e849e50d86a23986a62cb2ed536338353) Thanks
+  [@brionmario](https://github.com/brionmario)! - Copy README to dist during build to be available in npm
+
 ## 0.2.1
 
 ### Patch Changes

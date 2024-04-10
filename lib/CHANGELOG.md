@@ -1,5 +1,12 @@
 # medmark
 
+## 0.2.1
+
+### Patch Changes
+
+- [`c154225`](https://github.com/brionmario/medmark/commit/c15422543b692910e619baeb1aaecd5525bd0e40) Thanks
+  [@brionmario](https://github.com/brionmario)! - Restructured the repo with updated README's
+
 ## 0.2.0
 
 ### Minor Changes

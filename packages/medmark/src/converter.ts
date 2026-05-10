@@ -28,6 +28,7 @@ import fs, {WriteStream} from 'fs';
 import cheerio, {CheerioAPI, Element, Cheerio} from 'cheerio';
 import mkdirp from 'mkdirp';
 import {join, resolve, basename, extname} from 'path';
+import {pathToFileURL} from 'url';
 import chalk from 'chalk';
 import output from './output';
 import {transformHtmlToMarkdown} from './markdown';
@@ -365,8 +366,13 @@ async function convertMediumFile(
     template: templatePath,
   };
 
+  const resolvedTemplate: string | null = PATHS.template
+    ? PATHS.template.startsWith('file:')
+      ? PATHS.template
+      : pathToFileURL(resolve(PATHS.template)).href
+    : null;
   const loadedTemplateModule: {default: MedmarkTemplate} | null =
-    PATHS.template && (await import(resolve(PATHS.template)));
+    resolvedTemplate && (await import(resolvedTemplate));
   const template: MedmarkTemplate = loadedTemplateModule?.default ?? DefaultTemplate;
 
   const options: MedmarkOptions = template.getOptions();

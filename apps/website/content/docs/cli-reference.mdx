@@ -1,0 +1,61 @@
+---
+title: CLI Reference
+description: All medmark commands and flags.
+---
+
+## Commands
+
+### `medmark` (default)
+
+Runs the interactive conversion wizard.
+
+```bash
+npx medmark [options]
+```
+
+You can bypass the interactive prompts by passing flags directly:
+
+```bash
+npx medmark \
+  --input medmark/medium-export/posts \
+  --output medmark/output \
+  --template medmark/templates/sample-medmark-template.js
+```
+
+### `medmark init`
+
+Initialises the `medmark/` workspace in the current directory.
+
+```bash
+npx medmark init
+```
+
+Creates:
+- `medmark/medium-export/` — place your Medium archive here
+- `medmark/output/` — converted files are written here
+- `medmark/templates/sample-medmark-template.js` — starter custom template
+- `.medmark/logs/` — debug log output
+
+Running `medmark` without `init` first triggers the same setup automatically.
+
+## Flags
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--input <path>` | `-i` | Path to the `posts/` folder of the Medium export |
+| `--output <path>` | `-o` | Destination folder for converted files (default: `medmark/output`) |
+| `--template <file>` | `-t` | Path to a custom template file |
+| `--drafts` | `-d` | Include draft posts in the output |
+| `--skip <files>` | `-s` | Comma-separated list of HTML filenames to skip |
+| `--debug` | `-D` | Enable debug mode (saves logs to `.medmark/logs/`) |
+| `--version` | `-V` | Print the installed version |
+| `--help` | `-h` | Show help text |
+
+## Advanced options prompt
+
+When you answer **yes** to "Configure advanced options?" in the wizard, you get:
+
+- **Template file** — path to a custom `.js` template (leave empty to use the built-in default)
+- **Export drafts** — include `draft_*.html` files
+- **Files to skip** — comma-separated filenames to ignore
+- **Debug mode** — write verbose logs under `.medmark/logs/`

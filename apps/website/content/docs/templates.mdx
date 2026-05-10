@@ -1,0 +1,88 @@
+---
+title: Templates
+description: Customise the Markdown output shape with a template file.
+---
+
+A **template** is a plain CommonJS `.js` file that controls:
+
+1. **Options** — how medmark processes each post (image storage, code language default, folder strategy)
+2. **Render** — how each post is written to disk (front matter shape, filename, body)
+
+## Built-in default
+
+If you don't provide a template, medmark uses a sensible built-in default that generates standard YAML front matter.
+
+## Starter template
+
+`medmark init` creates `medmark/templates/sample-medmark-template.js`:
+
+```js
+const { frontMatterToYaml } = require('medmark');
+
+module.exports = {
+  getOptions() {
+    return {
+      defaultCodeBlockLanguage: 'js',
+      folderForEachSlug: true,
+      imagePath: '/resources',
+      imageStorageStrategy: 'REMOTE',
+    };
+  },
+
+  render(data) {
+    const date = new Date(data.published);
+    const prettyDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+      .toString().padStart(2, 0)}-${date.getDate().toString().padStart(2, 0)}`;
+
+    const frontMatterAsJSON = {
+      slug: `/posts/${data.titleForSlug}/`,
+      date: prettyDate,
+      title: data.title,
+      description: data.description,
+      authors: data.authors,
+      readingTime: data.readingTime,
+      draft: data.draft,
+      categories: data.categories,
+      tags: data.tags,
+      bannerImage: data.images.map(i => i.mediumUrl)[0],
+      ogImage: data.images.map(i => i.mediumUrl)[0],
+      images: data.images.map(i => i.mediumUrl),
+    };
+
+    return `---\n${frontMatterToYaml(frontMatterAsJSON)}---\n\n${data.body}\n`;
+  },
+};
+```
+
+## `getOptions()` reference
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `defaultCodeBlockLanguage` | `string` | Language hint for fenced code blocks with no language tag |
+| `folderForEachSlug` | `boolean` | Create a `slug/index.md` folder structure instead of `slug.md` |
+| `imagePath` | `string` | Base path used for image references in the output |
+| `imageStorageStrategy` | `'REMOTE'` \| `'LOCAL'` | `REMOTE` keeps Medium CDN URLs; `LOCAL` downloads images |
+
+## `render(data)` — available data
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `data.title` | `string` | Post title |
+| `data.titleForSlug` | `string` | URL-safe slug derived from the title |
+| `data.description` | `string` | Meta description scraped from Medium |
+| `data.body` | `string` | Converted Markdown body |
+| `data.published` | `string` | ISO date string |
+| `data.readingTime` | `string` | Reading time text (e.g. `"5 min read"`) |
+| `data.draft` | `boolean` | Whether the post is a draft |
+| `data.tags` | `string[]` | Post tags |
+| `data.categories` | `string[]` | Post categories |
+| `data.authors` | `Author[]` | Array of `{name, url}` objects |
+| `data.images` | `Image[]` | Array of `{mediumUrl, localName, localPath}` objects |
+
+## Using a custom template
+
+Pass the path via `--template` or enter it in the advanced options prompt:
+
+```bash
+npx medmark --template medmark/templates/my-template.js
+```

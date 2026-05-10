@@ -1,0 +1,70 @@
+---
+title: Getting Started
+description: Install medmark and run your first conversion in minutes.
+---
+
+## Prerequisites
+
+- Node.js 18 or later
+- A Medium account export (download from Medium → Settings → Security and apps → Download your information)
+
+## Run with npx (recommended)
+
+No installation needed:
+
+```bash
+npx medmark
+```
+
+On first run medmark will:
+1. Create a `medmark/` folder in your current directory
+2. Walk you through a short interactive prompt
+
+## Install globally
+
+```bash
+npm install -g medmark
+# or
+pnpm add -g medmark
+```
+
+Then run:
+
+```bash
+medmark
+```
+
+## First run walkthrough
+
+```
+┌
+  ███╗   ███╗███████╗██████╗ ...
+  ...
+       Convert your Medium export to Markdown · v0.2.1
+
+◇  Path to the `posts` folder of your Medium export
+│  medmark/medium-export/posts
+│
+◇  Destination folder for output files
+│  medmark/output
+│
+◇  Configure advanced options?
+│  No
+│
+◆  Configuration
+│  Input     medmark/medium-export/posts
+│  Output    medmark/output
+│  Template  built-in default
+│  Drafts    no
+│  Skip      none
+│  Debug     no
+└
+◇  Conversion complete!
+```
+
+## Providing your Medium export
+
+1. Export your data from [medium.com/me/export](https://medium.com/me/export)
+2. Unzip the archive
+3. Copy the `posts/` folder into `medmark/medium-export/`
+4. Run `npx medmark`

@@ -1,0 +1,11 @@
+{
+  "title": "medmark",
+  "pages": [
+    "index",
+    "getting-started",
+    "cli-reference",
+    "configuration",
+    "templates",
+    "advanced"
+  ]
+}

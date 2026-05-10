@@ -2,14 +2,20 @@
   "$schema": "https://unpkg.com/@changesets/config@2.2.0/schema.json",
   "access": "public",
   "baseBranch": "main",
-  "changelog": ["@changesets/changelog-github", { "repo": "brionmario/medmark" }],
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "brionmario/medmark"
+    }
+  ],
   "commit": false,
   "fixed": [],
   "ignore": [],
   "linked": [],
-  "root": {
-    "packageDir": "."
-  },
   "tagFormat": "medmark@${version}",
-  "updateInternalDependencies": "patch"
+  "updateInternalDependencies": "patch",
+  "privatePackages": {
+    "version": false,
+    "tag": false
+  }
 }

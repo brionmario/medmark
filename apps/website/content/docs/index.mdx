@@ -1,0 +1,36 @@
+---
+title: Overview
+description: Convert your Medium export to Markdown or MDX with ease.
+---
+
+**medmark** is a CLI tool that converts Medium exported archives into Markdown (or MDX) files, ready to drop into any static-site framework — Next.js, Astro, Hugo, and more.
+
+## What it does
+
+- Parses Medium's HTML export format
+- Generates clean Markdown with YAML front matter (slug, title, date, tags, images, and more)
+- Downloads and remaps images locally or preserves remote CDN URLs
+- Supports custom templates so you control the output shape
+- Skips reply posts and optionally exports drafts
+
+## How it works
+
+```
+npx medmark
+```
+
+On first run medmark creates a `medmark/` workspace in your current directory, then walks you through a short interactive prompt to point it at your Medium export archive.
+
+## Workspace layout
+
+After `medmark init` (or the first `medmark` run):
+
+```
+my-project/
+├── medmark/
+│   ├── medium-export/   ← paste your Medium export here
+│   ├── output/          ← converted Markdown files land here
+│   └── templates/       ← optional custom templates
+└── .medmark/
+    └── logs/            ← debug logs
+```

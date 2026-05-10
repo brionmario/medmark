@@ -1,0 +1,67 @@
+---
+title: Advanced Usage
+description: Debug mode, skipping files, drafts, and programmatic API.
+---
+
+## Debug mode
+
+Enable debug mode to write verbose logs to `.medmark/logs/`:
+
+```bash
+npx medmark --debug
+```
+
+Or answer **yes** to "Enable debug mode?" in the advanced options prompt. Logs include:
+
+- Per-post metadata JSON
+- Apollo state snapshots from scraped Medium pages
+- Image download results
+
+## Exporting drafts
+
+By default, draft posts (files starting with `draft_`) are skipped. To include them:
+
+```bash
+npx medmark --drafts
+```
+
+Drafts are identified by the filename prefix in the Medium export, not by the post's published status.
+
+## Skipping specific files
+
+Pass a comma-separated list of HTML filenames to ignore:
+
+```bash
+npx medmark --skip draft_old-post.html,another.html
+```
+
+## Programmatic API
+
+medmark exports its conversion utilities so you can use it in your own scripts:
+
+```js
+import { frontMatterToYaml } from 'medmark';
+```
+
+The `frontMatterToYaml` helper converts a plain object to a YAML front matter string, which is useful when writing custom templates.
+
+## Image strategies
+
+### `REMOTE` (default)
+Keeps the original `cdn-images-1.medium.com` URLs. Zero download time, but images depend on Medium's CDN staying available.
+
+### `LOCAL`
+Downloads all images into the path defined by `imagePath` in your template's `getOptions()`. Slower but self-contained.
+
+```js
+getOptions() {
+  return {
+    imageStorageStrategy: 'LOCAL',
+    imagePath: 'public/images',
+  };
+}
+```
+
+## Handling reply posts
+
+medmark automatically detects Medium "reply" posts (posts written in response to another post) and skips them. They are recorded in the `conversion_report.json` written to your output folder.

@@ -1,0 +1,46 @@
+---
+title: Configuration
+description: Understand the medmark workspace layout and folder conventions.
+---
+
+## Workspace folders
+
+medmark uses two directories in your project root:
+
+### `medmark/` — user data
+
+Visible folder you interact with directly.
+
+```
+medmark/
+├── medium-export/   ← paste your Medium export's posts/ folder here
+│   └── .gitkeep
+├── output/          ← converted Markdown output
+└── templates/
+    └── sample-medmark-template.js  ← starter template
+```
+
+### `.medmark/` — tool internals
+
+Hidden folder managed by medmark.
+
+```
+.medmark/
+└── logs/   ← debug logs written when --debug is on
+```
+
+## Initialising the workspace
+
+Running either of these creates both folders:
+
+```bash
+npx medmark init
+# or just
+npx medmark   ← auto-inits on first run
+```
+
+## Cross-platform notes
+
+- Both `medmark/` and `.medmark/` are created with `fs.mkdirSync` and work identically on macOS, Linux, and Windows.
+- On Windows, `.medmark/` will not be hidden at the OS level (Windows uses file attributes for hiding, not dot-prefixes). It functions correctly regardless.
+- All paths are built with `path.join()` / `path.resolve()` so separators are always OS-correct.

@@ -35,7 +35,12 @@ const pkg = require('./package.json');
 module.exports = [
   {
     cache: false,
-    external: ['fs', 'path'],
+    external: [
+      // Node.js built-ins
+      'fs', 'path', 'url', 'os', 'stream', 'util', 'events', 'buffer', 'crypto', 'http', 'https', 'module',
+      // All npm dependencies — resolved from node_modules at runtime so transitive deps are always accessible
+      ...Object.keys(pkg.dependencies || {}),
+    ],
     input: 'src/index.ts',
     output: [
       {

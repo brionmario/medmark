@@ -30,7 +30,7 @@
     "dev": "turbo run dev --parallel",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,json,md,mdx}\"",
     "lint": "turbo run lint",
-    "publish:packages": "changeset publish",
+    "publish:packages": "changeset publish --provenance",
     "publish:release": "semantic-release",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",

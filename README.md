@@ -1,5 +1,5 @@
 <p align="center" style="padding-top: 20px">
-  <img src="./docs/resources/medmark-logo.svg" height="50">
+  <img src="./docs/assets/images/brand/medmark-logo.svg" height="50">
   <p align="center">Export your Medium articles to Markdown</p>
 </p>
 

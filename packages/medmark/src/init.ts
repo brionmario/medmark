@@ -24,52 +24,45 @@
 
 import fs from 'fs';
 import path from 'path';
+import {log} from '@clack/prompts';
 import {
   DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME,
   DEFAULT_MEDMARK_FOLDER_NAME,
+  DEFAULT_MEDMARK_HIDDEN_FOLDER_NAME,
+  DEFAULT_MEDMARK_LOGS_FOLDER_NAME,
   DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME,
   DEFAULT_TEMPLATES_FOLDER_NAME,
 } from './constants';
-import output from './output';
 
-function init(): void {
+function ensureDir(dirPath: string, label: string): void {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, {recursive: true});
+    log.step(`Created ${label}`);
+  }
+}
+
+async function init(): Promise<void> {
   try {
-    output.addNewline();
-    output.log({
-      title: '🚀 Initializing Medmark...',
-    });
+    const cwd: string = process.cwd();
 
-    const medmarkDir: string = path.join(process.cwd(), DEFAULT_MEDMARK_FOLDER_NAME);
+    const medmarkDir: string = path.join(cwd, DEFAULT_MEDMARK_FOLDER_NAME);
     const mediumExportDir: string = path.join(medmarkDir, DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME);
     const templatesDir: string = path.join(medmarkDir, DEFAULT_TEMPLATES_FOLDER_NAME);
     const sampleTemplateFile: string = path.join(templatesDir, DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME);
 
-    // Create the .medmark folder
-    if (!fs.existsSync(medmarkDir)) {
-      fs.mkdirSync(medmarkDir);
-      output.log({bodyLines: [output.check({text: `${DEFAULT_MEDMARK_FOLDER_NAME} folder created.`})]});
-    } else {
-      output.log({bodyLines: [output.skip({text: `${DEFAULT_MEDMARK_FOLDER_NAME} folder already exists.`})]});
-    }
+    const hiddenDir: string = path.join(cwd, DEFAULT_MEDMARK_HIDDEN_FOLDER_NAME);
+    const logsDir: string = path.join(hiddenDir, DEFAULT_MEDMARK_LOGS_FOLDER_NAME);
 
-    // Create the medium-export folder and .gitkeep file
-    if (!fs.existsSync(mediumExportDir)) {
-      fs.mkdirSync(mediumExportDir);
+    ensureDir(medmarkDir, `${DEFAULT_MEDMARK_FOLDER_NAME}/`);
+    ensureDir(mediumExportDir, `${DEFAULT_MEDMARK_FOLDER_NAME}/${DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME}/`);
+    ensureDir(templatesDir, `${DEFAULT_MEDMARK_FOLDER_NAME}/${DEFAULT_TEMPLATES_FOLDER_NAME}/`);
+    ensureDir(hiddenDir, `${DEFAULT_MEDMARK_HIDDEN_FOLDER_NAME}/`);
+    ensureDir(logsDir, `${DEFAULT_MEDMARK_HIDDEN_FOLDER_NAME}/${DEFAULT_MEDMARK_LOGS_FOLDER_NAME}/`);
+
+    if (!fs.existsSync(path.join(mediumExportDir, '.gitkeep'))) {
       fs.writeFileSync(path.join(mediumExportDir, '.gitkeep'), '');
-      output.log({bodyLines: [output.check({text: `${DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME} folder created.`})]});
-    } else {
-      output.log({bodyLines: [output.skip({text: `${DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME} folder already exists.`})]});
     }
 
-    // Create the templates folder
-    if (!fs.existsSync(templatesDir)) {
-      fs.mkdirSync(templatesDir);
-      output.log({bodyLines: [output.check({text: `${DEFAULT_TEMPLATES_FOLDER_NAME} folder created.`})]});
-    } else {
-      output.log({bodyLines: [output.skip({text: `${DEFAULT_TEMPLATES_FOLDER_NAME} folder already exists.`})]});
-    }
-
-    // Create the sample-template.js file with content
     const sampleTemplateContent: string = `\
 const { frontMatterToYaml } = require('medmark');
 
@@ -117,21 +110,13 @@ module.exports = {
 
     if (!fs.existsSync(sampleTemplateFile)) {
       fs.writeFileSync(sampleTemplateFile, sampleTemplateContent);
-      output.log({bodyLines: [output.check({text: `${DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME} file created.`})]});
-    } else {
-      output.log({
-        bodyLines: [output.skip({text: `${DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME} file already exists.`})],
-      });
+      log.step(`Created ${DEFAULT_MEDMARK_FOLDER_NAME}/${DEFAULT_TEMPLATES_FOLDER_NAME}/${DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME}`);
     }
 
-    output.success({
-      title: '🎉 Initialization completed successfully.',
-    });
+    log.success('Workspace initialized.');
   } catch (error) {
-    output.error({
-      bodyLines: [error.message.toString()],
-      title: '❌ Initialization failed.',
-    });
+    log.error(`Initialization failed: ${(error as Error).message}`);
+    process.exit(1);
   }
 }
 

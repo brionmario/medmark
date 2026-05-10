@@ -1,7 +1,7 @@
 /**
  * MIT License
  *
- * Copyright (c) 2023, Brion Mario
+ * Copyright (c) 2023, Brion Mario.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,16 @@
  * SOFTWARE.
  */
 
-import Image from 'next/image';
-import {useTheme} from 'nextra-theme-blog';
-import {useEffect, useState} from 'react';
+/**
+ * The delimiter used to split the HTML of embedded tweets
+ */
+export const EMBEDDED_TWEET_HTML_SPIT_DELIMITER: string = 'EMBEDDED_TWEET_HTML_SPIT_DELIMITER';
 
-const PoweredByMedmark = () => {
-  const {resolvedTheme} = useTheme();
-  const [logo, setLogo] = useState('/assets/images/medmark-logo.svg');
-
-  useEffect(
-    () =>
-      setLogo(resolvedTheme === 'dark' ? '/assets/images/medmark-logo-light.svg' : '/assets/images/medmark-logo.svg'),
-    [resolvedTheme],
-  );
-
-  return (
-    <span className="powered-by-medmark">
-      Powered by <Image width="65" height="12" src={logo} title="Medmark" />.
-    </span>
-  );
-};
-
-export default PoweredByMedmark;
+export const DEFAULT_MEDMARK_FOLDER_NAME: string = 'medmark';
+export const DEFAULT_MEDMARK_HIDDEN_FOLDER_NAME: string = '.medmark';
+export const DEFAULT_MEDMARK_LOGS_FOLDER_NAME: string = 'logs';
+export const DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME: string = 'medium-export';
+export const DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME: string = 'output';
+export const DEFAULT_TEMPLATES_FOLDER_NAME: string = 'templates';
+export const DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME: string = 'sample-medmark-template.js';
+export const MEDIUM_EXPORT_POSTS_FOLDER_NAME: string = 'posts';

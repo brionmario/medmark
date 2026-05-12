@@ -1,5 +1,12 @@
 # medmark
 
+## 0.2.4
+
+### Patch Changes
+
+- [`5dc9d709d10fb6b1ba9c4c81d5b4567551a7e719`](https://github.com/brionmario/medmark/commit/5dc9d709d10fb6b1ba9c4c81d5b4567551a7e719)
+  Thanks [@brionmario](https://github.com/brionmario)! - Fix Chalk ESM issues
+
 ## 0.2.3
 
 ### Patch Changes

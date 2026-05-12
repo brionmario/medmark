@@ -59,10 +59,10 @@ const DefaultTemplate: MedmarkTemplate = {
     draft,
     categories,
     tags,
-    images,
+    images = [],
     body,
   }: MedmarkTemplateRenderOptions): string {
-    const date: Date = new Date(published);
+    const date: Date = new Date(published!);
     const prettyDate: string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
       .getDate()
       .toString()

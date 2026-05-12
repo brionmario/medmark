@@ -24,7 +24,7 @@
 
 import {extname} from 'path';
 import fetch, {Response} from 'node-fetch';
-import {AnyNode, CheerioAPI, Cheerio} from 'cheerio';
+import {AnyNode, CheerioAPI, Cheerio, Element} from 'cheerio';
 import MedmarkSilentException from './exceptions/medmark-silent-exception';
 
 /**
@@ -70,7 +70,7 @@ export async function inlineGists($cheerio: CheerioAPI, reporter: any): Promise<
   // FIXME: Can do away with promises here entirely?
   const promises: Array<Promise<void>> = [];
 
-  $cheerio('script').each(function () {
+  $cheerio('script').each(function (this: Element) {
     const gistPromise: Promise<void> = new Promise<void>(
       async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => {
         const src: string = $cheerio(this).attr('src') || '';
@@ -85,7 +85,7 @@ export async function inlineGists($cheerio: CheerioAPI, reporter: any): Promise<
 
             // Replace rawGist in markup.  This turns into ``` codefence.
             // FIXME: Just modify this in Turndown?
-            const inlineCode: Cheerio<AnyNode> = $cheerio(`<pre>${rawGist}</pre>`);
+            const inlineCode: Cheerio<AnyNode> = $cheerio(`<pre>${rawGist}</pre>`) as Cheerio<AnyNode>;
 
             // FIXME: Guard to ensure <figure> parent is removed
             // Replace the <figure> parent node with code fence

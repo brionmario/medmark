@@ -1,0 +1,740 @@
+
+> medmark@0.2.2 build /Users/brion/Desktop/brion/github/medium-to-md(x)/medmark/
+packages/medmark
+> pnpm clean:dist && rollup -c rollup.config.cjs
+
+
+> medmark@0.2.2 clean:dist /Users/brion/Desktop/brion/github/medium-to-md(x)/med
+mark/packages/medmark
+> rimraf dist
+
+
+src/index.ts → dist/cjs/index.js, dist/esm/index.js...
+src/converter.ts:153:13 - error TS2709: Cannot use namespace 'CheerioAPI' as a t
+ype.
+
+153   $cheerio: CheerioAPI,
+                ~~~~~~~~~~
+
+src/converter.ts:204:19 - error TS2709: Cannot use namespace 'CheerioAPI' as a t
+ype.
+
+204   const $cheerio: CheerioAPI = cheerio.load(content);
+                      ~~~~~~~~~~
+
+src/converter.ts:240:5 - error TS2345: Argument of type 'string | undefined' is 
+not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+240     options.imagePath,
+        ~~~~~~~~~~~~~~~~~
+
+src/converter.ts:259:23 - error TS2709: Cannot use namespace 'CheerioAPI' as a t
+ype.
+
+259   const $cheerioBody: CheerioAPI = cheerio.load(postBody);
+                          ~~~~~~~~~~
+
+src/converter.ts:262:21 - error TS2709: Cannot use namespace 'Cheerio' as a type
+.
+
+262   const schemaTags: Cheerio<Element> = $cheerioBody('script[type="applicatio
+n/ld+json"]');
+                        ~~~~~~~
+
+src/converter.ts:262:29 - error TS2709: Cannot use namespace 'Element' as a type
+.
+
+262   const schemaTags: Cheerio<Element> = $cheerioBody('script[type="applicatio
+n/ld+json"]');
+                                ~~~~~~~
+
+src/converter.ts:272:18 - error TS2709: Cannot use namespace 'Cheerio' as a type
+.
+
+272   const scripts: Cheerio<Element> = $cheerioBody('script');
+                     ~~~~~~~
+
+src/converter.ts:272:26 - error TS2709: Cannot use namespace 'Element' as a type
+.
+
+272   const scripts: Cheerio<Element> = $cheerioBody('script');
+                             ~~~~~~~
+
+src/converter.ts:274:7 - error TS2322: Type 'null' is not assignable to type 'Me
+diumApolloState'.
+
+274   let apolloState: MediumApolloState = null;
+          ~~~~~~~~~~~
+
+src/converter.ts:278:42 - error TS2709: Cannot use namespace 'Element' as a type
+.
+
+278   Object.values(scripts).forEach((value: Element & {children: (Element & {da
+ta: string})[]}) => {
+                                             ~~~~~~~
+
+src/converter.ts:278:64 - error TS2709: Cannot use namespace 'Element' as a type
+.
+
+278   Object.values(scripts).forEach((value: Element & {children: (Element & {da
+ta: string})[]}) => {
+                                                                   ~~~~~~~
+
+src/converter.ts:311:45 - error TS2683: 'this' implicitly has type 'any' because
+ it does not have a type annotation.
+
+311     let codeBlockContent: string = $cheerio(this).html();
+                                                ~~~~
+
+src/converter.ts:314:21 - error TS2683: 'this' implicitly has type 'any' because
+ it does not have a type annotation.
+
+314     return $cheerio(this).html(codeBlockContent);
+                        ~~~~
+
+src/converter.ts:323:7 - error TS2322: Type 'null' is not assignable to type 'st
+ring'.
+
+323   let posts: string = null;
+          ~~~~~
+
+src/converter.ts:381:37 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+381   const filename: string = basename(PATHS.file, '.html');
+                                        ~~~~~~~~~~
+
+src/converter.ts:389:39 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+389     reporter.report.posts.drafts.push(PATHS.file);
+                                          ~~~~~~~~~~
+
+src/converter.ts:399:40 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+399   reporter.report.posts.attempted.push(PATHS.file);
+                                           ~~~~~~~~~~
+
+src/converter.ts:401:9 - error TS2322: Type 'string | undefined' is not assignab
+le to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+401   const srcFilepath: string = PATHS.file;
+            ~~~~~~~~~~~
+
+src/converter.ts:402:43 - error TS2769: No overload matches this call.
+  Overload 1 of 3, '(path: PathOrFileDescriptor, options?: { encoding?: null | u
+ndefined; flag?: string | undefined; } | null | undefined): NonSharedBuffer', ga
+ve the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathOrFileDescriptor'.
+      Type 'undefined' is not assignable to type 'PathOrFileDescriptor'.
+  Overload 2 of 3, '(path: PathOrFileDescriptor, options?: BufferEncoding | (Obj
+ectEncodingOptions & { flag?: string | undefined; }) | null | undefined): string
+ | NonSharedBuffer', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathOrFileDescriptor'.
+      Type 'undefined' is not assignable to type 'PathOrFileDescriptor'.
+
+402   const content: Buffer = fs.readFileSync(PATHS.file);
+                                              ~~~~~~~~~~
+
+
+src/converter.ts:408:39 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+408     let imageFolder: string = resolve(options.imagePath);
+                                          ~~~~~~~~~~~~~~~~~
+
+src/converter.ts:413:27 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+413       PATHS.output = join(PATHS.output, postData.titleForSlug);
+                              ~~~~~~~~~~~~
+
+src/converter.ts:414:40 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+414       imageFolder = join(PATHS.output, options.imagePath);
+                                           ~~~~~~~~~~~~~~~~~
+
+src/converter.ts:419:17 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+419     mkdirp.sync(PATHS.output);
+                    ~~~~~~~~~~~~
+
+src/converter.ts:423:45 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+423       writePostToFile(templateRenderOutput, PATHS.file, PATHS.output);
+                                                ~~~~~~~~~~
+
+src/converter.ts:430:46 - error TS2345: Argument of type 'MedmarkTemplateRenderO
+ptionsImage[] | undefined' is not assignable to parameter of type 'MedmarkTempla
+teRenderOptionsImage[]'.
+  Type 'undefined' is not assignable to type 'MedmarkTemplateRenderOptionsImage[
+]'.
+
+430         await saveImagesToLocal(imageFolder, postData.images);
+                                                 ~~~~~~~~~~~~~~~
+
+src/converter.ts:436:42 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+436     reporter.report.posts.succeeded.push(PATHS.file);
+                                             ~~~~~~~~~~
+
+src/converter.ts:445:9 - error TS18046: 'error' is of type 'unknown'.
+
+445     if (error.type !== 'silent') {
+            ~~~~~
+
+src/converter.ts:475:45 - error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathLike'.
+      Type 'undefined' is not assignable to type 'PathLike'.
+
+475   const isDirectory: boolean = fs.lstatSync(PATHS.input).isDirectory();
+                                                ~~~~~~~~~~~
+
+  ../../node_modules/.pnpm/@types+node@18.19.130/node_modules/@types/node/fs.d.t
+s:1041:9
+    1041         (path: PathLike, options?: StatSyncOptions): Stats | BigIntStat
+s | undefined;
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+    The last overload is declared here.
+
+src/converter.ts:481:20 - error TS2769: No overload matches this call.
+  Overload 1 of 5, '(path: PathLike, options?: BufferEncoding | { encoding: Buff
+erEncoding | null; withFileTypes?: false | undefined; recursive?: boolean | unde
+fined; } | null | undefined): string[]', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathLike'.
+      Type 'undefined' is not assignable to type 'PathLike'.
+  Overload 2 of 5, '(path: PathLike, options?: BufferEncoding | (ObjectEncodingO
+ptions & { withFileTypes?: false | undefined; recursive?: boolean | undefined; }
+) | null | undefined): string[] | Buffer<...>[]', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathLike'.
+      Type 'undefined' is not assignable to type 'PathLike'.
+
+481     fs.readdirSync(PATHS.input).forEach((file: string) => {
+                       ~~~~~~~~~~~
+
+
+src/converter.ts:482:43 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+482       const evaluatingFile: string = join(PATHS.input, file);
+                                              ~~~~~~~~~~~
+
+src/converter.ts:485:57 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+485         promises.push(convertMediumFile(evaluatingFile, PATHS.output, PATHS.
+template, exportDrafts, postsToSkip));
+                                                            ~~~~~~~~~~~~
+
+src/converter.ts:491:45 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+491     promises.push(convertMediumFile(resolve(PATHS.input), PATHS.output, PATH
+S.template, exportDrafts, postsToSkip));
+                                                ~~~~~~~~~~~
+
+src/converter.ts:491:59 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+491     promises.push(convertMediumFile(resolve(PATHS.input), PATHS.output, PATH
+S.template, exportDrafts, postsToSkip));
+                                                              ~~~~~~~~~~~~
+
+src/converter.ts:499:31 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+499     reporter.saveReportToFile(PATHS.output);
+                                  ~~~~~~~~~~~~
+
+src/converter.ts:502:37 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+502       `Medium files from "${resolve(PATHS.input)}" have finished converting 
+to "${resolve(PATHS.output)}" using the "${
+                                        ~~~~~~~~~~~
+
+src/converter.ts:502:91 - error TS2345: Argument of type 'string | undefined' is
+ not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+502       `Medium files from "${resolve(PATHS.input)}" have finished converting 
+to "${resolve(PATHS.output)}" using the "${
+                                                                                
+              ~~~~~~~~~~~~
+
+src/github.ts:68:45 - error TS2709: Cannot use namespace 'CheerioAPI' as a type.
+
+68 export async function inlineGists($cheerio: CheerioAPI, reporter: any): Promi
+se<void[]> {
+                                               ~~~~~~~~~~
+
+src/github.ts:76:38 - error TS2683: 'this' implicitly has type 'any' because it 
+does not have a type annotation.
+
+76         const src: string = $cheerio(this).attr('src') || '';
+                                        ~~~~
+
+src/github.ts:88:31 - error TS2709: Cannot use namespace 'Cheerio' as a type.
+
+88             const inlineCode: Cheerio<AnyNode> = $cheerio(`<pre>${rawGist}</p
+re>`);
+                                 ~~~~~~~
+
+src/github.ts:88:39 - error TS2709: Cannot use namespace 'AnyNode' as a type.
+
+88             const inlineCode: Cheerio<AnyNode> = $cheerio(`<pre>${rawGist}</p
+re>`);
+                                         ~~~~~~~
+
+src/github.ts:92:22 - error TS2683: 'this' implicitly has type 'any' because it 
+does not have a type annotation.
+
+92             $cheerio(this).parent().replaceWith(inlineCode);
+                        ~~~~
+
+src/templates/default.ts:65:33 - error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following e
+rror.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+
+65     const date: Date = new Date(published);
+                                   ~~~~~~~~~
+
+
+src/templates/default.ts:71:68 - error TS18048: 'images' is possibly 'undefined'
+.
+
+71     const {mediumUrl: bannerImage = '', mediumUrl: ogImage = ''} = images[0] 
+?? {};
+                                                                      ~~~~~~
+
+src/templates/default.ts:86:15 - error TS18048: 'images' is possibly 'undefined'
+.
+
+86       images: images.map((image: MedmarkTemplateRenderOptionsImage) => image.
+mediumUrl),
+                 ~~~~~~
+
+src/turndown.ts:229:13 - error TS2322: Type 'string | undefined' is not assignab
+le to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+229       const lang: string = templateOptions.defaultCodeBlockLanguage;
+                ~~~~
+
+src/twitter.ts:29:38 - error TS2709: Cannot use namespace 'CheerioAPI' as a type
+.
+
+29 async function embedTweets($cheerio: CheerioAPI): Promise<void[]> {
+                                        ~~~~~~~~~~
+
+src/twitter.ts:34:37 - error TS2683: 'this' implicitly has type 'any' because it
+ does not have a type annotation.
+
+34       const href: string = $cheerio(this).attr('href');
+                                       ~~~~
+
+src/twitter.ts:41:16 - error TS2683: 'this' implicitly has type 'any' because it
+ does not have a type annotation.
+
+41       $cheerio(this).text(`${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}${embedded.ht
+ml}${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}`);
+                  ~~~~
+
+
+Found 48 errors in 5 files.
+
+Errors  Files
+    36  src/converter.ts:153
+     5  src/github.ts:68
+     3  src/templates/default.ts:65
+     1  src/turndown.ts:229
+     3  src/twitter.ts:29
+(!) Plugin typescript: @rollup/plugin-typescript TS7016: Could not find a declar
+ation file for module 'fake-useragent'. '/Users/brion/Desktop/brion/github/mediu
+m-to-md(x)/medmark/node_modules/.pnpm/fake-useragent@1.0.1/node_modules/fake-use
+ragent/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/fake-useragent` if it exists or add a new declara
+tion (.d.ts) file containing `declare module 'fake-useragent';`
+src/converter.ts: (26:20)
+
+26 import fakeUa from 'fake-useragent';
+                      ~~~~~~~~~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS7016: Could not find a declar
+ation file for module 'cheerio'. '/Users/brion/Desktop/brion/github/medium-to-md
+(x)/medmark/node_modules/.pnpm/cheerio@1.0.0-rc.2/node_modules/cheerio/index.js'
+ implicitly has an 'any' type.
+  Try `npm i --save-dev @types/cheerio` if it exists or add a new declaration (.
+d.ts) file containing `declare module 'cheerio';`
+src/converter.ts: (28:53)
+
+28 import cheerio, {CheerioAPI, Element, Cheerio} from 'cheerio';
+                                                       ~~~~~~~~~
+
+src/github.ts: (27:44)
+
+27 import {AnyNode, CheerioAPI, Cheerio} from 'cheerio';
+                                              ~~~~~~~~~
+
+src/twitter.ts: (26:26)
+
+26 import {CheerioAPI} from 'cheerio';
+                            ~~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS7016: Could not find a declar
+ation file for module 'mkdirp'. '/Users/brion/Desktop/brion/github/medium-to-md(
+x)/medmark/node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js' implici
+tly has an 'any' type.
+  Try `npm i --save-dev @types/mkdirp` if it exists or add a new declaration (.d
+.ts) file containing `declare module 'mkdirp';`
+src/converter.ts: (29:20)
+
+29 import mkdirp from 'mkdirp';
+                      ~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2345: Argument of type 'strin
+g | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/converter.ts: (240:5)
+
+240     options.imagePath,
+        ~~~~~~~~~~~~~~~~~
+
+src/converter.ts: (381:37)
+
+381   const filename: string = basename(PATHS.file, '.html');
+                                        ~~~~~~~~~~
+
+src/converter.ts: (389:39)
+
+389     reporter.report.posts.drafts.push(PATHS.file);
+                                          ~~~~~~~~~~
+
+src/converter.ts: (399:40)
+
+399   reporter.report.posts.attempted.push(PATHS.file);
+                                           ~~~~~~~~~~
+
+src/converter.ts: (408:39)
+
+408     let imageFolder: string = resolve(options.imagePath);
+                                          ~~~~~~~~~~~~~~~~~
+
+src/converter.ts: (413:27)
+
+413       PATHS.output = join(PATHS.output, postData.titleForSlug);
+                              ~~~~~~~~~~~~
+
+src/converter.ts: (414:40)
+
+414       imageFolder = join(PATHS.output, options.imagePath);
+                                           ~~~~~~~~~~~~~~~~~
+
+src/converter.ts: (423:45)
+
+423       writePostToFile(templateRenderOutput, PATHS.file, PATHS.output);
+                                                ~~~~~~~~~~
+
+src/converter.ts: (436:42)
+
+436     reporter.report.posts.succeeded.push(PATHS.file);
+                                             ~~~~~~~~~~
+
+src/converter.ts: (482:43)
+
+482       const evaluatingFile: string = join(PATHS.input, file);
+                                              ~~~~~~~~~~~
+
+src/converter.ts: (485:57)
+
+485         promises.push(convertMediumFile(evaluatingFile, PATHS.output, PATHS.
+template, exportDrafts, postsToSkip));
+                                                            ~~~~~~~~~~~~
+
+src/converter.ts: (491:45)
+
+491     promises.push(convertMediumFile(resolve(PATHS.input), PATHS.output, PATH
+S.template, exportDrafts, postsToSkip));
+                                                ~~~~~~~~~~~
+
+src/converter.ts: (491:59)
+
+491     promises.push(convertMediumFile(resolve(PATHS.input), PATHS.output, PATH
+S.template, exportDrafts, postsToSkip));
+                                                              ~~~~~~~~~~~~
+
+src/converter.ts: (499:31)
+
+499     reporter.saveReportToFile(PATHS.output);
+                                  ~~~~~~~~~~~~
+
+src/converter.ts: (502:37)
+
+502       `Medium files from "${resolve(PATHS.input)}" have finished converting 
+to "${resolve(PATHS.output)}" using the "${
+                                        ~~~~~~~~~~~
+
+src/converter.ts: (502:91)
+
+502       `Medium files from "${resolve(PATHS.input)}" have finished converting 
+to "${resolve(PATHS.output)}" using the "${
+                                                                                
+              ~~~~~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2322: Type 'null' is not assi
+gnable to type 'MediumApolloState'.
+src/converter.ts: (274:7)
+
+274   let apolloState: MediumApolloState = null;
+          ~~~~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2683: 'this' implicitly has t
+ype 'any' because it does not have a type annotation.
+src/converter.ts: (311:45)
+
+311     let codeBlockContent: string = $cheerio(this).html();
+                                                ~~~~
+
+src/converter.ts: (314:21)
+
+314     return $cheerio(this).html(codeBlockContent);
+                        ~~~~
+
+src/github.ts: (76:38)
+
+76         const src: string = $cheerio(this).attr('src') || '';
+                                        ~~~~
+
+src/github.ts: (92:22)
+
+92             $cheerio(this).parent().replaceWith(inlineCode);
+                        ~~~~
+
+src/twitter.ts: (34:37)
+
+34       const href: string = $cheerio(this).attr('href');
+                                       ~~~~
+
+src/twitter.ts: (41:16)
+
+41       $cheerio(this).text(`${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}${embedded.ht
+ml}${EMBEDDED_TWEET_HTML_SPIT_DELIMITER}`);
+                  ~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2322: Type 'null' is not assi
+gnable to type 'string'.
+src/converter.ts: (323:7)
+
+323   let posts: string = null;
+          ~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2322: Type 'string | undefine
+d' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/converter.ts: (401:9)
+
+401   const srcFilepath: string = PATHS.file;
+            ~~~~~~~~~~~
+
+src/turndown.ts: (229:13)
+
+229       const lang: string = templateOptions.defaultCodeBlockLanguage;
+                ~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2769: No overload matches thi
+s call.
+  Overload 1 of 3, '(path: PathOrFileDescriptor, options?: { encoding?: null | u
+ndefined; flag?: string | undefined; } | null | undefined): NonSharedBuffer', ga
+ve the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathOrFileDescriptor'.
+      Type 'undefined' is not assignable to type 'PathOrFileDescriptor'.
+  Overload 2 of 3, '(path: PathOrFileDescriptor, options?: BufferEncoding | (Obj
+ectEncodingOptions & { flag?: string | undefined; }) | null | undefined): string
+ | NonSharedBuffer', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathOrFileDescriptor'.
+      Type 'undefined' is not assignable to type 'PathOrFileDescriptor'.
+src/converter.ts: (402:43)
+
+402   const content: Buffer = fs.readFileSync(PATHS.file);
+                                              ~~~~~~~~~~
+
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2345: Argument of type 'Medma
+rkTemplateRenderOptionsImage[] | undefined' is not assignable to parameter of ty
+pe 'MedmarkTemplateRenderOptionsImage[]'.
+  Type 'undefined' is not assignable to type 'MedmarkTemplateRenderOptionsImage[
+]'.
+src/converter.ts: (430:46)
+
+430         await saveImagesToLocal(imageFolder, postData.images);
+                                                 ~~~~~~~~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS18046: 'error' is of type 'un
+known'.
+src/converter.ts: (445:9)
+
+445     if (error.type !== 'silent') {
+            ~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2769: No overload matches thi
+s call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathLike'.
+      Type 'undefined' is not assignable to type 'PathLike'.
+src/converter.ts: (475:45)
+
+475   const isDirectory: boolean = fs.lstatSync(PATHS.input).isDirectory();
+                                                ~~~~~~~~~~~
+
+  ../../node_modules/.pnpm/@types+node@18.19.130/node_modules/@types/node/fs.d.t
+s:1041:9
+    1041         (path: PathLike, options?: StatSyncOptions): Stats | BigIntStat
+s | undefined;
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+    The last overload is declared here.
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2769: No overload matches thi
+s call.
+  Overload 1 of 5, '(path: PathLike, options?: BufferEncoding | { encoding: Buff
+erEncoding | null; withFileTypes?: false | undefined; recursive?: boolean | unde
+fined; } | null | undefined): string[]', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathLike'.
+      Type 'undefined' is not assignable to type 'PathLike'.
+  Overload 2 of 5, '(path: PathLike, options?: BufferEncoding | (ObjectEncodingO
+ptions & { withFileTypes?: false | undefined; recursive?: boolean | undefined; }
+) | null | undefined): string[] | Buffer<...>[]', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'PathLike'.
+      Type 'undefined' is not assignable to type 'PathLike'.
+src/converter.ts: (481:20)
+
+481     fs.readdirSync(PATHS.input).forEach((file: string) => {
+                       ~~~~~~~~~~~
+
+
+(!) Plugin typescript: @rollup/plugin-typescript TS7016: Could not find a declar
+ation file for module 'fs-extra'. '/Users/brion/Desktop/brion/github/medium-to-m
+d(x)/medmark/node_modules/.pnpm/fs-extra@11.3.5/node_modules/fs-extra/lib/index.
+js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/fs-extra` if it exists or add a new declaration (
+.d.ts) file containing `declare module 'fs-extra';`
+src/debug.ts: (25:16)
+
+25 import fs from 'fs-extra';
+                  ~~~~~~~~~~
+
+src/reporter.ts: (25:16)
+
+25 import fs from 'fs-extra';
+                  ~~~~~~~~~~
+
+src/utils.ts: (25:16)
+
+25 import fs from 'fs-extra';
+                  ~~~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS7016: Could not find a declar
+ation file for module 'turndown-plugin-gfm'. '/Users/brion/Desktop/brion/github/
+medium-to-md(x)/medmark/node_modules/.pnpm/turndown-plugin-gfm@1.0.2/node_module
+s/turndown-plugin-gfm/lib/turndown-plugin-gfm.cjs.js' implicitly has an 'any' ty
+pe.
+  Try `npm i --save-dev @types/turndown-plugin-gfm` if it exists or add a new de
+claration (.d.ts) file containing `declare module 'turndown-plugin-gfm';`
+src/markdown.ts: (26:19)
+
+26 import {gfm} from 'turndown-plugin-gfm';
+                     ~~~~~~~~~~~~~~~~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS2769: No overload matches thi
+s call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following e
+rror.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type
+ 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/templates/default.ts: (65:33)
+
+65     const date: Date = new Date(published);
+                                   ~~~~~~~~~
+
+
+(!) Plugin typescript: @rollup/plugin-typescript TS18048: 'images' is possibly '
+undefined'.
+src/templates/default.ts: (71:68)
+
+71     const {mediumUrl: bannerImage = '', mediumUrl: ogImage = ''} = images[0] 
+?? {};
+                                                                      ~~~~~~
+
+src/templates/default.ts: (86:15)
+
+86       images: images.map((image: MedmarkTemplateRenderOptionsImage) => image.
+mediumUrl),
+                 ~~~~~~
+
+(!) Plugin typescript: @rollup/plugin-typescript TS7016: Could not find a declar
+ation file for module 'json-to-pretty-yaml'. '/Users/brion/Desktop/brion/github/
+medium-to-md(x)/medmark/node_modules/.pnpm/json-to-pretty-yaml@1.2.2/node_module
+s/json-to-pretty-yaml/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/json-to-pretty-yaml` if it exists or add a new de
+claration (.d.ts) file containing `declare module 'json-to-pretty-yaml';`
+src/utils.ts: (27:18)
+
+27 import YAML from 'json-to-pretty-yaml';
+                    ~~~~~~~~~~~~~~~~~~~~~
+
+created dist/cjs/index.js, dist/esm/index.js in 1.5s
+
+dist/types/index.d.ts → dist/index.d.ts...
+created dist/index.d.ts in 22ms
+
+  ~/De/b/g/medium-to-md(x)/medmark/p/medmark on   main *1 !5 ?2%            
+
+  ~/De/b/g/medium-to-md(x)/medmark/p/medmark on   main *1 !5 ?2%            
+
+  ~/De/b/g/medium-to-md(x)/medmark/p/medmark on   main *1 !5 ?2

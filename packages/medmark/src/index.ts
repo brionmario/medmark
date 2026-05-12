@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/// <reference path="../types/modules.d.ts" />
 /**
  * MIT License
  *
@@ -73,7 +74,7 @@ program
   .option('-d, --drafts', 'Export drafts along with other posts')
   .option('-s, --skip <files>', 'Comma-separated list of files to skip')
   .option('-D, --debug', 'Run in debug mode')
-  .action(async (options) => {
+  .action(async options => {
     intro(BANNER);
 
     const cwd: string = process.cwd();
@@ -91,28 +92,32 @@ program
     );
     const defaultOutput: string = path.join(DEFAULT_MEDMARK_FOLDER_NAME, DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME);
 
-    const inputPath: string = options.input ?? guardCancel(
-      await text({
-        message: 'Path to the `posts` folder of your Medium export',
-        placeholder: defaultInput,
-        defaultValue: defaultInput,
-        validate(value: string): string | undefined {
-          const resolved: string = path.resolve(cwd, value || defaultInput);
-          if (!fs.existsSync(resolved)) {
-            return `Path not found: ${resolved}`;
-          }
-          return undefined;
-        },
-      }),
-    );
+    const inputPath: string =
+      options.input ??
+      guardCancel(
+        await text({
+          message: 'Path to the `posts` folder of your Medium export',
+          placeholder: defaultInput,
+          defaultValue: defaultInput,
+          validate(value: string): string | undefined {
+            const resolved: string = path.resolve(cwd, value || defaultInput);
+            if (!fs.existsSync(resolved)) {
+              return `Path not found: ${resolved}`;
+            }
+            return undefined;
+          },
+        }),
+      );
 
-    const outputPath: string = options.output ?? guardCancel(
-      await text({
-        message: 'Destination folder for output files',
-        placeholder: defaultOutput,
-        defaultValue: defaultOutput,
-      }),
-    );
+    const outputPath: string =
+      options.output ??
+      guardCancel(
+        await text({
+          message: 'Destination folder for output files',
+          placeholder: defaultOutput,
+          defaultValue: defaultOutput,
+        }),
+      );
 
     let templatePath: string = options.template ?? '';
     let exportDrafts: boolean = options.drafts ?? false;

@@ -106,7 +106,7 @@ async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRend
   const imagePromises: Promise<void>[] = images.map(
     (image: MedmarkTemplateRenderOptionsImage) =>
       new Promise((_resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => {
-        const imageFilePath: string = join(folderPath, image.localName);
+        const imageFilePath: string = join(folderPath, image.localName!);
         mkdirp.sync(folderPath);
 
         logger.info(`Downloading image : ${image.mediumUrl} -> ${imageFilePath}`);
@@ -117,6 +117,7 @@ async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRend
         fetch(image.mediumUrl)
           .then((response: Response) => {
             if (response.ok) {
+              if (!response.body) throw new Error('Response body is null');
               response.body.pipe(writer);
               response.body.on('end', () => {
                 reporter.report.images.succeeded.push(`${image.mediumUrl}->${imageFilePath}`);
@@ -155,8 +156,8 @@ function getMediumImages(
 ): MedmarkTemplateRenderOptionsImage[] {
   const images: MedmarkTemplateRenderOptionsImage[] = [];
 
-  $cheerio('img.graf-image').each(function (index: number) {
-    const imageName: string = $cheerio(this).attr('data-image-id');
+  $cheerio('img.graf-image').each(function (this: any, index: number) {
+    const imageName: string = $cheerio(this).attr('data-image-id')!;
     const imageExtension: string = extname(imageName);
 
     // get max resolution of image
@@ -222,21 +223,21 @@ async function gatherPostData(
     throw new MedmarkSilentException(`Reply post. Skip over this one: ${blogTitle}`);
   }
 
-  let canonicalLink: string = $cheerio('footer > p > a').attr('href');
+  let canonicalLink: string = $cheerio('footer > p > a').attr('href')!;
   let titleForSlug: string = convertToSlug(blogTitle);
 
   if (!isDraft) {
-    canonicalLink = $cheerio('.p-canonical').attr('href');
+    canonicalLink = $cheerio('.p-canonical').attr('href')!;
 
-    const [, slug] = canonicalLink.match(/https:\/\/medium\.com\/.+\/(.+)-[a-z0-9]+$/i);
+    const [, slug] = canonicalLink.match(/https:\/\/medium\.com\/.+\/(.+)-[a-z0-9]+$/i)!;
     titleForSlug = slug;
   }
 
   // This will get the image urls, and rewrite the src in the content
   const imagesToSave: MedmarkTemplateRenderOptionsImage[] = getMediumImages(
-    options.imageStorageStrategy,
+    options.imageStorageStrategy ?? 'REMOTE',
     $cheerio,
-    options.imagePath,
+    options.imagePath ?? '',
     titleForSlug,
   );
 
@@ -246,7 +247,7 @@ async function gatherPostData(
   const postBody: string = await scrapeMetaDetailsFromPost(canonicalLink);
 
   // check if standalone post or reply
-  const isReplyPost: RegExpMatchArray = postBody.match(/inResponseToPostId":"[0-9a-z]+"/); // this is in markup for reply posts
+  const isReplyPost: RegExpMatchArray | null = postBody.match(/inResponseToPostId":"[0-9a-z]+"/); // this is in markup for reply posts
 
   if (isReplyPost) {
     logger.warn(`This is a reply, not a standalone post. Hence, skipping...`);
@@ -256,7 +257,7 @@ async function gatherPostData(
   }
 
   const $cheerioBody: CheerioAPI = cheerio.load(postBody);
-  const description: string = $cheerioBody('meta[name=description]').attr('content'); // from page...
+  const description: string = $cheerioBody('meta[name=description]').attr('content') ?? ''; // from page...
 
   const schemaTags: Cheerio<Element> = $cheerioBody('script[type="application/ld+json"]');
   const metadata: MediumPostMetadata = schemaTags[0]?.children[0]
@@ -264,13 +265,13 @@ async function gatherPostData(
     : {};
   const readingTime: string = $cheerioBody('.pw-reading-time').text();
 
-  if (debug.enabled) {
+  if (debug.enabled()) {
     debug.saveLog(blogTitle, 'metaData', metadata);
   }
 
   const scripts: Cheerio<Element> = $cheerioBody('script');
 
-  let apolloState: MediumApolloState = null;
+  let apolloState: MediumApolloState | null = null;
   let tags: string[] = [];
   let authors: MedmarkFrontMatterAuthor[] = [];
 
@@ -284,12 +285,12 @@ async function gatherPostData(
       try {
         apolloState = JSON.parse(value.children[0].data.replace('window.__APOLLO_STATE__ = ', ''));
 
-        if (debug.enabled) {
+        if (debug.enabled()) {
           debug.saveLog(blogTitle, 'apolloState', apolloState);
         }
 
-        tags = getTags(apolloState);
-        authors = getAuthors(apolloState, metadata);
+        tags = getTags(apolloState!);
+        authors = getAuthors(apolloState!, metadata);
       } catch (e) {
         logger.error(`An error ocurred while parsing Apollo state from scaped metadata: ${e}`);
       }
@@ -306,8 +307,8 @@ async function gatherPostData(
   // process code blocks
   // medium exports inline code block as <code></code> and multi-line as <pre></pre>
   // We need to wrap the content of the <pre> with <code> tags so turndown parser won't escape the codeblock content
-  $cheerio('pre').map(function () {
-    let codeBlockContent: string = $cheerio(this).html();
+  $cheerio('pre').map(function (this: any) {
+    let codeBlockContent: string = $cheerio(this).html() ?? '';
     codeBlockContent = `<code>${codeBlockContent}</code>`;
 
     return $cheerio(this).html(codeBlockContent);
@@ -319,17 +320,17 @@ async function gatherPostData(
     logger.error(`An error occurred while embedding tweets: ${filePath}`);
   }
 
-  let posts: string = null;
+  let posts: string | null = null;
   try {
-    posts = transformHtmlToMarkdown($cheerio('.section-content').html(), options);
+    posts = transformHtmlToMarkdown($cheerio('.section-content').html() ?? '', options);
   } catch (e) {
     logger.error(`An error occured while converting Html to Markdown: ${e}`);
   }
 
   return {
     authors,
-    body: posts,
-    bodyRaw: $cheerio('.section-content').html(),
+    body: posts ?? undefined,
+    bodyRaw: $cheerio('.section-content').html() ?? undefined,
     description,
     draft: isDraft,
     images: imagesToSave,
@@ -356,7 +357,7 @@ async function gatherPostData(
 async function convertMediumFile(
   filePath: string,
   outputPath: string,
-  templatePath: string,
+  templatePath: string | undefined,
   exportDrafts: boolean,
   postsToSkip: string[],
 ): Promise<void> {
@@ -371,13 +372,12 @@ async function convertMediumFile(
       ? PATHS.template
       : pathToFileURL(resolve(PATHS.template)).href
     : null;
-  const loadedTemplateModule: {default: MedmarkTemplate} | null =
-    resolvedTemplate && (await import(resolvedTemplate));
+  const loadedTemplateModule: {default: MedmarkTemplate} | null = resolvedTemplate && (await import(resolvedTemplate));
   const template: MedmarkTemplate = loadedTemplateModule?.default ?? DefaultTemplate;
 
   const options: MedmarkOptions = template.getOptions();
 
-  const filename: string = basename(PATHS.file, '.html');
+  const filename: string = basename(PATHS.file!, '.html');
 
   output.note({
     bodyLines: [`${chalk.gray('[path]')} ${PATHS.file}`, `${chalk.gray('[output]')} ${filename}`],
@@ -385,7 +385,7 @@ async function convertMediumFile(
   });
 
   if (filename.startsWith('draft')) {
-    reporter.report.posts.drafts.push(PATHS.file);
+    reporter.report.posts.drafts.push(PATHS.file!);
 
     if (!exportDrafts) {
       output.warn({
@@ -395,44 +395,44 @@ async function convertMediumFile(
     }
   }
 
-  reporter.report.posts.attempted.push(PATHS.file);
+  reporter.report.posts.attempted.push(PATHS.file!);
 
-  const srcFilepath: string = PATHS.file;
-  const content: Buffer = fs.readFileSync(PATHS.file);
+  const srcFilepath: string = PATHS.file!;
+  const content: Buffer = fs.readFileSync(PATHS.file!);
 
   try {
     const postData: MedmarkTemplateRenderOptions = await gatherPostData(content, options, srcFilepath, postsToSkip);
     postData.draft = exportDrafts;
 
-    let imageFolder: string = resolve(options.imagePath);
+    let imageFolder: string = resolve(options.imagePath ?? '');
     const templateRenderOutput: string = template.render(postData);
 
     // if true, make folder for each slug, and name it '[slug]/index.md'
     if (options.folderForEachSlug) {
-      PATHS.output = join(PATHS.output, postData.titleForSlug);
-      imageFolder = join(PATHS.output, options.imagePath);
+      PATHS.output = join(PATHS.output!, postData.titleForSlug!);
+      imageFolder = join(PATHS.output, options.imagePath ?? '');
       PATHS.file = 'index';
     }
 
     // make outputFolder if it doesn't exist yet
-    mkdirp.sync(PATHS.output);
+    mkdirp.sync(PATHS.output!);
 
     try {
       // render post file to folder
-      writePostToFile(templateRenderOutput, PATHS.file, PATHS.output);
+      writePostToFile(templateRenderOutput, PATHS.file!, PATHS.output!);
     } catch (e) {
       logger.error(`Couldn't write the post to: ${PATHS.output}`);
     }
 
     if (options.imageStorageStrategy === 'LOCAL') {
       try {
-        await saveImagesToLocal(imageFolder, postData.images);
+        await saveImagesToLocal(imageFolder, postData.images!);
       } catch (e) {
         logger.error(`An error occurred while saving the images to local directory. Blog: ${postData.titleForSlug}`);
       }
     }
 
-    reporter.report.posts.succeeded.push(PATHS.file);
+    reporter.report.posts.succeeded.push(PATHS.file!);
   } catch (error) {
     if (error instanceof MedmarkSilentException) {
       logger.warn(error.toString());
@@ -441,7 +441,7 @@ async function convertMediumFile(
     }
 
     // re-throw if you want it to bubble up
-    if (error.type !== 'silent') {
+    if ((error as MedmarkSilentException).type !== 'silent') {
       throw new MedmarkException(`Error occurred while converting medium: ${PATHS.file}`);
     }
   }
@@ -471,23 +471,23 @@ async function convert(
 
   output.announceCheckpoint('🐱 Started converting.');
 
-  const isDirectory: boolean = fs.lstatSync(PATHS.input).isDirectory();
+  const isDirectory: boolean = fs.lstatSync(PATHS.input!).isDirectory();
 
   const promises: Promise<void>[] = [];
 
   if (isDirectory) {
     // folder was passed in, so get all html files for folders
-    fs.readdirSync(PATHS.input).forEach((file: string) => {
-      const evaluatingFile: string = join(PATHS.input, file);
+    fs.readdirSync(PATHS.input!).forEach((file: string) => {
+      const evaluatingFile: string = join(PATHS.input!, file);
 
       if (file.endsWith('.html')) {
-        promises.push(convertMediumFile(evaluatingFile, PATHS.output, PATHS.template, exportDrafts, postsToSkip));
+        promises.push(convertMediumFile(evaluatingFile, PATHS.output!, PATHS.template, exportDrafts, postsToSkip));
       } else {
         logger.warn(`Skipping ${evaluatingFile} because it is not an html file.`);
       }
     });
   } else {
-    promises.push(convertMediumFile(resolve(PATHS.input), PATHS.output, PATHS.template, exportDrafts, postsToSkip));
+    promises.push(convertMediumFile(resolve(PATHS.input!), PATHS.output!, PATHS.template, exportDrafts, postsToSkip));
   }
 
   try {
@@ -495,12 +495,12 @@ async function convert(
 
     output.success({title: `Successfully converted ${promises.length} files.`});
     reporter.printPrettyReport();
-    reporter.saveReportToFile(PATHS.output);
+    reporter.saveReportToFile(PATHS.output!);
 
     logger.info(
-      `Medium files from "${resolve(PATHS.input)}" have finished converting to "${resolve(PATHS.output)}" using the "${
-        PATHS.template || 'default'
-      }" template.`,
+      `Medium files from "${resolve(PATHS.input!)}" have finished converting to "${resolve(
+        PATHS.output!,
+      )}" using the "${PATHS.template || 'default'}" template.`,
     );
     logger.info(`Detailed output report named "conversion_report.json" can be found in the output folder.`);
   } catch (e) {

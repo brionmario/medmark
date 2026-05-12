@@ -226,7 +226,7 @@ export function addParseCodeBlocksRule(turndownService: TurndownService, templat
      * @returns The markdown formatted code block.
      */
     replacement(content: string): string {
-      const lang: string = templateOptions.defaultCodeBlockLanguage;
+      const lang: string = templateOptions.defaultCodeBlockLanguage ?? '';
       return `
 \`\`\`${lang}
 ${content}

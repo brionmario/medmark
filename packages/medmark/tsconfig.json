@@ -9,6 +9,7 @@
     "lib": ["ESNext"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "sourceMap": true,

@@ -68,7 +68,7 @@ export const getAuthors = (
   apolloState: MediumApolloState,
   metadata: MediumPostMetadata,
 ): MedmarkFrontMatterAuthor[] => {
-  let author: MedmarkFrontMatterAuthor = null;
+  let author: MedmarkFrontMatterAuthor | null = null;
   const authorNameFromMeta: string = metadata?.author?.name;
 
   // FIXME: TS ISSUE
@@ -85,7 +85,7 @@ export const getAuthors = (
     }
   });
 
-  return [author];
+  return author ? [author] : [];
 };
 
 /**

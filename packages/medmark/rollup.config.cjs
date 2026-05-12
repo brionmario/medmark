@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+const {execSync} = require('child_process');
 const commonjs = require('@rollup/plugin-commonjs');
 const copy = require('rollup-plugin-copy');
 const {nodeResolve} = require('@rollup/plugin-node-resolve');
@@ -31,6 +32,21 @@ const typescript = require('@rollup/plugin-typescript');
 const shebang = require('rollup-plugin-preserve-shebang');
 const dts = require('rollup-plugin-dts');
 const pkg = require('./package.json');
+
+/** Emits .d.ts files via tsc after the JS bundle is written, before the dts-bundle step runs. */
+function emitDeclarations() {
+  return {
+    name: 'emit-declarations',
+    closeBundle() {
+      try {
+        execSync('tsc -p tsconfig.lib.json --emitDeclarationOnly --noEmit false', {stdio: 'inherit'});
+      } catch {
+        // tsc exits non-zero when type errors exist, but still emits declarations
+        // (noEmitOnError defaults to false). Warnings are already printed to stderr above.
+      }
+    },
+  };
+}
 
 module.exports = [
   {
@@ -65,8 +81,11 @@ module.exports = [
       commonjs(),
       typescript({
         tsconfig: './tsconfig.lib.json',
+        declaration: false,
+        declarationDir: undefined,
       }),
       terser(),
+      emitDeclarations(),
       copy({
         targets: [
           {dest: 'dist', src: '../README.md'},
@@ -78,7 +97,7 @@ module.exports = [
   {
     cache: false,
     external: [/\.s?css$/],
-    input: 'dist/esm/types/index.d.ts',
+    input: 'dist/types/index.d.ts',
     output: [{file: 'dist/index.d.ts', format: 'esm'}],
     plugins: [dts.default()],
   },

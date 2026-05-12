@@ -1,5 +1,12 @@
 # medmark
 
+## 0.2.3
+
+### Patch Changes
+
+- [`a67badc9051920a2abfc9f9a58e576417b9b3884`](https://github.com/brionmario/medmark/commit/a67badc9051920a2abfc9f9a58e576417b9b3884)
+  Thanks [@brionmario](https://github.com/brionmario)! - Improve DX
+
 ## 0.2.2
 
 ### Patch Changes

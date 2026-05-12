@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import chalk, {ChalkInstance} from 'chalk';
+import chalk, {Chalk} from 'chalk';
 import {EOL} from 'os';
 
 export interface CLIErrorMessageConfig {
@@ -115,11 +115,11 @@ class CLIOutput {
    * implementation.
    */
   colors: {
-    cyan: ChalkInstance;
-    gray: ChalkInstance;
-    green: ChalkInstance;
-    red: ChalkInstance;
-    white: ChalkInstance;
+    cyan: Chalk;
+    gray: Chalk;
+    green: Chalk;
+    red: Chalk;
+    white: Chalk;
   } = {
     cyan: chalk.cyan,
     gray: chalk.gray,
@@ -128,11 +128,11 @@ class CLIOutput {
     white: chalk.white,
   };
 
-  bold: ChalkInstance = chalk.bold;
+  bold: Chalk = chalk.bold;
 
-  underline: ChalkInstance = chalk.underline;
+  underline: Chalk = chalk.underline;
 
-  dim: ChalkInstance = chalk.dim;
+  dim: Chalk = chalk.dim;
 
   /**
    * Writes a string to standard output.

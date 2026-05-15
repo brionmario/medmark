@@ -44,9 +44,13 @@ jobs:
       - name: 🧩 Install Dependencies
         run: pnpm install
 
+      - name: 🗑️ Remove server-only files
+        run: rm apps/website/proxy.ts
+
       - name: 🏗️ Build Website
         run: pnpm turbo run build --filter=@medmark/website
         env:
+          NEXT_EXPORT: "true"
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - name: 📤 Upload Pages Artifact

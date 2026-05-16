@@ -1,5 +1,12 @@
 # medmark
 
+## 0.2.5
+
+### Patch Changes
+
+- [`ecc8916999984d65da43591a66f9b29297436eea`](https://github.com/brionmario/medmark/commit/ecc8916999984d65da43591a66f9b29297436eea)
+  Thanks [@brionmario](https://github.com/brionmario)! - Trigger release
+
 ## 0.2.4
 
 ### Patch Changes

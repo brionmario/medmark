@@ -1,5 +1,12 @@
 # medmark
 
+## 0.2.6
+
+### Patch Changes
+
+- [`58a1887d236770478821a1a51611c0f870d5a0dd`](https://github.com/brionmario/medmark/commit/58a1887d236770478821a1a51611c0f870d5a0dd)
+  Thanks [@brionmario](https://github.com/brionmario)! - Fix node issues
+
 ## 0.2.5
 
 ### Patch Changes

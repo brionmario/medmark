@@ -23,7 +23,6 @@
  */
 
 import {extname} from 'path';
-import fetch, {Response} from 'node-fetch';
 import {AnyNode, CheerioAPI, Cheerio, Element} from 'cheerio';
 import MedmarkSilentException from './exceptions/medmark-silent-exception';
 
@@ -48,7 +47,7 @@ async function getRawGist(gistUrl: string): Promise<string> {
 
   url = `${url}/raw`;
 
-  const response: Response = await fetch(url);
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new MedmarkSilentException(`An error occurred while getting the Gist: ${response.statusText}`);

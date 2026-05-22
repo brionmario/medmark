@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-import fetch, {Response} from 'node-fetch';
 import fakeUa from 'fake-useragent';
 import fs, {WriteStream} from 'fs';
 import cheerio, {CheerioAPI, Element, Cheerio} from 'cheerio';
@@ -86,7 +85,7 @@ process.on('unhandledRejection', (error: string) => {
  * @throws {Error} If there is an issue with the fetch request.
  */
 async function scrapeMetaDetailsFromPost(url: string): Promise<string> {
-  const response: Response = await fetch(url, {
+  const response = await fetch(url, {
     headers: {
       'User-Agent': fakeUa(),
     },
@@ -115,13 +114,13 @@ async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRend
         const writer: WriteStream = fs.createWriteStream(imageFilePath);
 
         fetch(image.mediumUrl)
-          .then((response: Response) => {
+          .then((response) => {
             if (response.ok) {
               if (!response.body) throw new Error('Response body is null');
-              response.body.pipe(writer);
-              response.body.on('end', () => {
+              (response.body as any).pipe(writer);
+              (response.body as any).on('end', () => {
                 reporter.report.images.succeeded.push(`${image.mediumUrl}->${imageFilePath}`);
-                resolve();
+                _resolve();
               });
             } else {
               throw new Error(`Received response status ${response.status}`);

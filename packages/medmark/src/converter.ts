@@ -215,6 +215,16 @@ async function gatherPostData(
   const isDraft: boolean = filename.startsWith('draft');
   const blogTitle: string = $cheerio('.graf--leading').first().text();
 
+  // Comments/replies have a leading paragraph (graf--p), not a title heading (graf--title).
+  const isComment: boolean = !$cheerio('.graf--leading').first().hasClass('graf--title');
+
+  if (isComment) {
+    logger.warn(`This is a comment, not a standalone post. Hence, skipping...`);
+    reporter.report.posts.replies.push(filePath);
+
+    throw new MedmarkSilentException(`Comment post. Skip over this one: ${blogTitle}`);
+  }
+
   if (postsToSkip && postsToSkip.some((post: string) => blogTitle.startsWith(post))) {
     logger.warn(`This is a reply, not a standalone post. Hence, skipping...`);
     reporter.report.posts.replies.push(filePath);

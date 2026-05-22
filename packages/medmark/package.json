@@ -1,6 +1,6 @@
 {
   "name": "medmark",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Export your Medium articles to markdown(md).",
   "keywords": [
     "medium",

@@ -27,6 +27,60 @@
  */
 export type MedmarkImageStorageStrategy = 'LOCAL' | 'REMOTE';
 
+/**
+ * Output formats supported by the generated content registry.
+ * - `json`    : a machine-readable `registry.json` manifest.
+ * - `ts`      : a typed `registry.ts` ESM module (great DX for TS consumers).
+ * - `rss`     : an RSS 2.0 `feed.xml` (requires `registry.site.url`).
+ * - `sitemap` : a `sitemap.xml` (requires `registry.site.url`).
+ */
+export type MedmarkRegistryFormat = 'json' | 'ts' | 'rss' | 'sitemap';
+
+/**
+ * Configuration for the generated content registry.
+ */
+export interface MedmarkRegistryOptions {
+  /**
+   * Whether to generate a registry at all. Defaults to `true`.
+   */
+  enabled?: boolean;
+  /**
+   * Base filename (without extension) for the registry files. Defaults to `registry`.
+   */
+  filename?: string;
+  /**
+   * The formats to emit. Defaults to `['json']`.
+   */
+  formats?: MedmarkRegistryFormat[];
+  /**
+   * Whether to include drafts in the RSS/sitemap feeds. Drafts are always
+   * present in the JSON/TS manifests (flagged via `draft: true`). Defaults to `false`.
+   */
+  includeDrafts?: boolean;
+  /**
+   * Site metadata, required for the `rss` and `sitemap` formats.
+   */
+  site?: {
+    /**
+     * A short description of the site, used in the RSS channel.
+     */
+    description?: string;
+    /**
+     * The language of the site (e.g. `en`), used in the RSS channel.
+     */
+    language?: string;
+    /**
+     * The title of the site, used in the RSS channel.
+     */
+    title?: string;
+    /**
+     * The absolute base URL of the site (e.g. `https://example.com`).
+     * Required to emit `rss` and `sitemap`.
+     */
+    url?: string;
+  };
+}
+
 export interface MedmarkOptions {
   /**
    * Default language to use for code blocks.
@@ -44,4 +98,8 @@ export interface MedmarkOptions {
    * Strategy to use for storing images.
    */
   imageStorageStrategy?: MedmarkImageStorageStrategy;
+  /**
+   * Configuration for the generated content registry.
+   */
+  registry?: MedmarkRegistryOptions;
 }

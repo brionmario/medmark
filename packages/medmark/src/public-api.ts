@@ -26,3 +26,8 @@ export {frontMatterToYaml} from './utils';
 export {default as chalk} from 'chalk';
 export * from './constants';
 export {default as logger} from './output';
+export {buildDefaultRegistryEntry, serializeDefaultRegistry} from './registry';
+export * from './models/medmark/core';
+export * from './models/medmark/front-matter';
+export * from './models/medmark/registry';
+export * from './models/medmark/template';

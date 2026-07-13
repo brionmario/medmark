@@ -29,9 +29,26 @@ import {
   MedmarkTemplateRenderOptionsImage,
 } from '../models/medmark/template';
 import {MedmarkFrontMatter} from '../models/medmark/front-matter';
+import {
+  MedmarkRegistry,
+  MedmarkRegistryContext,
+  MedmarkRegistryEntry,
+  MedmarkRegistryEntryContext,
+  MedmarkRegistryFile,
+} from '../models/medmark/registry';
+import {buildDefaultRegistryEntry, serializeDefaultRegistry} from '../registry';
 import {frontMatterToYaml} from '../utils';
 
 const DefaultTemplate: MedmarkTemplate = {
+  /**
+   * Builds the registry entry for a single generated post.
+   * @param post The render options for the post.
+   * @param context Context about where the post was written.
+   * @returns The registry entry.
+   */
+  buildRegistryEntry(post: MedmarkTemplateRenderOptions, context: MedmarkRegistryEntryContext): MedmarkRegistryEntry {
+    return buildDefaultRegistryEntry(post, context);
+  },
   /**
    * Returns an object with default options for rendering markdown.
    * @returns Object containing default options.
@@ -42,6 +59,10 @@ const DefaultTemplate: MedmarkTemplate = {
       folderForEachSlug: true,
       imagePath: '/resources',
       imageStorageStrategy: 'REMOTE',
+      registry: {
+        enabled: true,
+        formats: ['json'],
+      },
     };
   },
   /**
@@ -96,6 +117,15 @@ ${body}
 `;
 
     return frontMatter;
+  },
+  /**
+   * Serializes the aggregated registry into output files.
+   * @param registry The aggregated registry.
+   * @param context Context about the run.
+   * @returns The files to write, relative to the output root.
+   */
+  serializeRegistry(registry: MedmarkRegistry, context: MedmarkRegistryContext): MedmarkRegistryFile[] {
+    return serializeDefaultRegistry(registry, context);
   },
 };
 

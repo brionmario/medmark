@@ -24,8 +24,24 @@
 
 import {MedmarkOptions} from './core';
 import {MedmarkFrontMatter} from './front-matter';
+import {
+  MedmarkRegistry,
+  MedmarkRegistryContext,
+  MedmarkRegistryEntry,
+  MedmarkRegistryEntryContext,
+  MedmarkRegistryFile,
+} from './registry';
 
 export interface MedmarkTemplate {
+  /**
+   * Builds the registry entry for a single generated post. Optional — when
+   * omitted, Medmark uses its built-in default entry shape. Return `null` to
+   * exclude the post from the registry.
+   * @param post The render options for the post.
+   * @param context Context about where the post was written.
+   * @returns The registry entry, or `null` to skip.
+   */
+  buildRegistryEntry?(post: MedmarkTemplateRenderOptions, context: MedmarkRegistryEntryContext): MedmarkRegistryEntry | null;
   /**
    * Returns an object with default options for rendering markdown.
    * @returns Object containing default options.
@@ -37,6 +53,15 @@ export interface MedmarkTemplate {
    * @returns String containing front matter and markdown.
    */
   render(options: MedmarkTemplateRenderOptions): string;
+  /**
+   * Serializes the aggregated registry into one or more output files. Optional —
+   * when omitted, Medmark uses its built-in serializers driven by
+   * `options.registry.formats`.
+   * @param registry The aggregated registry.
+   * @param context Context about the run.
+   * @returns The files to write, relative to the output root.
+   */
+  serializeRegistry?(registry: MedmarkRegistry, context: MedmarkRegistryContext): MedmarkRegistryFile[];
 }
 
 /**
@@ -51,6 +76,10 @@ export interface MedmarkTemplateRenderOptions extends Omit<MedmarkFrontMatter, '
    * The raw body of the blog post.
    */
   bodyRaw?: string;
+  /**
+   * The canonical URL of the post on the source provider (e.g. Medium).
+   */
+  canonicalUrl?: string;
   /**
    * Images associated with the blog post.
    */

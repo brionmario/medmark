@@ -35,3 +35,12 @@ export const DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME: string = 'output';
 export const DEFAULT_TEMPLATES_FOLDER_NAME: string = 'templates';
 export const DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME: string = 'sample-medmark-template.js';
 export const MEDIUM_EXPORT_POSTS_FOLDER_NAME: string = 'posts';
+
+/**
+ * Base filename (without extension) used for the generated content registry.
+ */
+export const DEFAULT_MEDMARK_REGISTRY_FILENAME: string = 'registry';
+/**
+ * Current schema version of the generated registry payload.
+ */
+export const MEDMARK_REGISTRY_VERSION: number = 1;

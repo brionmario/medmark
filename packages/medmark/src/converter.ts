@@ -26,12 +26,19 @@ import fakeUa from 'fake-useragent';
 import fs, {WriteStream} from 'fs';
 import cheerio, {CheerioAPI, Element, Cheerio} from 'cheerio';
 import mkdirp from 'mkdirp';
-import {join, resolve, basename, extname} from 'path';
+import {join, resolve, relative, basename, extname} from 'path';
 import {pathToFileURL} from 'url';
 import chalk from 'chalk';
 import output from './output';
 import {transformHtmlToMarkdown} from './markdown';
 import Reporter from './reporter';
+import RegistryCollector, {buildDefaultRegistryEntry, serializeDefaultRegistry} from './registry';
+import {
+  MedmarkRegistry,
+  MedmarkRegistryEntry,
+  MedmarkRegistryEntryContext,
+  MedmarkRegistryFile,
+} from './models/medmark/registry';
 import debug from './debug';
 import embedTweets from './twitter';
 import {convertToSlug, writePostToFile, getAuthors, getTags} from './utils';
@@ -340,6 +347,7 @@ async function gatherPostData(
     authors,
     body: posts ?? undefined,
     bodyRaw: $cheerio('.section-content').html() ?? undefined,
+    canonicalUrl: canonicalLink,
     description,
     draft: isDraft,
     images: imagesToSave,
@@ -366,25 +374,17 @@ async function gatherPostData(
 async function convertMediumFile(
   filePath: string,
   outputPath: string,
-  templatePath: string | undefined,
+  template: MedmarkTemplate,
+  options: MedmarkOptions,
   exportDrafts: boolean,
   postsToSkip: string[],
 ): Promise<void> {
+  const outputRoot: string = outputPath;
+
   const PATHS: Paths = {
     file: filePath,
     output: outputPath,
-    template: templatePath,
   };
-
-  const resolvedTemplate: string | null = PATHS.template
-    ? PATHS.template.startsWith('file:')
-      ? PATHS.template
-      : pathToFileURL(resolve(PATHS.template)).href
-    : null;
-  const loadedTemplateModule: {default: MedmarkTemplate} | null = resolvedTemplate && (await import(resolvedTemplate));
-  const template: MedmarkTemplate = loadedTemplateModule?.default ?? DefaultTemplate;
-
-  const options: MedmarkOptions = template.getOptions();
 
   const filename: string = basename(PATHS.file!, '.html');
 
@@ -429,6 +429,23 @@ async function convertMediumFile(
     try {
       // render post file to folder
       writePostToFile(templateRenderOutput, PATHS.file!, PATHS.output!);
+
+      // record the generated post in the registry (unless disabled)
+      if (options.registry?.enabled !== false) {
+        const writtenFilePath: string = resolve(`${join(PATHS.output!, basename(PATHS.file!, '.html'))}.md`);
+        const entryContext: MedmarkRegistryEntryContext = {
+          options,
+          outputRoot,
+          relativePath: relative(outputRoot, writtenFilePath),
+          slug: postData.titleForSlug ?? basename(PATHS.file!, '.html'),
+        };
+
+        const entry: MedmarkRegistryEntry | null = template.buildRegistryEntry
+          ? template.buildRegistryEntry(postData, entryContext)
+          : buildDefaultRegistryEntry(postData, entryContext);
+
+        RegistryCollector.getInstance().add(entry);
+      }
     } catch (e) {
       logger.error(`Couldn't write the post to: ${PATHS.output}`);
     }
@@ -457,6 +474,42 @@ async function convertMediumFile(
 }
 
 /**
+ * Builds and writes the content registry files to the output folder.
+ *
+ * @param template - The resolved template for the run.
+ * @param options - The resolved template options.
+ * @param outputFolder - The output root folder.
+ */
+function writeRegistry(template: MedmarkTemplate, options: MedmarkOptions, outputFolder: string): void {
+  if (options.registry?.enabled === false) {
+    return;
+  }
+
+  const collector: RegistryCollector = RegistryCollector.getInstance();
+
+  if (collector.size() === 0) {
+    return;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const {version}: {version: string} = require(join(__dirname, '../../package.json'));
+  const registry: MedmarkRegistry = collector.build(`medmark@${version}`, new Date().toISOString());
+
+  const files: MedmarkRegistryFile[] = template.serializeRegistry
+    ? template.serializeRegistry(registry, {options, outputRoot: outputFolder})
+    : serializeDefaultRegistry(registry, {options, outputRoot: outputFolder});
+
+  files.forEach((file: MedmarkRegistryFile) => {
+    try {
+      fs.writeFileSync(join(outputFolder, file.filename), file.content);
+      logger.info(`Registry file written: ${join(outputFolder, file.filename)}`);
+    } catch (e) {
+      logger.error(`Couldn't write registry file "${file.filename}" to: ${outputFolder}`);
+    }
+  });
+}
+
+/**
  * Converts Medium post(s) from an input file or directory of files to a HTML file(s) using a template.
  *
  * @param inputPath - The file path to the input file or directory of files.
@@ -480,6 +533,16 @@ async function convert(
 
   output.announceCheckpoint('🐱 Started converting.');
 
+  // Resolve the template once for the whole run. This also drives registry generation.
+  const resolvedTemplate: string | null = PATHS.template
+    ? PATHS.template.startsWith('file:')
+      ? PATHS.template
+      : pathToFileURL(resolve(PATHS.template)).href
+    : null;
+  const loadedTemplateModule: {default: MedmarkTemplate} | null = resolvedTemplate && (await import(resolvedTemplate));
+  const template: MedmarkTemplate = loadedTemplateModule?.default ?? DefaultTemplate;
+  const options: MedmarkOptions = template.getOptions();
+
   const isDirectory: boolean = fs.lstatSync(PATHS.input!).isDirectory();
 
   const promises: Promise<void>[] = [];
@@ -490,13 +553,15 @@ async function convert(
       const evaluatingFile: string = join(PATHS.input!, file);
 
       if (file.endsWith('.html')) {
-        promises.push(convertMediumFile(evaluatingFile, PATHS.output!, PATHS.template, exportDrafts, postsToSkip));
+        promises.push(convertMediumFile(evaluatingFile, PATHS.output!, template, options, exportDrafts, postsToSkip));
       } else {
         logger.warn(`Skipping ${evaluatingFile} because it is not an html file.`);
       }
     });
   } else {
-    promises.push(convertMediumFile(resolve(PATHS.input!), PATHS.output!, PATHS.template, exportDrafts, postsToSkip));
+    promises.push(
+      convertMediumFile(resolve(PATHS.input!), PATHS.output!, template, options, exportDrafts, postsToSkip),
+    );
   }
 
   try {
@@ -505,6 +570,8 @@ async function convert(
     output.success({title: `Successfully converted ${promises.length} files.`});
     reporter.printPrettyReport();
     reporter.saveReportToFile(PATHS.output!);
+
+    writeRegistry(template, options, PATHS.output!);
 
     logger.info(
       `Medium files from "${resolve(PATHS.input!)}" have finished converting to "${resolve(

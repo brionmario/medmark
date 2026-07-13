@@ -64,7 +64,7 @@ async function init(): Promise<void> {
     }
 
     const sampleTemplateContent: string = `\
-const { frontMatterToYaml } = require('medmark');
+const { frontMatterToYaml, buildDefaultRegistryEntry, serializeDefaultRegistry } = require('medmark');
 
 module.exports = {
   getOptions() {
@@ -73,7 +73,27 @@ module.exports = {
       folderForEachSlug: true,
       imagePath: '/resources',
       imageStorageStrategy: 'REMOTE',
+      // Generate a machine-readable index of every post that was converted.
+      registry: {
+        enabled: true,
+        // 'json' -> registry.json, 'ts' -> registry.ts, 'rss' -> feed.xml, 'sitemap' -> sitemap.xml
+        formats: ['json'],
+        // 'rss' and 'sitemap' require \`site.url\`.
+        // site: { url: 'https://example.com', title: 'My Blog', description: '...' },
+      },
     };
+  },
+
+  // OPTIONAL: customize what gets recorded per post in the registry.
+  // Omit to use the built-in default entry shape.
+  buildRegistryEntry(data, context) {
+    return buildDefaultRegistryEntry(data, context);
+  },
+
+  // OPTIONAL: customize how the registry is serialized to disk.
+  // Omit to use the built-in serializers driven by \`options.registry.formats\`.
+  serializeRegistry(registry, context) {
+    return serializeDefaultRegistry(registry, context);
   },
 
   render(data) {

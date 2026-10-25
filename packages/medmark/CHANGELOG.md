@@ -1,5 +1,19 @@
 # medmark
 
+## 0.3.1
+
+### Patch Changes
+
+- [`e5a5b772c16923b7dde5c404191c1af33f3f3f35`](https://github.com/brionmario/medmark/commit/e5a5b772c16923b7dde5c404191c1af33f3f3f35)
+  Thanks [@brionmario](https://github.com/brionmario)! - Load templates that export via `export default`
+
+  Templates compiled from TypeScript (or any module that sets `exports.default`) produce a second level of `default`
+  once imported, so they silently fell back to the built-in template. The loader now unwraps nested `default` exports,
+  which means CommonJS, ESM, and TypeScript-compiled templates all work.
+
+  Also extracts `MedmarkRegistrySiteOptions` as a named exported interface, and adds the missing `hasClass` declaration
+  to the bundled `cheerio` types so the package type-checks cleanly.
+
 ## 0.3.0
 
 ### Minor Changes

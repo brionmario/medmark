@@ -10,12 +10,14 @@ description: Convert your Medium export to Markdown or MDX with ease.
 - Parses Medium's HTML export format
 - Generates clean Markdown with YAML front matter (slug, title, date, tags, images, and more)
 - Downloads and remaps images locally or preserves remote CDN URLs
+- Inlines GitHub Gists and embedded tweets into the Markdown body
+- Builds a [content registry](/docs/registry) — a `registry.json`/`registry.ts` manifest, an RSS feed, and a sitemap
 - Supports custom templates so you control the output shape
 - Skips reply posts and optionally exports drafts
 
 ## How it works
 
-```
+```bash
 npx medmark
 ```
 
@@ -28,9 +30,21 @@ After `medmark init` (or the first `medmark` run):
 ```
 my-project/
 ├── medmark/
-│   ├── medium-export/   ← paste your Medium export here
-│   ├── output/          ← converted Markdown files land here
+│   ├── medium-export/   ← paste your Medium export's posts/ folder here
 │   └── templates/       ← optional custom templates
 └── .medmark/
     └── logs/            ← debug logs
 ```
+
+The output folder (`medmark/output/` by default) is created by the conversion
+run itself, not by `init`. Alongside the converted posts it contains a
+`conversion_report.json` and, unless disabled, the generated registry files.
+
+## Next steps
+
+<Cards>
+  <Card title="Getting Started" href="/docs/getting-started" description="Install medmark and run your first conversion." />
+  <Card title="CLI Reference" href="/docs/cli-reference" description="Every command and flag." />
+  <Card title="Templates" href="/docs/templates" description="Control the shape of the generated files." />
+  <Card title="Content Registry" href="/docs/registry" description="Generate a manifest, RSS feed, and sitemap." />
+</Cards>

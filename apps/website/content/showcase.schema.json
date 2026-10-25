@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "medmark showcase",
+  "description": "Sites and blogs whose content was migrated with medmark.",
+  "type": "object",
+  "required": ["sites"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "sites": {
+      "type": "array",
+      "description": "One entry per site. Keep the array sorted by `name`.",
+      "items": {
+        "type": "object",
+        "required": ["name", "url", "description", "author"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The site or blog name, as it should be displayed.",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "url": {
+            "type": "string",
+            "description": "Link to the page built with medmark output.",
+            "pattern": "^https://"
+          },
+          "description": {
+            "type": "string",
+            "description": "One sentence about the site.",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "author": {
+            "type": "object",
+            "description": "Who maintains the site.",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "github": {
+                "type": "string",
+                "description": "GitHub username, without the @.",
+                "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$"
+              }
+            }
+          },
+          "repo": {
+            "type": "string",
+            "description": "Optional link to the site's source repository.",
+            "pattern": "^https://"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Optional labels, e.g. the framework used.",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24
+            },
+            "maxItems": 6
+          }
+        }
+      }
+    }
+  }
+}

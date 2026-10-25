@@ -15,7 +15,6 @@ Visible folder you interact with directly.
 medmark/
 ├── medium-export/   ← paste your Medium export's posts/ folder here
 │   └── .gitkeep
-├── output/          ← converted Markdown output
 └── templates/
     └── sample-medmark-template.js  ← starter template
 ```
@@ -29,18 +28,41 @@ Hidden folder managed by medmark.
 └── logs/   ← debug logs written when --debug is on
 ```
 
+### The output folder
+
+The output folder defaults to `medmark/output` but is **not** created by
+`init` — the conversion run creates it (and any parent folders) on demand, so
+pointing `--output` anywhere else works without extra setup.
+
+```
+medmark/output/
+├── <slug>/index.md          ← or <slug>.md, see folderForEachSlug
+├── registry.json            ← content registry, unless disabled
+└── conversion_report.json   ← per-run statistics
+```
+
 ## Initialising the workspace
 
-Running either of these creates both folders:
+Running either of these creates the workspace folders:
 
 ```bash
 npx medmark init
 # or just
-npx medmark   ← auto-inits on first run
+npx medmark   # auto-inits on first run
 ```
+
+## Where settings live
+
+medmark has no config file. Everything is configured in one of two places:
+
+| Setting | Configured via |
+|---------|----------------|
+| Input, output, template, drafts, skip list, debug | [CLI flags](/docs/cli-reference) or the interactive prompts |
+| Image strategy, code-block language, folder layout, registry | Your [template's](/docs/templates) `getOptions()` |
 
 ## Cross-platform notes
 
 - Both `medmark/` and `.medmark/` are created with `fs.mkdirSync` and work identically on macOS, Linux, and Windows.
 - On Windows, `.medmark/` will not be hidden at the OS level (Windows uses file attributes for hiding, not dot-prefixes). It functions correctly regardless.
 - All paths are built with `path.join()` / `path.resolve()` so separators are always OS-correct.
+- Template paths are resolved to `file://` URLs before being imported, which is what makes custom templates loadable on Windows too.

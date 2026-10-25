@@ -92,7 +92,7 @@ process.on('unhandledRejection', (error: string) => {
  * @throws {Error} If there is an issue with the fetch request.
  */
 async function scrapeMetaDetailsFromPost(url: string): Promise<string> {
-  const response = await fetch(url, {
+  const response: Response = await fetch(url, {
     headers: {
       'User-Agent': fakeUa(),
     },
@@ -121,7 +121,7 @@ async function saveImagesToLocal(folderPath: string, images: MedmarkTemplateRend
         const writer: WriteStream = fs.createWriteStream(imageFilePath);
 
         fetch(image.mediumUrl)
-          .then((response) => {
+          .then((response: Response) => {
             if (response.ok) {
               if (!response.body) throw new Error('Response body is null');
               (response.body as any).pipe(writer);
@@ -491,7 +491,8 @@ function writeRegistry(template: MedmarkTemplate, options: MedmarkOptions, outpu
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // The package manifest sits outside `rootDir`, so it is read at runtime rather than imported.
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
   const {version}: {version: string} = require(join(__dirname, '../../package.json'));
   const registry: MedmarkRegistry = collector.build(`medmark@${version}`, new Date().toISOString());
 
@@ -507,6 +508,32 @@ function writeRegistry(template: MedmarkTemplate, options: MedmarkOptions, outpu
       logger.error(`Couldn't write registry file "${file.filename}" to: ${outputFolder}`);
     }
   });
+}
+
+/**
+ * The shape of a dynamically imported template module. A template can be
+ * authored as CommonJS (`module.exports = template`), as ESM
+ * (`export default template`), or compiled from TypeScript — which produces
+ * `exports.default`, and therefore a second level of `default` once the module
+ * is imported. {@link resolveTemplateModule} flattens all three.
+ */
+type MedmarkTemplateModule = MedmarkTemplate | {default?: MedmarkTemplateModule};
+
+/**
+ * Unwraps the template exported by a dynamically imported template module.
+ *
+ * @param module - The imported template module.
+ * @returns The template, or `null` when the module exports nothing usable.
+ */
+function resolveTemplateModule(module: MedmarkTemplateModule | null): MedmarkTemplate | null {
+  let candidate: MedmarkTemplateModule | undefined | null = module;
+
+  // Unwrap nested `default`s until a module that looks like a template shows up.
+  while (candidate && typeof (candidate as MedmarkTemplate).render !== 'function') {
+    candidate = (candidate as {default?: MedmarkTemplateModule}).default;
+  }
+
+  return (candidate as MedmarkTemplate) ?? null;
 }
 
 /**
@@ -534,13 +561,15 @@ async function convert(
   output.announceCheckpoint('🐱 Started converting.');
 
   // Resolve the template once for the whole run. This also drives registry generation.
-  const resolvedTemplate: string | null = PATHS.template
-    ? PATHS.template.startsWith('file:')
+  let resolvedTemplate: string | null = null;
+
+  if (PATHS.template) {
+    resolvedTemplate = PATHS.template.startsWith('file:')
       ? PATHS.template
-      : pathToFileURL(resolve(PATHS.template)).href
-    : null;
-  const loadedTemplateModule: {default: MedmarkTemplate} | null = resolvedTemplate && (await import(resolvedTemplate));
-  const template: MedmarkTemplate = loadedTemplateModule?.default ?? DefaultTemplate;
+      : pathToFileURL(resolve(PATHS.template)).href;
+  }
+  const loadedTemplateModule: MedmarkTemplateModule | null = resolvedTemplate && (await import(resolvedTemplate));
+  const template: MedmarkTemplate = resolveTemplateModule(loadedTemplateModule) ?? DefaultTemplate;
   const options: MedmarkOptions = template.getOptions();
 
   const isDirectory: boolean = fs.lstatSync(PATHS.input!).isDirectory();

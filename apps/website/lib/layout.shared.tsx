@@ -27,6 +27,10 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: <NavLogo />,
     },
+    links: [
+      { text: 'Documentation', url: '/docs' },
+      { text: 'Showcase', url: '/showcase' },
+    ],
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
   };
 }

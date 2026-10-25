@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, type CSSProperties } from 'react';
+import { useCallback, useEffect, useState, useRef, type CSSProperties } from 'react';
 import Link from 'next/link';
 
 /* ── Brand / feature data ─────────────────────────────── */
@@ -30,7 +30,7 @@ type TermLine =
 const SCRIPT: TermLine[] = [
   { kind: 'cmd' },
   { kind: 'gap' },
-  { kind: 'info', text: '  medmark v2.0.0  ·  Medium → Markdown' },
+  { kind: 'info', text: '  medmark  ·  Medium → Markdown' },
   { kind: 'gap' },
   { kind: 'prompt', q: '  ? Path to posts folder', a: '› ./medium-export/posts' },
   { kind: 'prompt', q: '  ? Output destination  ', a: '› ./output' },
@@ -91,16 +91,20 @@ function TermLineEl({ line }: { line: TermLine; }) {
 }
 
 function AnimatedTerminal() {
+  // Each run is a fresh mount, so the animation restarts from pristine state
+  // instead of resetting it synchronously inside an effect.
+  const [cycle, setCycle] = useState(0);
+  const onFinished = useCallback(() => setCycle(c => c + 1), []);
+
+  return <TerminalRun key={cycle} onFinished={onFinished} />;
+}
+
+function TerminalRun({ onFinished }: { onFinished: () => void; }) {
   const [typed, setTyped]     = useState('');
   const [visible, setVisible] = useState(0); // how many lines after cmd are shown
   const [cmdDone, setCmdDone] = useState(false);
-  const [cycle, setCycle]     = useState(0);
 
   useEffect(() => {
-    setTyped('');
-    setVisible(0);
-    setCmdDone(false);
-
     const timers: ReturnType<typeof setTimeout>[] = [];
 
     // Phase 1 – type the command
@@ -121,10 +125,10 @@ function AnimatedTerminal() {
     });
 
     // Phase 3 – restart loop
-    timers.push(setTimeout(() => setCycle(c => c + 1), cumDelay + 2800));
+    timers.push(setTimeout(onFinished, cumDelay + 2800));
 
     return () => timers.forEach(clearTimeout);
-  }, [cycle]);
+  }, [onFinished]);
 
   const showCmdCursor = !cmdDone || visible < SCRIPT.length - 1;
 

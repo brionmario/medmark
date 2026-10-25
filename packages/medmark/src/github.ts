@@ -47,7 +47,7 @@ async function getRawGist(gistUrl: string): Promise<string> {
 
   url = `${url}/raw`;
 
-  const response = await fetch(url);
+  const response: Response = await fetch(url);
 
   if (!response.ok) {
     throw new MedmarkSilentException(`An error occurred while getting the Gist: ${response.statusText}`);

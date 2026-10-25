@@ -1,0 +1,127 @@
+---
+title: Submit to the Showcase
+description: Add your migrated blog to the medmark showcase with a pull request.
+---
+
+The [showcase](/showcase) lists blogs and sites whose content was migrated off
+Medium with medmark. If you've moved your own writing across, please add it —
+it helps other people see what the output looks like in the wild.
+
+Adding an entry is a change to a single JSON file. No build step, no code.
+
+## What qualifies
+
+- The site is **publicly reachable** over HTTPS.
+- At least some of its content was **converted with medmark**.
+- It isn't primarily an ad, a paywall, or a link farm.
+
+That's the whole bar. Personal blogs with three posts are as welcome as
+company engineering sites.
+
+## The quick way
+
+<Steps>
+
+<Step>
+
+### Open the file on GitHub
+
+Use GitHub's web editor — it forks the repository and creates the branch for
+you:
+
+[Edit `showcase.json` →](https://github.com/brionmario/medmark/edit/main/apps/website/content/showcase.json)
+
+</Step>
+
+<Step>
+
+### Add your entry
+
+Append an object to the `sites` array:
+
+```json title="apps/website/content/showcase.json"
+{
+  "sites": [
+    {
+      "name": "Your Blog",
+      "url": "https://example.com/blog",
+      "description": "One sentence about what you write about.",
+      "author": {
+        "name": "Your Name",
+        "github": "your-github-username"
+      },
+      "repo": "https://github.com/your-github-username/your-site",
+      "tags": ["Next.js", "MDX"]
+    }
+  ]
+}
+```
+
+</Step>
+
+<Step>
+
+### Open the pull request
+
+Use the **showcase** pull request template so the checks are obvious to
+whoever reviews it:
+
+[Open a showcase PR →](https://github.com/brionmario/medmark/compare?template=showcase.md)
+
+</Step>
+
+</Steps>
+
+## The local way
+
+If you'd rather run it locally:
+
+```bash
+git clone https://github.com/brionmario/medmark.git
+cd medmark
+pnpm install
+
+# edit apps/website/content/showcase.json
+
+pnpm --filter @medmark/website dev
+```
+
+Then open [localhost:3000/showcase](http://localhost:3000/showcase) to see
+your card before you push.
+
+## Entry fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | yes | The site or blog name, as it should be displayed (max 60 chars) |
+| `url` | yes | `https://` link to the page built from medmark output |
+| `description` | yes | One sentence, max 160 characters |
+| `author.name` | yes | Who maintains the site |
+| `author.github` | no | GitHub username, without the `@` |
+| `repo` | no | `https://` link to the site's source repository |
+| `tags` | no | Up to 6 short labels, e.g. the framework used |
+
+The file has a JSON Schema next to it (`showcase.schema.json`), so an editor
+with schema support will flag a typo before you commit.
+
+## House rules
+
+- **Keep the array sorted by `name`.** The page sorts entries itself, but a
+  sorted file keeps diffs small.
+- **One site per pull request.** It keeps review simple, and a problem with
+  one entry doesn't hold up another.
+- **Link the page, not the homepage** — if your posts live at `/blog`, link
+  `/blog`.
+- **Describe, don't advertise.** "Notes on distributed systems" reads better
+  than "The #1 resource for engineers".
+
+## What happens next
+
+A maintainer checks that the link resolves and that the entry parses, then
+merges. The showcase page is statically generated, so your card appears the
+next time the site is deployed.
+
+<Callout title="Something wrong with an existing entry?">
+Links rot and people move on. Open a pull request removing or updating the
+entry — no need to ask first if it's your own.
+</Callout>

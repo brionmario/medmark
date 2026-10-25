@@ -37,6 +37,29 @@ export type MedmarkImageStorageStrategy = 'LOCAL' | 'REMOTE';
 export type MedmarkRegistryFormat = 'json' | 'ts' | 'rss' | 'sitemap';
 
 /**
+ * Site metadata used by the `rss` and `sitemap` registry formats.
+ */
+export interface MedmarkRegistrySiteOptions {
+  /**
+   * A short description of the site, used in the RSS channel.
+   */
+  description?: string;
+  /**
+   * The language of the site (e.g. `en`), used in the RSS channel.
+   */
+  language?: string;
+  /**
+   * The title of the site, used in the RSS channel.
+   */
+  title?: string;
+  /**
+   * The absolute base URL of the site (e.g. `https://example.com`).
+   * Required to emit `rss` and `sitemap`.
+   */
+  url?: string;
+}
+
+/**
  * Configuration for the generated content registry.
  */
 export interface MedmarkRegistryOptions {
@@ -60,25 +83,7 @@ export interface MedmarkRegistryOptions {
   /**
    * Site metadata, required for the `rss` and `sitemap` formats.
    */
-  site?: {
-    /**
-     * A short description of the site, used in the RSS channel.
-     */
-    description?: string;
-    /**
-     * The language of the site (e.g. `en`), used in the RSS channel.
-     */
-    language?: string;
-    /**
-     * The title of the site, used in the RSS channel.
-     */
-    title?: string;
-    /**
-     * The absolute base URL of the site (e.g. `https://example.com`).
-     * Required to emit `rss` and `sitemap`.
-     */
-    url?: string;
-  };
+  site?: MedmarkRegistrySiteOptions;
 }
 
 export interface MedmarkOptions {

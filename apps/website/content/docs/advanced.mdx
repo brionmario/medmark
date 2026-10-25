@@ -1,6 +1,6 @@
 ---
 title: Advanced Usage
-description: Debug mode, skipping files, drafts, and programmatic API.
+description: Debug mode, skipping files, drafts, and the programmatic API.
 ---
 
 ## Debug mode
@@ -27,6 +27,10 @@ npx medmark --drafts
 
 Drafts are identified by the filename prefix in the Medium export, not by the post's published status.
 
+Drafts are always recorded in the `json` and `ts` registry outputs with
+`draft: true`; whether they reach the RSS feed and sitemap is controlled by
+`registry.includeDrafts`. See [Content Registry](/docs/registry).
+
 ## Skipping specific files
 
 Pass a comma-separated list of HTML filenames to ignore:
@@ -35,22 +39,14 @@ Pass a comma-separated list of HTML filenames to ignore:
 npx medmark --skip draft_old-post.html,another.html
 ```
 
-## Programmatic API
-
-medmark exports its conversion utilities so you can use it in your own scripts:
-
-```js
-import { frontMatterToYaml } from 'medmark';
-```
-
-The `frontMatterToYaml` helper converts a plain object to a YAML front matter string, which is useful when writing custom templates.
-
 ## Image strategies
 
 ### `REMOTE` (default)
+
 Keeps the original `cdn-images-1.medium.com` URLs. Zero download time, but images depend on Medium's CDN staying available.
 
 ### `LOCAL`
+
 Downloads all images into the path defined by `imagePath` in your template's `getOptions()`. Slower but self-contained.
 
 ```js
@@ -62,6 +58,75 @@ getOptions() {
 }
 ```
 
+## Embedded content
+
+medmark resolves two kinds of embeds before converting the body:
+
+- **GitHub Gists** are fetched and inlined as fenced code blocks, so the post
+  stays readable without JavaScript.
+- **Tweets** are fetched through Twitter's oEmbed endpoint and inlined as HTML.
+
+Both require network access. Failures are recorded in
+`conversion_report.json` rather than aborting the run.
+
 ## Handling reply posts
 
 medmark automatically detects Medium "reply" posts (posts written in response to another post) and skips them. They are recorded in the `conversion_report.json` written to your output folder.
+
+## The conversion report
+
+Every run writes `conversion_report.json` into the output folder with counts
+and failure reasons for posts, drafts, replies, images, and gists. It is the
+first place to look when a post did not come out as expected.
+
+## Programmatic API
+
+medmark publishes its helpers and types so you can use them from your own
+scripts and templates:
+
+```js
+const {
+  frontMatterToYaml,
+  buildDefaultRegistryEntry,
+  serializeDefaultRegistry,
+  logger,
+  chalk,
+} = require('medmark');
+```
+
+| Export | Description |
+|--------|-------------|
+| `frontMatterToYaml(obj)` | Converts a plain object into a YAML front matter string |
+| `buildDefaultRegistryEntry(data, context)` | Produces medmark's default registry entry for a post |
+| `serializeDefaultRegistry(registry, context)` | Runs medmark's built-in registry serializers |
+| `logger` | The output logger medmark itself uses |
+| `chalk` | Re-exported `chalk`, so templates can colourise output without a dependency |
+
+Workspace path constants (`DEFAULT_MEDMARK_FOLDER_NAME`,
+`DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME`, `DEFAULT_TEMPLATES_FOLDER_NAME`,
+`DEFAULT_MEDMARK_REGISTRY_FILENAME`, and friends) are exported too.
+
+### Types
+
+All the public interfaces ship with the package:
+
+```ts
+import type {
+  MedmarkOptions,
+  MedmarkRegistry,
+  MedmarkRegistryEntry,
+  MedmarkRegistryEntryContext,
+  MedmarkRegistryFile,
+  MedmarkRegistryOptions,
+  MedmarkRegistrySiteOptions,
+  MedmarkTemplate,
+  MedmarkTemplateRenderOptions,
+  MedmarkFrontMatter,
+} from 'medmark';
+```
+
+<Callout title="The CLI is the supported entry point">
+`convert()` itself is not part of the public API. Drive conversions through
+the CLI (or `npx medmark` from a script) and use the exports above to shape
+the output.
+</Callout>

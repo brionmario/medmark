@@ -6,7 +6,7 @@ description: Install medmark and run your first conversion in minutes.
 ## Prerequisites
 
 - Node.js 18 or later
-- A Medium account export (download from Medium → Settings → Security and apps → Download your information)
+- A Medium account export (request one from [medium.com/me/export](https://medium.com/me/export))
 
 ## Run with npx (recommended)
 
@@ -17,7 +17,8 @@ npx medmark
 ```
 
 On first run medmark will:
-1. Create a `medmark/` folder in your current directory
+
+1. Create a `medmark/` workspace in your current directory
 2. Walk you through a short interactive prompt
 
 ## Install globally
@@ -34,13 +35,58 @@ Then run:
 medmark
 ```
 
+## Providing your Medium export
+
+<Steps>
+
+<Step>
+
+### Request your export
+
+Go to [medium.com/me/export](https://medium.com/me/export) and request your
+information. Medium emails you a download link, which can take a little while
+to arrive.
+
+</Step>
+
+<Step>
+
+### Create the workspace
+
+```bash
+npx medmark init
+```
+
+</Step>
+
+<Step>
+
+### Drop the posts in
+
+Unzip the archive and copy its `posts/` folder into `medmark/medium-export/`,
+so you end up with `medmark/medium-export/posts/*.html`.
+
+</Step>
+
+<Step>
+
+### Convert
+
+```bash
+npx medmark
+```
+
+</Step>
+
+</Steps>
+
 ## First run walkthrough
 
 ```
 ┌
   ███╗   ███╗███████╗██████╗ ...
   ...
-       Convert your Medium export to Markdown · v0.2.1
+       Convert your Medium export to Markdown
 
 ◇  Path to the `posts` folder of your Medium export
 │  medmark/medium-export/posts
@@ -62,9 +108,17 @@ medmark
 ◇  Conversion complete!
 ```
 
-## Providing your Medium export
+## What you get
 
-1. Export your data from [medium.com/me/export](https://medium.com/me/export)
-2. Unzip the archive
-3. Copy the `posts/` folder into `medmark/medium-export/`
-4. Run `npx medmark`
+```
+medmark/output/
+├── my-first-post/
+│   └── index.md             ← one folder per post (folderForEachSlug)
+├── registry.json            ← content registry manifest
+└── conversion_report.json   ← what succeeded, failed, and was skipped
+```
+
+<Callout title="Prompts can be skipped">
+Every prompt has a matching flag, so the whole run can be scripted. See the
+[CLI reference](/docs/cli-reference).
+</Callout>

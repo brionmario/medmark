@@ -1,16 +1,4 @@
 {
   "$schema": "./showcase.schema.json",
-  "sites": [
-    {
-      "name": "Brion Mario",
-      "url": "https://brionmario.com/blog",
-      "description": "Posts on identity, frontend, tooling, and design systems, migrated off Medium.",
-      "author": {
-        "name": "Brion Mario",
-        "github": "brionmario"
-      },
-      "repo": "https://github.com/brionmario/brionmario.com",
-      "tags": ["Next.js", "MDX"]
-    }
-  ]
+  "sites": []
 }

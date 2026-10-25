@@ -130,9 +130,7 @@ module.exports = {
 
     if (!fs.existsSync(sampleTemplateFile)) {
       fs.writeFileSync(sampleTemplateFile, sampleTemplateContent);
-      log.step(
-        `Created ${DEFAULT_MEDMARK_FOLDER_NAME}/${DEFAULT_TEMPLATES_FOLDER_NAME}/${DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME}`,
-      );
+      log.step(`Created ${DEFAULT_MEDMARK_FOLDER_NAME}/${DEFAULT_TEMPLATES_FOLDER_NAME}/${DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME}`);
     }
 
     log.success('Workspace initialized.');

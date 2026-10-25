@@ -79,8 +79,7 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-preserve-shebang": "^1.0.1",
     "ts-node": "^10.9.1",
-    "tslib": "^2.5.0",
-    "typescript": "^5.9.3"
+    "tslib": "^2.5.0"
   },
   "bin": {
     "medmark": "./dist/cjs/index.js"

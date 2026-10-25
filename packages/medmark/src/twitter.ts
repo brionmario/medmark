@@ -33,7 +33,7 @@ async function embedTweets($cheerio: CheerioAPI): Promise<void[]> {
       const href: string = $cheerio(this).attr('href') ?? '';
 
       // FIXME: TS ISSUE
-      const embedded: any = await fetch(`https://publish.twitter.com/oembed?url=${href}`).then((response: Response) =>
+      const embedded: any = await fetch(`https://publish.twitter.com/oembed?url=${href}`).then((response) =>
         response.json(),
       );
 

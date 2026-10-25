@@ -11,30 +11,6 @@ html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
 }
 
-/* ══ Brand logo ═════════════════════════════════════════ */
-
-/*
- * The right-hand bar of the brand mark is a pale grey, which all but
- * disappears on a light background and leaves the "M" looking broken. These
- * tokens keep the brand colours on dark surfaces and swap in a dark neutral
- * on light ones.
- */
-:root {
-  --medmark-logo-neutral: #2a3b37;
-  --medmark-logo-neutral-dim: #44534f;
-}
-
-.dark {
-  --medmark-logo-neutral: #d9e1e3;
-  --medmark-logo-neutral-dim: #bfc9cc;
-}
-
-/* The hero is dark in both themes, so pin the dark values on it. */
-.logo-on-dark {
-  --medmark-logo-neutral: #d9e1e3;
-  --medmark-logo-neutral-dim: #bfc9cc;
-}
-
 /* ══ Hero page ══════════════════════════════════════════ */
 
 .hero-root {

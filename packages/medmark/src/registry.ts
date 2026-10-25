@@ -24,7 +24,7 @@
 
 import {DEFAULT_MEDMARK_REGISTRY_FILENAME, MEDMARK_REGISTRY_VERSION} from './constants';
 import logger from './logger';
-import {MedmarkOptions, MedmarkRegistryFormat, MedmarkRegistrySiteOptions} from './models/medmark/core';
+import {MedmarkOptions, MedmarkRegistryFormat} from './models/medmark/core';
 import {MedmarkFrontMatterAuthor} from './models/medmark/front-matter';
 import {
   MedmarkRegistry,
@@ -147,7 +147,7 @@ export default registry;
  * Serializes the registry as an RSS 2.0 feed. Requires `site.url`.
  */
 function serializeAsRss(registry: MedmarkRegistry, options: MedmarkOptions): MedmarkRegistryFile | null {
-  const site: MedmarkRegistrySiteOptions | undefined = options.registry?.site;
+  const site = options.registry?.site;
 
   if (!site?.url) {
     logger.warn('Skipping RSS feed generation: `registry.site.url` is not configured.');
@@ -196,7 +196,7 @@ ${items}
  * Serializes the registry as a `sitemap.xml`. Requires `site.url`.
  */
 function serializeAsSitemap(registry: MedmarkRegistry, options: MedmarkOptions): MedmarkRegistryFile | null {
-  const site: MedmarkRegistrySiteOptions | undefined = options.registry?.site;
+  const site = options.registry?.site;
 
   if (!site?.url) {
     logger.warn('Skipping sitemap generation: `registry.site.url` is not configured.');

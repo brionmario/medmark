@@ -1,8 +1,9 @@
 #!/usr/bin/env node
+/// <reference path="../types/modules.d.ts" />
 /**
  * MIT License
  *
- * Copyright (c) 2026, Brion Mario
+ * Copyright (c) 2022, Brion Mario.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,8 +42,7 @@ import {
   MEDIUM_EXPORT_POSTS_FOLDER_NAME,
 } from './constants';
 
-// The package manifest sits outside `rootDir`, so it is read at runtime rather than imported.
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const {version: PKG_VERSION}: {version: string} = require(path.join(__dirname, '../../package.json'));
 
 const BANNER: string = `
@@ -63,19 +63,6 @@ function guardCancel<T>(value: T | symbol): T {
   return value as T;
 }
 
-/**
- * Flags accepted by the `medmark` command. Every flag is optional; anything
- * omitted is prompted for interactively.
- */
-interface MedmarkCliOptions {
-  debug?: boolean;
-  drafts?: boolean;
-  input?: string;
-  output?: string;
-  skip?: string;
-  template?: string;
-}
-
 const program: Command = new Command();
 
 program
@@ -87,7 +74,7 @@ program
   .option('-d, --drafts', 'Export drafts along with other posts')
   .option('-s, --skip <files>', 'Comma-separated list of files to skip')
   .option('-D, --debug', 'Run in debug mode')
-  .action(async (options: MedmarkCliOptions) => {
+  .action(async options => {
     intro(BANNER);
 
     const cwd: string = process.cwd();
@@ -109,9 +96,9 @@ program
       options.input ??
       guardCancel(
         await text({
-          defaultValue: defaultInput,
           message: 'Path to the `posts` folder of your Medium export',
           placeholder: defaultInput,
+          defaultValue: defaultInput,
           validate(value: string): string | undefined {
             const resolved: string = path.resolve(cwd, value || defaultInput);
             if (!fs.existsSync(resolved)) {
@@ -126,9 +113,9 @@ program
       options.output ??
       guardCancel(
         await text({
-          defaultValue: defaultOutput,
           message: 'Destination folder for output files',
           placeholder: defaultOutput,
+          defaultValue: defaultOutput,
         }),
       );
 
@@ -139,8 +126,8 @@ program
 
     const configureAdvanced: boolean = guardCancel(
       await confirm({
-        initialValue: false,
         message: 'Configure advanced options?',
+        initialValue: false,
       }),
     );
 
@@ -161,8 +148,8 @@ program
 
       exportDrafts = guardCancel(
         await confirm({
-          initialValue: false,
           message: 'Export drafts as well?',
+          initialValue: false,
         }),
       );
 
@@ -181,8 +168,8 @@ program
 
       debugMode = guardCancel(
         await confirm({
-          initialValue: false,
           message: 'Enable debug mode?',
+          initialValue: false,
         }),
       );
     }
@@ -209,7 +196,7 @@ program
       debug.initialize();
     }
 
-    const s: ReturnType<typeof spinner> = spinner();
+    const s = spinner();
     s.start('Converting your Medium posts...');
 
     try {

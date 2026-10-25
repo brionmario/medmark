@@ -41,10 +41,7 @@ export interface MedmarkTemplate {
    * @param context Context about where the post was written.
    * @returns The registry entry, or `null` to skip.
    */
-  buildRegistryEntry?(
-    post: MedmarkTemplateRenderOptions,
-    context: MedmarkRegistryEntryContext,
-  ): MedmarkRegistryEntry | null;
+  buildRegistryEntry?(post: MedmarkTemplateRenderOptions, context: MedmarkRegistryEntryContext): MedmarkRegistryEntry | null;
   /**
    * Returns an object with default options for rendering markdown.
    * @returns Object containing default options.

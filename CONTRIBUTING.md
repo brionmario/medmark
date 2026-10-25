@@ -5,7 +5,6 @@ As a contributor, here are the guidelines we would like you to follow:
 
  - [Setting Up Development Environment](#setting-up-development-environment)
  - [Commit Message Guidelines](#commit-message-guidelines)
- - [Adding Your Site to the Showcase](#adding-your-site-to-the-showcase)
 
 ## Setting Up Development Environment
 
@@ -217,19 +216,3 @@ The content of the commit message body should contain:
 
 - information about the SHA of the commit being reverted in the following format: `This reverts commit <SHA>`,
 - a clear description of the reason for reverting the commit message.
-
-## Adding Your Site to the Showcase
-
-Migrated your blog off Medium with Medmark? Add it to the
-[showcase](https://brionmario.github.io/medmark/showcase).
-
-It is a single entry appended to [`apps/website/content/showcase.json`](apps/website/content/showcase.json) —
-no code, no build step. The full field reference and house rules live in the
-[submission guide](https://brionmario.github.io/medmark/docs/showcase).
-
-The short version:
-
-1. Edit `apps/website/content/showcase.json` and append your entry to `sites`.
-2. Keep the array sorted by `name`, and keep it to one site per pull request.
-3. Open the pull request with the
-   [showcase template](https://github.com/brionmario/medmark/compare?template=showcase.md).

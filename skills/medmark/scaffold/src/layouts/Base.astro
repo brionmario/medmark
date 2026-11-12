@@ -6,11 +6,14 @@ interface Props {
   description?: string;
   image?: string;
   title?: string;
+  /** Post pages set this so the document type is right for sharing. */
+  type?: 'website' | 'article';
 }
 
-const {description = site.description, image, title} = Astro.props;
-const pageTitle: string = title ? `${title} · ${site.title}` : site.title;
+const {description = site.description, image, title, type = 'website'} = Astro.props;
+const pageTitle: string = title ? `${title} · ${site.title}` : `${site.title} — ${site.tagline}`;
 const canonical: string = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
+const year: number = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -20,27 +23,41 @@ const canonical: string = Astro.site ? new URL(Astro.url.pathname, Astro.site).h
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={site.author.name} />
     <link rel="canonical" href={canonical} />
-    <meta property="og:title" content={pageTitle} />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={title ?? site.title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
     {image && <meta property="og:image" content={image} />}
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={site.title} href="/rss.xml" />
   </head>
   <body>
     <header class="site-header">
       <a class="site-title" href="/">{site.title}</a>
-      <p class="site-tagline">{site.description}</p>
+      {site.nav.length > 1 && (
+        <nav class="site-nav">
+          {site.nav.map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))}
+        </nav>
+      )}
     </header>
+
     <main>
       <slot />
     </main>
+
     <footer class="site-footer">
-      <p>
-        Generated with <a href="https://github.com/brionmario/medmark">medmark</a> · Built with
-        <a href="https://astro.build">Astro</a>
+      <p class="site-footer__links">
+        {site.links.map((link) => (
+          <a href={link.href} rel={link.href.startsWith('http') ? 'me noreferrer' : undefined}>{link.label}</a>
+        ))}
       </p>
+      <p class="site-footer__legal">© {year} {site.author.name}</p>
     </footer>
   </body>
 </html>

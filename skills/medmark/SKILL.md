@@ -134,9 +134,12 @@ field names.
 
 ## 2. Host the generated posts
 
-The skill ships a minimal Astro blog in `scaffold/`: one folder-per-slug content collection, a post list, a post page,
-RSS, dark mode, zero config. It reads medmark's default front matter and passes unknown keys through, so custom
-templates still render.
+The skill ships a small Astro blog in `scaffold/`: a post list grouped by year, post pages with older/newer links, RSS,
+a sitemap, robots.txt, a 404 page, light and dark themes. It reads medmark's default front matter and passes unknown
+keys through, so custom templates still render.
+
+The goal is **the user's personal blog**, not a visible "medmark export". Treat the scaffold as a starting point you
+finish in their name — [Make it theirs](#make-it-theirs) below is part of the job, not an optional extra.
 
 ### Create the site
 
@@ -153,9 +156,46 @@ Then copy the posts in — the scaffold reads `content/posts/`:
 cp -R ../medmark/output/. content/posts/
 ```
 
-Edit `src/site.json` with the user's blog title, description and name — the details you asked for earlier. Never invent
-them. If you still do not have them, ask now (with the host's question tool where there is one), or leave the
-placeholders and say so plainly.
+### Make it theirs
+
+`src/site.json` is the identity of the blog, and every placeholder in it is a thing that must not ship:
+
+```json
+{
+  "title": "Ada Lovelace",
+  "tagline": "Notes on compilers, and the occasional detour.",
+  "description": "Essays on compilers and language design by Ada Lovelace.",
+  "url": "https://ada.example.com",
+  "author": {"name": "Ada Lovelace", "bio": "Compiler engineer. Previously at …", "avatar": "/avatar.jpg"},
+  "nav": [{"label": "Posts", "href": "/"}],
+  "links": [{"label": "GitHub", "href": "https://github.com/ada"}, {"label": "RSS", "href": "/rss.xml"}]
+}
+```
+
+- **title** is usually the person's name — this is a personal blog, not a product. `"My Blog"` shipping to production
+  is a failure.
+- **tagline** is the line readers see first. One sentence in their voice, from what they told you or what their posts
+  are actually about. Offer a draft and let them correct it rather than asking them to compose from scratch.
+- **description** goes in meta tags and the RSS feed. Never leave it saying anything about medmark or Medium.
+- **url** matters before deploying: canonical links, RSS and the sitemap are relative without it.
+- **author.bio** and **author.avatar** are optional. Leave `bio` empty rather than inventing a career, and drop an
+  image at `public/avatar.jpg` if they give you one.
+- **links** — replace the `your-handle` GitHub placeholder with their real accounts, or remove the row. A dead link to
+  a stranger's profile is worse than no link.
+
+Also, before you call it done:
+
+- **Swap `public/favicon.svg`.** It ships as a placeholder circle. Their initial, or an icon they provide.
+- **Check the excerpts.** `src/lib/posts.ts` strips the title where Medium repeated it into the body. Read the rendered
+  list; if an excerpt still starts mid-sentence or repeats the heading, fix that post's `description` front matter.
+- **Check the titles and dates** against what the posts were on Medium. A conversion glitch is easiest to spot here.
+- **Remove posts they don't want public.** Medium exports everything, including drafts and one-line replies. Ask
+  before deleting anything.
+- **Keep editing cheap.** Tell them the styling is one file (`src/styles/global.css`) and the pages are two short
+  `.astro` files — this is a site they own and can change, not a generated artifact they're stuck with.
+
+If the user has their own site already, say so plainly: copying `content/posts/` into their existing blog is usually
+less work than adopting this scaffold.
 
 ### Preview
 
@@ -218,6 +258,23 @@ npx wrangler pages deploy dist
 
 Deploying publishes the user's writing under their account. Confirm with them before running any deploy command, and
 report the resulting URL afterwards.
+
+### Before you call it production-ready
+
+Walk this yourself — don't hand the user a checklist to run.
+
+- [ ] No placeholders left: `"Your Name"`, `your-handle`, the default tagline, the placeholder favicon.
+- [ ] `site` (or `SITE_URL`) is the real domain, and `/rss.xml`, `/sitemap.xml` and `/robots.txt` show absolute URLs.
+- [ ] `npm run build` is clean, and you have opened `npm run preview` — not just the dev server.
+- [ ] Open three or four posts, including the oldest and the longest. Check images, code blocks, embeds and links.
+- [ ] Look at it at phone width.
+- [ ] A made-up URL renders the 404 page.
+- [ ] Drafts and replies the user didn't want are gone from `content/posts/`.
+- [ ] If they're keeping the Medium originals up, suggest `canonicalUrl` in front matter or a `rel=canonical` on the
+      Medium side, so search engines know which copy is which.
+
+Then tell the user what you checked and what you couldn't — a broken image behind a Medium CDN redirect, say — rather
+than declaring it perfect.
 
 ## Keeping it up to date
 

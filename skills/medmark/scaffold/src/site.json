@@ -1,5 +1,16 @@
 {
-  "title": "My Blog",
-  "description": "Articles exported from Medium with medmark.",
-  "author": "Your Name"
+  "title": "Your Name",
+  "tagline": "Writing about the things I build.",
+  "description": "Essays and notes by Your Name.",
+  "url": "",
+  "author": {
+    "name": "Your Name",
+    "bio": "",
+    "avatar": ""
+  },
+  "nav": [{"label": "Posts", "href": "/"}],
+  "links": [
+    {"label": "GitHub", "href": "https://github.com/your-handle"},
+    {"label": "RSS", "href": "/rss.xml"}
+  ]
 }

@@ -2,38 +2,71 @@
 import {render} from 'astro:content';
 import type {GetStaticPaths} from 'astro';
 import Base from '../../layouts/Base.astro';
-import {authorNames, formatDate, getPosts, type Post} from '../../lib/posts';
+import {authorNames, excerpt, formatDate, getPosts, postUrl, type Post} from '../../lib/posts';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts: Post[] = await getPosts();
 
-  return posts.map((post: Post) => ({params: {slug: post.id}, props: {post}}));
+  return posts.map((post: Post, index: number) => ({
+    params: {slug: post.id},
+    props: {
+      newer: posts[index - 1] ?? null,
+      older: posts[index + 1] ?? null,
+      post,
+    },
+  }));
 };
 
 interface Props {
+  newer: Post | null;
+  older: Post | null;
   post: Post;
 }
 
-const {post} = Astro.props;
+const {newer, older, post} = Astro.props;
 const {Content} = await render(post);
+const authors: string[] = authorNames(post);
 ---
 
-<Base title={post.data.title} description={post.data.description} image={post.data.ogImage}>
+<Base title={post.data.title} description={excerpt(post)} image={post.data.ogImage} type="article">
   <article class="post">
     <header class="post__header">
       <h1>{post.data.title ?? post.id}</h1>
-      <p class="post-meta">
-        {formatDate(post.data.date)}
+      <p class="post__meta">
+        <time datetime={post.data.date?.toISOString()}>{formatDate(post.data.date)}</time>
         {post.data.readingTime && <> · {post.data.readingTime}</>}
-        {authorNames(post).length > 0 && <> · {authorNames(post).join(', ')}</>}
+        {authors.length > 0 && <> · {authors.join(', ')}</>}
       </p>
+      {post.data.tags && post.data.tags.length > 0 && (
+        <ul class="tags">
+          {post.data.tags.map((tag: string) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )}
     </header>
+
     {post.data.bannerImage && <img class="post__banner" src={post.data.bannerImage} alt="" />}
+
     <div class="prose">
       <Content />
     </div>
-    <footer class="post__footer">
-      <a href="/">← All posts</a>
-    </footer>
+
+    <nav class="post__nav">
+      {older ? (
+        <a class="post__nav-link" href={postUrl(older)}>
+          <span>← Older</span>
+          {older.data.title}
+        </a>
+      ) : (
+        <span />
+      )}
+      {newer && (
+        <a class="post__nav-link post__nav-link--next" href={postUrl(newer)}>
+          <span>Newer →</span>
+          {newer.data.title}
+        </a>
+      )}
+    </nav>
   </article>
 </Base>

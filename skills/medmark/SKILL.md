@@ -56,8 +56,8 @@ npx medmark --input medmark/medium-export/posts --output medmark/output
 ```
 
 Other flags: `-t, --template <file>`, `-d, --drafts`, `-s, --skip <files>`, `-D, --debug`. Run `npx medmark --help` to
-confirm them for the installed version rather than guessing. Full reference:
-<https://github.com/brionmario/medmark#readme>.
+confirm them for the installed version rather than guessing. Full CLI and configuration
+reference: <https://brionmario.github.io/medmark/docs>.
 
 ### What the default template produces
 

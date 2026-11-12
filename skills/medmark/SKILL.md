@@ -22,9 +22,38 @@ If the user already has Markdown from a previous run, skip straight to [Host](#2
 
 ## 1. Convert a Medium archive
 
-**Prerequisites:** Node.js (LTS) and the user's Medium archive. They request it at Medium Settings → "Download your
-information" → Download, then wait for the email and unzip the file. If they do not have it yet, tell them this step is
-theirs — you cannot download it for them.
+**Prerequisites:** Node.js (LTS) and the user's Medium archive.
+
+### Find the archive first
+
+Before running anything, locate the archive. It is a folder (or a `.zip` of one) containing a `posts/` directory full
+of `.html` files — names look like `2019-04-01_My-post-title-abc123def.html`. Look in, roughly this order:
+
+1. A path the user named in the conversation.
+2. The working directory: `medmark/medium-export/`, `medium-export/`, `./posts/`.
+3. The usual download spots: `~/Downloads`, `~/Desktop` — `medium-export*.zip`, `medium-export/`.
+
+```bash
+find . ~/Downloads ~/Desktop -maxdepth 3 \( -name "medium-export*" -o -name "medium_export*" \) 2>/dev/null
+```
+
+**If you cannot find one, stop and ask the user — do not run the CLI against a guess and do not invent sample posts.**
+Ask for whichever applies:
+
+- _They have it already:_ ask for the path to the unzipped folder (or the `.zip`), then carry on. Unzip it yourself if
+  they give you a zip.
+- _They do not have it yet:_ exporting is theirs to do — you cannot download it for them. Tell them:
+  1. Open <https://medium.com/me/settings> (the Security and apps tab) → "Download your information" → **Download**.
+  2. Confirm with the password prompt, then wait for Medium's email ("Your Medium export is ready") — usually minutes,
+     sometimes hours.
+  3. Download the zip from the link in that email and tell you where it landed.
+
+  Then end your turn. Pick this up when they come back with the file rather than polling or waiting.
+
+If you find something ambiguous — several candidate folders, or a folder with no `posts/` inside — say what you found
+and let the user pick, rather than choosing for them.
+
+### Run the conversion
 
 Work inside the directory where the user wants the output.
 
@@ -41,8 +70,8 @@ medmark/
 .medmark/logs/            # run logs
 ```
 
-Tell the user to copy the unzipped archive into `medmark/medium-export/` (the `posts/` folder with the `.html` files
-must be directly inside it), then run:
+Copy the archive you located into `medmark/medium-export/` — the `posts/` folder with the `.html` files must end up
+directly inside it. Then run:
 
 ```bash
 npx medmark

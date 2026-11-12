@@ -3,7 +3,21 @@ title: Overview
 description: Convert your Medium export to Markdown or MDX with ease.
 ---
 
-**medmark** is a CLI tool that converts Medium exported archives into Markdown (or MDX) files, ready to drop into any static-site framework — Next.js, Astro, Hugo, and more.
+**medmark** is a CLI tool that converts Medium exported archives into Markdown (or MDX) files, ready to drop into any
+static-site framework — Next.js, Astro, Hugo, and more.
+
+## Let an agent do it
+
+If you use a coding agent, you can hand it the whole migration — conversion, a blog to put the posts in, and the deploy:
+
+```bash
+npx skills add brionmario/medmark
+```
+
+> "Convert my Medium export to Markdown and get it hosted."
+
+See [Agent Skill](/docs/agent-skill) for what it runs, and [Docs for AI](/docs/llms) for `llms.txt` and the Markdown
+version of every page.
 
 ## What it does
 
@@ -21,7 +35,8 @@ description: Convert your Medium export to Markdown or MDX with ease.
 npx medmark
 ```
 
-On first run medmark creates a `medmark/` workspace in your current directory, then walks you through a short interactive prompt to point it at your Medium export archive.
+On first run medmark creates a `medmark/` workspace in your current directory, then walks you through a short
+interactive prompt to point it at your Medium export archive.
 
 ## Workspace layout
 
@@ -36,15 +51,24 @@ my-project/
     └── logs/            ← debug logs
 ```
 
-The output folder (`medmark/output/` by default) is created by the conversion
-run itself, not by `init`. Alongside the converted posts it contains a
-`conversion_report.json` and, unless disabled, the generated registry files.
+The output folder (`medmark/output/` by default) is created by the conversion run itself, not by `init`. Alongside the
+converted posts it contains a `conversion_report.json` and, unless disabled, the generated registry files.
 
 ## Next steps
 
 <Cards>
-  <Card title="Getting Started" href="/docs/getting-started" description="Install medmark and run your first conversion." />
+  <Card
+    title="Getting Started"
+    href="/docs/getting-started"
+    description="Install medmark and run your first conversion."
+  />
   <Card title="CLI Reference" href="/docs/cli-reference" description="Every command and flag." />
   <Card title="Templates" href="/docs/templates" description="Control the shape of the generated files." />
   <Card title="Content Registry" href="/docs/registry" description="Generate a manifest, RSS feed, and sitemap." />
+  <Card
+    title="Agent Skill"
+    href="/docs/agent-skill"
+    description="Let Claude Code, Codex or Cursor convert and host it for you."
+  />
+  <Card title="Docs for AI" href="/docs/llms" description="llms.txt and Markdown copies of every page." />
 </Cards>

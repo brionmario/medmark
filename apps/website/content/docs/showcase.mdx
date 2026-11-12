@@ -3,9 +3,8 @@ title: Submit to the Showcase
 description: Add your migrated blog to the medmark showcase with a pull request.
 ---
 
-The [showcase](/showcase) lists blogs and sites whose content was migrated off
-Medium with medmark. If you've moved your own writing across, please add it —
-it helps other people see what the output looks like in the wild.
+The [showcase](/showcase) lists blogs and sites whose content was migrated off Medium with medmark. If you've moved your
+own writing across, please add it — it helps other people see what the output looks like in the wild.
 
 Adding an entry is a change to a single JSON file. No build step, no code.
 
@@ -15,8 +14,7 @@ Adding an entry is a change to a single JSON file. No build step, no code.
 - At least some of its content was **converted with medmark**.
 - It isn't primarily an ad, a paywall, or a link farm.
 
-That's the whole bar. Personal blogs with three posts are as welcome as
-company engineering sites.
+That's the whole bar. Personal blogs with three posts are as welcome as company engineering sites.
 
 ## The quick way
 
@@ -26,8 +24,7 @@ company engineering sites.
 
 ### Open the file on GitHub
 
-Use GitHub's web editor — it forks the repository and creates the branch for
-you:
+Use GitHub's web editor — it forks the repository and creates the branch for you:
 
 [Edit `showcase.json` →](https://github.com/brionmario/medmark/edit/main/apps/website/content/showcase.json)
 
@@ -63,8 +60,7 @@ Append an object to the `sites` array:
 
 ### Open the pull request
 
-Use the **showcase** pull request template so the checks are obvious to
-whoever reviews it:
+Use the **showcase** pull request template so the checks are obvious to whoever reviews it:
 
 [Open a showcase PR →](https://github.com/brionmario/medmark/compare?template=showcase.md)
 
@@ -86,42 +82,53 @@ pnpm install
 pnpm --filter @medmark/website dev
 ```
 
-Then open [localhost:3000/showcase](http://localhost:3000/showcase) to see
-your card before you push.
+Then open [localhost:3000/showcase](http://localhost:3000/showcase) to see your card before you push.
 
 ## Entry fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | yes | The site or blog name, as it should be displayed (max 60 chars) |
-| `url` | yes | `https://` link to the page built from medmark output |
-| `description` | yes | One sentence, max 160 characters |
-| `author.name` | yes | Who maintains the site |
-| `author.github` | no | GitHub username, without the `@` |
-| `repo` | no | `https://` link to the site's source repository |
-| `tags` | no | Up to 6 short labels, e.g. the framework used |
+| Field           | Required | Description                                                     |
+| --------------- | -------- | --------------------------------------------------------------- |
+| `name`          | yes      | The site or blog name, as it should be displayed (max 60 chars) |
+| `url`           | yes      | `https://` link to the page built from medmark output           |
+| `description`   | yes      | One sentence, max 160 characters                                |
+| `author.name`   | yes      | Who maintains the site                                          |
+| `author.github` | no       | GitHub username, without the `@`                                |
+| `repo`          | no       | `https://` link to the site's source repository                 |
+| `tags`          | no       | Up to 6 short labels, e.g. the framework used                   |
 
-The file has a JSON Schema next to it (`showcase.schema.json`), so an editor
-with schema support will flag a typo before you commit.
+The file has a JSON Schema next to it (`showcase.schema.json`), so an editor with schema support will flag a typo before
+you commit.
 
 ## House rules
 
-- **Keep the array sorted by `name`.** The page sorts entries itself, but a
-  sorted file keeps diffs small.
-- **One site per pull request.** It keeps review simple, and a problem with
-  one entry doesn't hold up another.
-- **Link the page, not the homepage** — if your posts live at `/blog`, link
-  `/blog`.
-- **Describe, don't advertise.** "Notes on distributed systems" reads better
-  than "The #1 resource for engineers".
+- **Keep the array sorted by `name`.** The page sorts entries itself, but a sorted file keeps diffs small.
+- **One site per pull request.** It keeps review simple, and a problem with one entry doesn't hold up another.
+- **Link the page, not the homepage** — if your posts live at `/blog`, link `/blog`.
+- **Describe, don't advertise.** "Notes on distributed systems" reads better than "The #1 resource for engineers".
 
 ## What happens next
 
-A maintainer checks that the link resolves and that the entry parses, then
-merges. The showcase page is statically generated, so your card appears the
-next time the site is deployed.
+A maintainer checks that the link resolves and that the entry parses, then merges. The showcase page is statically
+generated, so your card appears the next time the site is deployed.
 
 <Callout title="Something wrong with an existing entry?">
-Links rot and people move on. Open a pull request removing or updating the
-entry — no need to ask first if it's your own.
+  Links rot and people move on. Open a pull request removing or updating the entry — no need to ask first if it's your
+  own.
 </Callout>
+
+## Badge
+
+Using medmark for your content? You're welcome to add this badge to your README. Totally optional 😜.
+
+![Content Powered By Medmark](https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K)
+
+```md
+![Content Powered By Medmark](https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K)
+```
+
+```html
+<img
+  alt="Content Powered By Medmark"
+  src="https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K"
+/>
+```

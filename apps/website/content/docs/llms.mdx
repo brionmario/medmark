@@ -1,0 +1,45 @@
+---
+title: Docs for AI
+description: Every page of these docs in Markdown, plus llms.txt, for coding agents and LLMs.
+---
+
+These docs are written for people, and served for machines too. Point an agent at any of these and it gets clean
+Markdown instead of scraped HTML.
+
+## llms.txt
+
+A single index of every page in this site, in the [llms.txt](https://llmstxt.org) format:
+
+```
+https://brionmario.github.io/medmark/llms.txt
+```
+
+The full text of every page, concatenated into one file:
+
+```
+https://brionmario.github.io/medmark/llms-full.txt
+```
+
+That second one is the quickest way to give an assistant the whole of medmark's documentation in one paste.
+
+## Markdown for any page
+
+Append the page's path to `/llms.mdx/` to get its raw Markdown:
+
+```
+https://brionmario.github.io/medmark/llms.mdx/docs/getting-started/content.md
+```
+
+Every docs page also has a **Copy Markdown** button at the top, next to the title — handy when you want to drop one page
+into a chat.
+
+## The agent skill
+
+If your agent supports [Agent Skills](/docs/agent-skill), skip the copy-paste: the medmark skill teaches it to run the
+conversion and host the result.
+
+```bash
+npx skills add brionmario/medmark
+```
+
+See [Agent Skill](/docs/agent-skill) for what it does and how to install it in Claude Code, Codex or Cursor.

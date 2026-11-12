@@ -38,7 +38,13 @@ find . ~/Downloads ~/Desktop -maxdepth 3 \( -name "medium-export*" -o -name "med
 ```
 
 **If you cannot find one, stop and ask the user — do not run the CLI against a guess and do not invent sample posts.**
-Ask for whichever applies:
+
+Ask properly: if your host gives you an interactive question tool (Claude Code's does), use it, with "I have the
+archive" and "I haven't exported it yet" as the choices — a dialog they can answer in one click beats a wall of text.
+Without such a tool, ask in your message and end the turn. Either way, ask for the blog details in the same breath
+(title, one-line description, author name as it should appear on posts), so they are not interrupted twice.
+
+Then cover whichever applies:
 
 - _They have it already:_ ask for the path to the unzipped folder (or the `.zip`), then carry on. Unzip it yourself if
   they give you a zip.
@@ -55,7 +61,7 @@ and let the user pick, rather than choosing for them.
 
 ### Run the conversion
 
-Work inside the directory where the user wants the output.
+Only once you have the archive in hand. Work inside the directory where the user wants the output.
 
 ```bash
 npx medmark init
@@ -147,8 +153,9 @@ Then copy the posts in — the scaffold reads `content/posts/`:
 cp -R ../medmark/output/. content/posts/
 ```
 
-Edit `src/site.json` with the user's blog title, description and name. Ask them for these rather than inventing them; if
-they would rather fill it in later, leave the placeholders and say so.
+Edit `src/site.json` with the user's blog title, description and name — the details you asked for earlier. Never invent
+them. If you still do not have them, ask now (with the host's question tool where there is one), or leave the
+placeholders and say so plainly.
 
 ### Preview
 

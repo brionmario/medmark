@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+import site from '../site.json';
+
+interface Props {
+  description?: string;
+  image?: string;
+  title?: string;
+}
+
+const {description = site.description, image, title} = Astro.props;
+const pageTitle: string = title ? `${title} · ${site.title}` : site.title;
+const canonical: string = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/rss+xml" title={site.title} href="/rss.xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-title" href="/">{site.title}</a>
+      <p class="site-tagline">{site.description}</p>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>
+        Generated with <a href="https://github.com/brionmario/medmark">medmark</a> · Built with
+        <a href="https://astro.build">Astro</a>
+      </p>
+    </footer>
+  </body>
+</html>

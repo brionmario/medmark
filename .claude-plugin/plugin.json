@@ -1,0 +1,13 @@
+{
+  "name": "medmark",
+  "description": "Convert a Medium archive to Markdown with medmark, then preview and deploy the generated blog.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Brion Mario",
+    "url": "https://github.com/brionmario"
+  },
+  "homepage": "https://github.com/brionmario/medmark",
+  "repository": "https://github.com/brionmario/medmark",
+  "license": "MIT",
+  "keywords": ["medium", "markdown", "blog", "astro", "medmark"]
+}

@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import {authorNames, formatDate, getPosts, type Post} from '../lib/posts';
+
+const posts: Post[] = await getPosts();
+---
+
+<Base>
+  {posts.length === 0 && (
+    <p class="empty">
+      No posts yet. Copy your medmark output into <code>content/posts/</code> and refresh.
+    </p>
+  )}
+  <ul class="post-list">
+    {posts.map((post: Post) => (
+      <li class="post-card">
+        {post.data.bannerImage && (
+          <a href={`/posts/${post.id}/`} class="post-card__banner">
+            <img src={post.data.bannerImage} alt="" loading="lazy" />
+          </a>
+        )}
+        <div class="post-card__body">
+          <h2><a href={`/posts/${post.id}/`}>{post.data.title ?? post.id}</a></h2>
+          {post.data.description && <p class="post-card__description">{post.data.description}</p>}
+          <p class="post-meta">
+            {formatDate(post.data.date)}
+            {post.data.readingTime && <> · {post.data.readingTime}</>}
+            {authorNames(post).length > 0 && <> · {authorNames(post).join(', ')}</>}
+            {post.data.draft && <> · <span class="badge">Draft</span></>}
+          </p>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <ul class="tags">
+              {post.data.tags.map((tag: string) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </li>
+    ))}
+  </ul>
+</Base>

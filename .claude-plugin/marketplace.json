@@ -1,0 +1,27 @@
+{
+  "name": "medmark",
+  "owner": {
+    "name": "Brion Mario",
+    "url": "https://github.com/brionmario"
+  },
+  "metadata": {
+    "description": "Agent skills for medmark — export Medium articles to Markdown and host them.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "medmark",
+      "source": "./",
+      "description": "Convert a Medium archive to Markdown with medmark, then preview and deploy the generated blog.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Brion Mario",
+        "url": "https://github.com/brionmario"
+      },
+      "homepage": "https://github.com/brionmario/medmark",
+      "repository": "https://github.com/brionmario/medmark",
+      "license": "MIT",
+      "keywords": ["medium", "markdown", "blog", "astro", "medmark"]
+    }
+  ]
+}

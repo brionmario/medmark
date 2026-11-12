@@ -1,0 +1,109 @@
+---
+title: Agent Skill
+description: Install the medmark skill so your coding agent can convert and host your Medium archive for you.
+---
+
+medmark ships an [agent skill](https://github.com/brionmario/medmark/tree/main/skills/medmark) that teaches coding
+agents — Claude Code, Codex, Cursor, Copilot — how to run the CLI and put the generated Markdown online.
+
+Once it's installed, this is the whole workflow:
+
+> Convert my Medium export to Markdown and get it hosted.
+
+The agent runs `npx medmark`, scaffolds a small [Astro](https://astro.build) blog from the output, previews it locally,
+and walks you through deploying to Vercel, Netlify, Cloudflare Pages or GitHub Pages.
+
+## Install
+
+<Tabs items={['skills CLI', 'Claude Code plugin', 'Manual']}>
+
+<Tab value="skills CLI">
+
+Works across Claude Code, Codex, Cursor and other agents:
+
+```bash
+npx skills add brionmario/medmark
+```
+
+</Tab>
+
+<Tab value="Claude Code plugin">
+
+```bash
+/plugin marketplace add brionmario/medmark
+```
+
+```bash
+/plugin install medmark@medmark
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy the skill folder into your agent's skills directory:
+
+```bash
+git clone https://github.com/brionmario/medmark.git /tmp/medmark
+cp -R /tmp/medmark/skills/medmark ~/.claude/skills/medmark
+```
+
+</Tab>
+
+</Tabs>
+
+## What the skill does
+
+<Steps>
+
+<Step>
+
+### Converts your archive
+
+It scaffolds the working folders with `npx medmark init`, tells you where to unzip the Medium archive, and runs the
+conversion. Requesting the archive from Medium is still yours to do — the agent can't download it for you.
+
+</Step>
+
+<Step>
+
+### Builds a site from the output
+
+The skill carries a small Astro starter. It reads medmark's folder-per-slug output straight from `content/posts/`, with
+a lenient front matter schema that passes unknown keys through, so custom templates keep working.
+
+What you get: a post list, post pages with syntax highlighting, RSS, OG tags, light and dark themes, and drafts hidden
+in production builds. It's a few short files — change `src/styles/global.css` and the two page files to make it yours.
+
+</Step>
+
+<Step>
+
+### Previews and deploys
+
+`npm run dev` for a local preview, `npm run build` for static output in `dist/`, then any static host. The skill covers
+Vercel, Netlify, Cloudflare Pages and GitHub Pages, and it confirms with you before running a deploy.
+
+</Step>
+
+</Steps>
+
+## Keeping posts in sync
+
+Re-export from Medium, re-run `npx medmark`, copy the output over `content/posts/` again and redeploy. Posts you deleted
+on Medium stay until you clear the folder first.
+
+## Without an agent
+
+The starter is a plain Astro project — you can use it on its own:
+
+```bash
+git clone https://github.com/brionmario/medmark.git /tmp/medmark
+cp -R /tmp/medmark/skills/medmark/scaffold my-blog
+cd my-blog
+cp -R ../medmark/output/. content/posts/
+npm install
+npm run dev
+```
+
+Set your blog's name in `src/site.json`, then deploy `dist/` anywhere.

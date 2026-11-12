@@ -5,12 +5,13 @@
 
 <div align="center">
 
-  <a href="">[![npm version](https://badge.fury.io/js/medmark.svg)](https://badge.fury.io/js/medmark)</a>
-  <a href="">[![Build](https://github.com/brionmario/medmark/actions/workflows/build.yml/badge.svg)](https://github.com/brionmario/medmark/actions/workflows/build.yml)</a>
-  <a href="">[![Release](https://github.com/brionmario/medmark/actions/workflows/release.yml/badge.svg)](https://github.com/brionmario/medmark/actions/workflows/release.yml)</a>
-  <a href=""><!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END --></a>
-  <a href="">[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-yellow.svg)](http://commitizen.github.io/cz-cli/)</a>
-  <a href="">[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)</a>
+<a href="">[![npm version](https://badge.fury.io/js/medmark.svg)](https://badge.fury.io/js/medmark)</a>
+<a href="">[![Build](https://github.com/brionmario/medmark/actions/workflows/build.yml/badge.svg)](https://github.com/brionmario/medmark/actions/workflows/build.yml)</a>
+<a href="">[![Release](https://github.com/brionmario/medmark/actions/workflows/release.yml/badge.svg)](https://github.com/brionmario/medmark/actions/workflows/release.yml)</a>
+<a href=""><!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END --></a>
+<a href="">[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-yellow.svg)](http://commitizen.github.io/cz-cli/)</a>
+<a href="">[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)</a>
+
 </div>
 
 # Table of Contents
@@ -18,6 +19,7 @@
 - 💡 [Inspiration](#inspiration)
 - [Prerequisites](#prerequisites)
 - [Install](#install)
+- [Agent Skill](#agent-skill)
 - [API Reference](#api-reference)
 - [Examples](#examples)
 - [Contributors](#contributors)
@@ -25,9 +27,12 @@
 
 # Inspiration
 
-This project is inspired by [export-medium-to-gatsby](https://github.com/jamischarles/export-medium-to-gatsby), a tool to export Medium articles to Gatsby.js. However, the last update to `export-medium-to-gatsby` was made on Mar 11, 2021 and seems it's unmaintained. I got several issues trying to convert my blogs so I decided to fork and improve the code.
+This project is inspired by [export-medium-to-gatsby](https://github.com/jamischarles/export-medium-to-gatsby), a tool
+to export Medium articles to Gatsby.js. However, the last update to `export-medium-to-gatsby` was made on Mar 11, 2021
+and seems it's unmaintained. I got several issues trying to convert my blogs so I decided to fork and improve the code.
 
-Hence, I decided to fork the repo and improve the code and fix the issues I encountered. I also added some features that I think would be useful for me and other users.
+Hence, I decided to fork the repo and improve the code and fix the issues I encountered. I also added some features that
+I think would be useful for me and other users.
 
 💡 I primarily use this to create my own personal blog (https://brionmario.com/blog)
 
@@ -92,18 +97,19 @@ After running the above command, you will be prompted for the following:
 5. Comma-separated list of files to skip (optional).
 6. Whether to run the tool in debug mode (default is true).
 
-Once you have provided the required information, the tool will convert your Medium archive to markdown files and save them to the specified output folder.
+Once you have provided the required information, the tool will convert your Medium archive to markdown files and save
+them to the specified output folder.
 
 ### Options
 
-| Option | Alias | Description |
-|--------|-------|-------------|
-| `--input <path_to_posts_folder>` | `-i` | Path to the folder containing posts from the medium export |
-| `--output <destination_folder>` | `-o` | Destination folder for output files. Defaults to "output" |
-| `--template <template_file>` | `-t` | Template used to generate post files |
-| `--drafts` | `-d` | Set flag to export drafts along with other posts |
-| `--skip <comma_separated_files>` | `-s` | Comma-separated list of files to skip |
-| `--debug` | `-D` | Set flag to run the tool in debug mode |
+| Option                           | Alias | Description                                                |
+| -------------------------------- | ----- | ---------------------------------------------------------- |
+| `--input <path_to_posts_folder>` | `-i`  | Path to the folder containing posts from the medium export |
+| `--output <destination_folder>`  | `-o`  | Destination folder for output files. Defaults to "output"  |
+| `--template <template_file>`     | `-t`  | Template used to generate post files                       |
+| `--drafts`                       | `-d`  | Set flag to export drafts along with other posts           |
+| `--skip <comma_separated_files>` | `-s`  | Comma-separated list of files to skip                      |
+| `--debug`                        | `-D`  | Set flag to run the tool in debug mode                     |
 
 ## Template
 
@@ -111,43 +117,42 @@ By default, the tool generates markdown files with the following structure:
 
 ```yaml
 ---
-slug: "/your-post-slug/"
-date: "2023-05-01"
-title: "Your Post Title"
-description: "Your post description"
+slug: '/your-post-slug/'
+date: '2023-05-01'
+title: 'Your Post Title'
+description: 'Your post description'
 authors:
-  - bio: "Your bio"
-    id: "your-id"
-    image: "https://your-image-url.com"
-    name: "Your Name"
-    twitterScreenName: "your-twitter-handle"
-    username: "your-username"
-readingTime: "x min read"
+  - bio: 'Your bio'
+    id: 'your-id'
+    image: 'https://your-image-url.com'
+    name: 'Your Name'
+    twitterScreenName: 'your-twitter-handle'
+    username: 'your-username'
+readingTime: 'x min read'
 draft: false
 tags:
-  - "tag1"
-  - "tag2"
-  - "tag3"
-bannerImage: "https://your-banner-image-url.com"
-ogImage: "https://your-og-image-url.com"
+  - 'tag1'
+  - 'tag2'
+  - 'tag3'
+bannerImage: 'https://your-banner-image-url.com'
+ogImage: 'https://your-og-image-url.com'
 images:
-  - "https://your-image1-url.com"
-  - "https://your-image2-url.com"
-  - "https://your-image3-url.com"
-  - "https://your-image4-url.com"
-  - "https://your-image5-url.com"
+  - 'https://your-image1-url.com'
+  - 'https://your-image2-url.com'
+  - 'https://your-image3-url.com'
+  - 'https://your-image4-url.com'
+  - 'https://your-image5-url.com'
 
 ---
-
 <BLOG CONTENT>
 ```
 
 ### Custom Template
 
-You can also write your own template if you need more customizations for the front-matter, etc. The created custom template can be passed to the `--template` argument in the CLI.
+You can also write your own template if you need more customizations for the front-matter, etc. The created custom
+template can be passed to the `--template` argument in the CLI.
 
 To create a custom template, create a JavaScript file that exports an object with two functions:
-
 
 ```js
 const {frontMatterToYaml} = require('medmark');
@@ -210,15 +215,44 @@ ${data.body}
 };
 ```
 
-The `getOptions` function returns an object with default options for rendering markdown, such as the default language for code blocks, the path for images referenced in markdown files, etc.
+The `getOptions` function returns an object with default options for rendering markdown, such as the default language
+for code blocks, the path for images referenced in markdown files, etc.
 
-The `render` function takes a data object containing blog post information, and returns a string of front matter and markdown body. The front matter should be formatted in YAML syntax.
+The `render` function takes a data object containing blog post information, and returns a string of front matter and
+markdown body. The front matter should be formatted in YAML syntax.
 
 Once you've created your custom template, you can pass its path to the `--template` argument in the CLI:
 
 ```bash
 npx medmark --input medium-export/posts --output output --template path/to/custom/template.js
 ```
+
+## Agent Skill
+
+Rather have your coding agent do it? medmark ships an [agent skill](./skills/medmark) that converts your archive **and**
+gets the result hosted.
+
+```bash
+npx skills add brionmario/medmark
+```
+
+Or, as a Claude Code plugin:
+
+```bash
+/plugin marketplace add brionmario/medmark
+/plugin install medmark@medmark
+```
+
+Then just ask:
+
+> Convert my Medium export to Markdown and get it hosted.
+
+The agent runs the CLI, builds a small [Astro](https://astro.build) blog from the generated Markdown (post list, post
+pages, RSS, dark mode), previews it locally, and walks you through deploying to Vercel, Netlify, Cloudflare Pages or
+GitHub Pages.
+
+The starter site lives in [`skills/medmark/scaffold`](./skills/medmark/scaffold) and works on its own if you'd rather do
+it by hand.
 
 ## Contributing
 
@@ -228,7 +262,8 @@ Excellent! Read up on our [guidelines for contributing](./CONTRIBUTING.md) to ge
 
 ## Badge
 
-If you use Medmark in your own projects, you can choose to add the following badge to your README file to acknowledge its usage. Please note that this is totally optional 😜.
+If you use Medmark in your own projects, you can choose to add the following badge to your README file to acknowledge
+its usage. Please note that this is totally optional 😜.
 
 ![Medmark](https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K)
 
@@ -254,15 +289,20 @@ https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage
 #### AsciiDoc
 
 ```html
-image:https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K[Static Badge]
+image:https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K[Static
+Badge]
 ```
 
 #### HTML
 
 ```html
-<img alt="Static Badge" src="https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K">
+<img
+  alt="Static Badge"
+  src="https://img.shields.io/badge/Content_Powered_By-Medmark-yellow?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA1NSA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzE4MzZfMikiPgo8cGF0aCBkPSJNNDMuODUgMzYuNTVDNDMuODUgMzcuMDUgNDQuMDE2NyAzNy40NSA0NC4zNSAzNy43NUw0Ny42NSA0MC45VjQxSDMxVjQwLjlMMzQuMzUgMzcuNzVDMzQuNjUgMzcuNDUgMzQuOCAzNy4wNSAzNC44IDM2LjU1VjE2LjQ1QzM0LjggMTUuNDUgMzQuODUgMTQuNDUgMzQuOTUgMTMuNDVMMjMuNjUgNDEuNEgyMy41NUwxMS44NSAxNS43QzExLjM1IDE0LjY2NjcgMTEuMDMzMyAxMy45MzMzIDEwLjkgMTMuNVYzMi42QzEwLjkgMzMuMSAxMS4xMTY3IDMzLjY1IDExLjU1IDM0LjI1TDE2LjYgNDAuOVY0MUg0LjE1VjQwLjlMOS4yIDM0LjI1QzkuNjMzMzMgMzMuNjUgOS44NSAzMy4xIDkuODUgMzIuNlYxMi44QzkuODUgMTIuMiA5LjcgMTEuNzE2NyA5LjQgMTEuMzVMNS4zIDUuOTVWNS44NUgxNy4yNUwyNy43IDI4LjY1TDM2LjkgNS44NUg0Ny42NVY1Ljk1TDQ0LjM1IDkuNkM0NC4wMTY3IDkuOTMzMzMgNDMuODUgMTAuMzUgNDMuODUgMTAuODVWMzYuNTVaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c%2BCjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzE4MzZfMiI%2BCjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K"
+/>
 ```
 
 ## License
 
-Licenses this source under the MIT License, Version 2.0 [LICENSE](./LICENSE), You may not use this file except in compliance with the License.
+Licenses this source under the MIT License, Version 2.0 [LICENSE](./LICENSE), You may not use this file except in
+compliance with the License.

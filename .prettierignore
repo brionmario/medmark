@@ -1,1 +1,4 @@
 output
+
+# Agent skill manifests — keep frontmatter on a single line.
+skills/**/SKILL.md

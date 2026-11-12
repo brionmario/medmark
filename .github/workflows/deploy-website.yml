@@ -6,6 +6,16 @@ on:
   push:
     branches:
       - main
+    # Only the things the site is actually built from. Note that the docs
+    # content lives in `apps/website/content` as `.mdx`, so it must stay in.
+    paths:
+      - "apps/website/**"
+      - "!apps/website/README.md"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/deploy-website.yml"
   workflow_dispatch:
 
 concurrency:

@@ -42,19 +42,19 @@ Running `medmark` without `init` first triggers the same setup automatically.
 
 ## Flags
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--input <path>` | `-i` | Path to the `posts/` folder of the Medium export |
-| `--output <path>` | `-o` | Destination folder for converted files (default: `medmark/output`) |
-| `--template <file>` | `-t` | Path to a custom template file |
-| `--drafts` | `-d` | Include draft posts in the output |
-| `--skip <files>` | `-s` | Comma-separated list of HTML filenames to skip |
-| `--debug` | `-D` | Enable debug mode (saves logs to `.medmark/logs/`) |
-| `--version` | `-V` | Print the installed version |
-| `--help` | `-h` | Show help text |
+| Flag                | Short | Description                                                        |
+| ------------------- | ----- | ------------------------------------------------------------------ |
+| `--input <path>`    | `-i`  | Path to the `posts/` folder of the Medium export                   |
+| `--output <path>`   | `-o`  | Destination folder for converted files (default: `medmark/output`) |
+| `--template <file>` | `-t`  | Path to a custom template file                                     |
+| `--drafts`          | `-d`  | Include draft posts in the output                                  |
+| `--skip <files>`    | `-s`  | Comma-separated list of HTML filenames to skip                     |
+| `--debug`           | `-D`  | Enable debug mode (saves logs to `.medmark/logs/`)                 |
+| `--version`         | `-V`  | Print the installed version                                        |
+| `--help`            | `-h`  | Show help text                                                     |
 
-Any flag you omit is prompted for interactively, so a partially-flagged run
-still works — only the missing answers are asked for.
+Any flag you omit is prompted for interactively, so a partially-flagged run still works — only the missing answers are
+asked for.
 
 ## Advanced options prompt
 
@@ -66,6 +66,6 @@ When you answer **yes** to "Configure advanced options?" in the wizard, you get:
 - **Debug mode** — write verbose logs under `.medmark/logs/`
 
 <Callout title="Registry options are template-only">
-The content registry is configured in your template's `getOptions()`, not via
-flags. See [Content Registry](/docs/registry).
+  The content registry is configured in your template's `getOptions()`, not via flags. See [Content
+  Registry](/docs/registry).
 </Callout>

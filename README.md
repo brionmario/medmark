@@ -48,7 +48,7 @@ Everything lives at **[brionmario.github.io/medmark](https://brionmario.github.i
 
 medmark ships an [agent skill](https://brionmario.github.io/medmark/docs/agent-skill) for Claude Code, Codex, Cursor and
 friends. Installed, it takes the migration end to end — conversion, a blog built from the output, and the deploy. The
-skill and its Astro starter live in [`skills/medmark`](./skills/medmark).
+skill and its Next.js starter live in [`skills/medmark`](./skills/medmark).
 
 ## Showcase
 

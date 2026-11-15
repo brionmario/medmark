@@ -10,8 +10,9 @@ Once it's installed, this is the whole workflow:
 
 > Convert my Medium export to Markdown and get it hosted.
 
-The agent runs `npx medmark`, scaffolds a small [Astro](https://astro.build) blog from the output, previews it locally,
-and walks you through deploying to Vercel, Netlify, Cloudflare Pages or GitHub Pages.
+The agent runs `npx medmark`, asks who the blog belongs to, builds a [Next.js](https://nextjs.org) blog from the output
+with your name and details on it, previews it locally, and walks you through deploying to Vercel, Netlify, Cloudflare
+Pages or GitHub Pages.
 
 ## Install
 
@@ -67,13 +68,22 @@ conversion. Requesting the archive from Medium is still yours to do — the agen
 
 <Step>
 
+### Makes it your blog, not an export
+
+Before building anything it asks whose blog this is — paste a LinkedIn profile, type the details, or give just a name
+and a couple of links. Your name, role, bio and links go into `site.config.ts`, and every section that has nothing to
+say hides itself. It won't invent a career you don't have.
+
+</Step>
+
+<Step>
+
 ### Builds a site from the output
 
-The skill carries a small Astro starter. It reads medmark's folder-per-slug output straight from `content/posts/`, with
-a lenient front matter schema that passes unknown keys through, so custom templates keep working.
-
-What you get: a post list, post pages with syntax highlighting, RSS, OG tags, light and dark themes, and drafts hidden
-in production builds. It's a few short files — change `src/styles/global.css` and the two page files to make it yours.
+The skill carries a Next.js 16 starter — App Router, TypeScript, Tailwind v4, statically exported. It reads medmark's
+folder-per-slug output straight from `content/posts/`: posts grouped by year, post pages with tags and syntax
+highlighting, tag pages, an about page, RSS, sitemap, OG tags, and a light/dark toggle. Markdown is rendered with raw
+HTML allowed, so Medium's figures and embeds survive.
 
 </Step>
 
@@ -81,7 +91,7 @@ in production builds. It's a few short files — change `src/styles/global.css` 
 
 ### Previews and deploys
 
-`npm run dev` for a local preview, `npm run build` for static output in `dist/`, then any static host. The skill covers
+`npm run dev` for a local preview, `npm run build` for static output in `out/`, then any static host. The skill covers
 Vercel, Netlify, Cloudflare Pages and GitHub Pages, and it confirms with you before running a deploy.
 
 </Step>
@@ -95,7 +105,7 @@ on Medium stay until you clear the folder first.
 
 ## Without an agent
 
-The starter is a plain Astro project — you can use it on its own:
+The starter is a plain Next.js project — you can use it on its own:
 
 ```bash
 git clone https://github.com/brionmario/medmark.git /tmp/medmark
@@ -106,4 +116,4 @@ npm install
 npm run dev
 ```
 
-Set your blog's name in `src/site.json`, then deploy `dist/` anywhere.
+Fill in `site.config.ts`, then deploy `out/` anywhere.

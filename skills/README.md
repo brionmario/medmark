@@ -2,9 +2,9 @@
 
 Skills that teach coding agents (Claude Code, Codex, Cursor, Copilot, …) how to run medmark and host what it generates.
 
-| Skill                  | What it does                                                                                            |
-| ---------------------- | ------------------------------------------------------------------------------------------------------- |
-| [`medmark`](./medmark) | Convert a Medium archive to Markdown, scaffold an Astro blog from the output, preview it and deploy it. |
+| Skill                  | What it does                                                                                                   |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [`medmark`](./medmark) | Convert a Medium archive to Markdown, build a personal Next.js blog from the output, preview it and deploy it. |
 
 ## Install
 
@@ -36,5 +36,5 @@ Just ask, once the skill is installed:
 
 > Convert my Medium export to Markdown and get it hosted.
 
-The skill handles the `npx medmark` run, builds an Astro site from the generated posts, previews it locally, and walks
-through deploying to Vercel, Netlify, Cloudflare Pages or GitHub Pages.
+The skill handles the `npx medmark` run, builds a personal Next.js site from the generated posts, previews it locally,
+and walks through deploying to Vercel, Netlify, Cloudflare Pages or GitHub Pages.

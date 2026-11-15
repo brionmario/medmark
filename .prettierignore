@@ -2,3 +2,4 @@ output
 
 # Agent skill manifests — keep frontmatter on a single line.
 skills/**/SKILL.md
+skills/medmark/scaffold/package-lock.json

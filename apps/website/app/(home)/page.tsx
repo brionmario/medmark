@@ -160,8 +160,8 @@ export default function HomePage() {
               </h2>
               <p className="max-w-xl text-fd-muted-foreground">
                 medmark ships an <Link href="/docs/agent-skill">agent skill</Link> for Claude Code, Codex, Cursor and
-                friends. It runs the conversion, scaffolds an Astro blog from the generated posts, previews it locally
-                and walks you through deploying it.
+                friends. It runs the conversion, builds a personal Next.js blog from the generated posts, previews it
+                locally and walks you through deploying it.
               </p>
               <div className="flex flex-wrap items-center gap-3">
                 <CopyButton value="npx skills add brionmario/medmark" />
@@ -190,7 +190,7 @@ export default function HomePage() {
               <ol className="m-0 mt-5 list-none space-y-3 p-0 text-sm text-fd-muted-foreground">
                 {[
                   'Runs the medmark CLI over your archive',
-                  'Builds an Astro blog from the output',
+                  'Builds a personal Next.js blog from the output',
                   'Previews it, then deploys it',
                 ].map((item, index) => (
                   <li key={item} className="flex items-start gap-3">

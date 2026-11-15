@@ -17,6 +17,7 @@ config file to make it yours.
    ```ts
    export const site: SiteConfig = {
      name: 'Ada Lovelace',
+     theme: 'clay',
      role: 'Compiler engineer',
      location: 'Cambridge, UK',
      tagline: 'Notes on compilers, and the occasional detour.',
@@ -40,6 +41,9 @@ config file to make it yours.
    Every section hides itself when its field is empty, so fill in what you want and leave the rest alone. Then swap
    `public/favicon.svg` for your own mark.
 
+   `theme` picks one of four palettes — `clay`, `ink`, `forest` or `plum`. Run the dev server and open
+   <http://localhost:3000/themes> to see them side by side in light and dark; the page exists only in dev.
+
 3. Run it:
 
    ```bash
@@ -56,7 +60,8 @@ config file to make it yours.
 - An about page driven by the same config — bio, what you're working on now, recent roles
 - `/rss.xml`, `/sitemap.xml`, `/robots.txt` and a 404 page
 - Open Graph, Twitter and canonical tags on every page
-- Light and dark themes with a toggle that remembers the choice and follows your OS until it's used
+- Four palettes, light and dark, switched with one line — plus a toggle that remembers the reader's choice and follows
+  their OS until it's used
 - Drafts (`draft: true`) visible in `npm run dev`, dropped from production builds
 
 Posts are rendered at build time with remark/rehype and raw HTML enabled — **not** MDX, because Medium exports carry
@@ -86,7 +91,9 @@ and the sitemap are absolute.
 content/posts/              your medmark output (one folder per slug)
 public/                     static files — favicon, avatar, LOCAL images
 site.config.ts              name, role, tagline, about, work, links
-app/globals.css             the palette (six variables) and post body styling
+app/themes.ts               the four palettes — colour lives here and nowhere else
+app/globals.css             post body styling, type scale
+app/themes/page.tsx         dev-only gallery of the palettes
 app/layout.tsx              page shell, fonts, meta tags
 app/page.tsx                home — intro and post list
 app/about/page.tsx

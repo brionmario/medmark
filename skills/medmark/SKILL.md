@@ -158,6 +158,7 @@ Whatever they pick, you need at most these, and the site works with the first tw
 | About | LinkedIn "About", or them | home intro + `/about/` |
 | Work | LinkedIn "Experience" | `/about/` |
 | Links | them | header, footer, `/about/` |
+| Look | them, from four palettes | the whole site — see [Pick a look](#pick-a-look) |
 
 ### Reading a LinkedIn profile
 
@@ -186,7 +187,7 @@ The skill ships a small, production-ready **Next.js 16** blog in `scaffold/`:
 - Post pages with tags, reading time and older/newer links; tag pages; an about page
 - RSS feed, sitemap, robots.txt and a 404 page
 - Light and dark themes with a toggle that remembers the choice, following the OS until it is used
-- Serif display type (Instrument Serif) over Inter, on a warm paper-and-ink palette with one accent colour
+- Serif display type (Instrument Serif) over Inter, and four palettes to choose from — one line of config
 
 Markdown is rendered at build time through remark/rehype with `rehype-raw`, **not** MDX: Medium exports carry raw HTML
 (figures, captions, iframes) that MDX rejects. Code blocks are highlighted by Shiki in both themes. Front matter is
@@ -207,6 +208,27 @@ Then copy the posts in — the scaffold reads `content/posts/`:
 cp -R ../medmark/output/. content/posts/
 ```
 
+### Pick a look
+
+The scaffold ships four palettes in `app/themes.ts` — `clay` (warm paper, terracotta accent; the default), `ink`
+(cool greys, blue link), `forest` (off-white, deep green) and `plum` (faint violet, deep purple). Each defines a light
+and a dark version of the same seven colours, and `theme` in `site.config.ts` picks one. Nothing else in the site
+hard-codes a colour, so switching is one line.
+
+Offer the choice rather than deciding silently — most people have an opinion once they see the options, and this is
+the part of the site that is most theirs. Use your host's interactive question tool with the four names and their
+one-line descriptions as the choices, or ask in your message. Either way, say that it changes everything in one line,
+so nobody treats it as a commitment.
+
+Showing it beats describing it: with the dev server running, `/themes` renders all four side by side, in light and
+dark, with the person's own name and tagline in the samples. That page exists only in `npm run dev` — production
+builds 404 it, so there is nothing to delete afterwards.
+
+If your host happens to have a visual design tool (Claude's artifact canvas, for example), you can mock the palettes
+up there instead. Do not depend on it: the `/themes` page is the route every agent can use, and the choice is the same
+one either way. A palette they want that isn't here is a new block in `app/themes.ts` with the same seven keys — copy
+`clay` and change the colours.
+
 ### Fill in site.config.ts
 
 `site.config.ts` at the root of the scaffold is the whole identity of the blog. It is typed and commented; fill it
@@ -215,6 +237,7 @@ with what you gathered in step 2:
 ```ts
 export const site: SiteConfig = {
   name: 'Ada Lovelace',
+  theme: 'clay',
   role: 'Compiler engineer',
   location: 'Cambridge, UK',
   tagline: 'Notes on compilers, and the occasional detour.',
@@ -250,8 +273,8 @@ Also before you call it done:
 - **Check the titles and dates** against what the posts were on Medium. A conversion glitch is easiest to spot here.
 - **Remove posts they don't want public.** Medium exports everything, including drafts and one-line replies. Ask
   before deleting anything.
-- **Keep editing cheap.** Tell them where things are: the palette is six CSS variables at the top of
-  `app/globals.css`, the post body styling is the `.prose` block below it, and the pages are short files under `app/`.
+- **Keep editing cheap.** Tell them where things are: the palettes are in `app/themes.ts`, the post body styling is
+  the `.prose` block in `app/globals.css`, and the pages are short files under `app/`.
   This is a site they own, not a generated artifact they're stuck with.
 
 If the user already has a site, say so plainly: copying `content/posts/` into their existing blog is usually less work
@@ -332,6 +355,8 @@ Walk this yourself — don't hand the user a checklist to run.
 - [ ] No placeholders left: `Your Name`, the default tagline, the placeholder favicon, an empty `description`.
 - [ ] Nothing invented in `site.config.ts` — every role, date and claim came from the user or their profile.
 - [ ] `url` (or `SITE_URL`) is the real domain, and `/rss.xml`, `/sitemap.xml` and `/robots.txt` show absolute URLs.
+- [ ] They have seen the look and agreed to it — `/themes` in dev, or the site itself — rather than keeping the
+      default because nobody asked.
 - [ ] `npm run build` is clean, and you have opened `npm run start` — not just the dev server.
 - [ ] Open three or four posts, including the oldest and the longest. Check images, code blocks, embeds and links.
 - [ ] Look at it at phone width, and flip the theme toggle on both the home page and a post.
@@ -350,8 +375,10 @@ removed from the output stay in `content/posts/` until deleted — clear the fol
 
 ## Notes and gotchas
 
-- The scaffold is a starting point, not a framework. If the user wants a different look, change the palette variables
-  in `app/globals.css` and the components in `app/components/` — they are short on purpose.
+- The scaffold is a starting point, not a framework. If the user wants a different look, change or add a palette in
+  `app/themes.ts` and edit the components in `app/components/` — they are short on purpose.
+- `/themes` is dev-only by design (`notFound()` in production). Do not "fix" it into a public page, and do not tell the
+  user to delete it.
 - Posts live in `content/posts/` (not inside `app/`) so the generated output can be replaced wholesale without
   touching the site code.
 - Rendering is Markdown → HTML through rehype with raw HTML allowed. Do not switch it to MDX to get components: it

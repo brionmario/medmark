@@ -1,3 +1,5 @@
+import type {ThemeName} from './app/themes';
+
 /**
  * Everything personal about this blog lives here.
  *
@@ -26,6 +28,13 @@ export interface WorkEntry {
 export interface SiteConfig {
   /** The person this blog belongs to. Used in the header and copyright. */
   name: string;
+  /**
+   * Which look the blog wears: 'clay', 'ink', 'forest' or 'plum'.
+   *
+   * Run `npm run dev` and open /themes to see all four side by side, or read
+   * `app/themes.ts` to change the colours or add your own.
+   */
+  theme: ThemeName;
   /** What you do, e.g. "Software engineer". Shown under your name. */
   role: string;
   /** Optional, e.g. "Colombo, Sri Lanka". */
@@ -52,6 +61,7 @@ export interface SiteConfig {
 
 export const site: SiteConfig = {
   name: 'Your Name',
+  theme: 'clay',
   role: '',
   location: '',
   tagline: 'Writing about the things I build.',

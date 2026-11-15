@@ -4,6 +4,7 @@ import type {ReactNode} from 'react';
 import site, {siteUrl} from '@/site.config';
 import SiteFooter from './components/site-footer';
 import SiteHeader from './components/site-header';
+import {themeCss, themes} from './themes';
 import './globals.css';
 
 const body = Inter({display: 'swap', subsets: ['latin'], variable: '--font-body'});
@@ -31,8 +32,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    {color: '#fbfaf7', media: '(prefers-color-scheme: light)'},
-    {color: '#111110', media: '(prefers-color-scheme: dark)'},
+    {color: themes[site.theme].light.paper, media: '(prefers-color-scheme: light)'},
+    {color: themes[site.theme].dark.paper, media: '(prefers-color-scheme: dark)'},
   ],
 };
 
@@ -46,6 +47,8 @@ export default function RootLayout({children}: {children: ReactNode}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* The chosen palette, from app/themes.ts. */}
+        <style dangerouslySetInnerHTML={{__html: themeCss(site.theme)}} />
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
       </head>
       <body className={`${body.variable} ${display.variable} min-h-screen flex flex-col`}>

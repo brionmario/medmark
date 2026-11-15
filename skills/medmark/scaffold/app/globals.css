@@ -3,27 +3,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ── Palette ──────────────────────────────────────────────────────────────
-   Warm paper and ink, with a single clay accent. Change these six colours and
-   the whole site follows — nothing else hard-codes a colour. */
-:root {
-  --paper: #fbfaf7;
-  --raised: #ffffff;
-  --ink: #141312;
-  --soft: #6b6861;
-  --line: #e7e3da;
-  --accent: #a94f26;
-  --accent-soft: #fdf1ea;
-}
-
-:root.dark {
-  --paper: #111110;
-  --raised: #171715;
-  --ink: #eceae5;
-  --soft: #948f86;
-  --line: #272521;
-  --accent: #e0875c;
-  --accent-soft: #231a15;
-}
+   The colours themselves live in `app/themes.ts` and are written into this
+   page as CSS variables by `app/layout.tsx`, picked by `theme` in
+   site.config.ts. Nothing below hard-codes a colour — change the palette
+   there and the whole site follows. */
 
 @theme inline {
   --color-paper: var(--paper);

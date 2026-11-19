@@ -7,7 +7,7 @@ description: Understand the medmark workspace layout and folder conventions.
 
 medmark uses two directories in your project root:
 
-### `medmark/` — user data
+### `medmark/`: user data
 
 Visible folder you interact with directly.
 
@@ -19,7 +19,7 @@ medmark/
     └── sample-medmark-template.js  ← starter template
 ```
 
-### `.medmark/` — tool internals
+### `.medmark/`: tool internals
 
 Hidden folder managed by medmark.
 
@@ -30,7 +30,7 @@ Hidden folder managed by medmark.
 
 ### The output folder
 
-The output folder defaults to `medmark/output` but is **not** created by `init` — the conversion run creates it (and any
+The output folder defaults to `medmark/output` but is **not** created by `init`. The conversion run creates it (and any
 parent folders) on demand, so pointing `--output` anywhere else works without extra setup.
 
 ```

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function About() {
-  // Nothing written yet — don't ship an empty page.
+  // Nothing written yet, so don't ship an empty page.
   if (site.about.length === 0) {
     notFound();
   }

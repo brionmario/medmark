@@ -34,7 +34,7 @@ import {
 
 export interface MedmarkTemplate {
   /**
-   * Builds the registry entry for a single generated post. Optional — when
+   * Builds the registry entry for a single generated post. Optional: when
    * omitted, Medmark uses its built-in default entry shape. Return `null` to
    * exclude the post from the registry.
    * @param post The render options for the post.
@@ -57,7 +57,7 @@ export interface MedmarkTemplate {
    */
   render(options: MedmarkTemplateRenderOptions): string;
   /**
-   * Serializes the aggregated registry into one or more output files. Optional —
+   * Serializes the aggregated registry into one or more output files. Optional:
    * when omitted, Medmark uses its built-in serializers driven by
    * `options.registry.formats`.
    * @param registry The aggregated registry.

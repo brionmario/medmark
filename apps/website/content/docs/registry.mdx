@@ -3,7 +3,7 @@ title: Content Registry
 description: Generate a manifest, RSS feed, and sitemap alongside your Markdown.
 ---
 
-Converting posts gives you Markdown files, but a site usually needs an _index_ of them too — to build a listing page, a
+Converting posts gives you Markdown files, but a site usually needs an _index_ of them too, to build a listing page, a
 feed, or a sitemap. The **content registry** is that index: medmark records every post it writes and emits it in the
 formats you ask for.
 
@@ -47,7 +47,7 @@ module.exports = {
 | `filename`      | `string`                                   | `'registry'` | Base filename (no extension) for the `json` and `ts` outputs |
 | `formats`       | `('json' \| 'ts' \| 'rss' \| 'sitemap')[]` | `['json']`   | Which files to emit                                          |
 | `includeDrafts` | `boolean`                                  | `false`      | Include drafts in the RSS feed and sitemap                   |
-| `site`          | `object`                                   | —            | Site metadata; **required** for `rss` and `sitemap`          |
+| `site`          | `object`                                   | none         | Site metadata; **required** for `rss` and `sitemap`          |
 
 ### `site` metadata
 
@@ -175,7 +175,7 @@ module.exports = {
 
 ### `serializeRegistry(registry, context)`
 
-Called once at the end of the run with the aggregated registry. Return the list of files to write — this bypasses
+Called once at the end of the run with the aggregated registry. Return the list of files to write. This bypasses
 `formats` entirely, so you control the output completely.
 
 ```js

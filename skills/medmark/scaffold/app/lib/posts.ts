@@ -7,7 +7,7 @@ const POSTS_DIR: string = path.join(process.cwd(), 'content', 'posts');
 export interface PostMeta {
   /** URL path segments, e.g. `['my-post']`. */
   segments: string[];
-  /** `my-post` — the folder name medmark generated. */
+  /** `my-post`, the folder name medmark generated. */
   slug: string;
   title: string;
   date: Date | null;

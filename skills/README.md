@@ -8,7 +8,7 @@ Skills that teach coding agents (Claude Code, Codex, Cursor, Copilot, …) how t
 
 ## Install
 
-With the [`skills`](https://skills.sh) CLI — works across Claude Code, Codex, Cursor and other agents:
+With the [`skills`](https://skills.sh) CLI, which works across Claude Code, Codex, Cursor and other agents:
 
 ```bash
 npx skills add brionmario/medmark
@@ -24,7 +24,7 @@ As a Claude Code plugin:
 /plugin install medmark@medmark
 ```
 
-Manually — copy the folder into your agent's skills directory:
+Manually, by copying the folder into your agent's skills directory:
 
 ```bash
 git clone https://github.com/brionmario/medmark.git /tmp/medmark && cp -R /tmp/medmark/skills/medmark ~/.claude/skills/medmark

@@ -32,9 +32,9 @@ npx medmark init
 
 Creates:
 
-- `medmark/medium-export/` — place your Medium archive's `posts/` folder here
-- `medmark/templates/sample-medmark-template.js` — starter custom template
-- `.medmark/logs/` — debug log output
+- `medmark/medium-export/`: place your Medium archive's `posts/` folder here
+- `medmark/templates/sample-medmark-template.js`: starter custom template
+- `.medmark/logs/`: debug log output
 
 The output folder is created by the conversion run, not by `init`.
 
@@ -53,17 +53,17 @@ Running `medmark` without `init` first triggers the same setup automatically.
 | `--version`         | `-V`  | Print the installed version                                        |
 | `--help`            | `-h`  | Show help text                                                     |
 
-Any flag you omit is prompted for interactively, so a partially-flagged run still works — only the missing answers are
+Any flag you omit is prompted for interactively, so a partially-flagged run still works. Only the missing answers are
 asked for.
 
 ## Advanced options prompt
 
 When you answer **yes** to "Configure advanced options?" in the wizard, you get:
 
-- **Template file** — path to a custom `.js` template (leave empty to use the built-in default)
-- **Export drafts** — include `draft_*.html` files
-- **Files to skip** — comma-separated filenames to ignore
-- **Debug mode** — write verbose logs under `.medmark/logs/`
+- **Template file**: path to a custom `.js` template (leave empty to use the built-in default)
+- **Export drafts**: include `draft_*.html` files
+- **Files to skip**: comma-separated filenames to ignore
+- **Debug mode**: write verbose logs under `.medmark/logs/`
 
 <Callout title="Registry options are template-only">
   The content registry is configured in your template's `getOptions()`, not via flags. See [Content

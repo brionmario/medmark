@@ -86,7 +86,7 @@ export default function ThemesPage() {
       <p className="text-soft mt-4 max-w-[34rem] leading-relaxed">
         Set <code className="font-mono text-sm">theme</code> in{' '}
         <code className="font-mono text-sm">site.config.ts</code> to one of these. The colours live in{' '}
-        <code className="font-mono text-sm">app/themes.ts</code> — copy a block to make your own.
+        <code className="font-mono text-sm">app/themes.ts</code>. Copy a block to make your own.
       </p>
       <p className="text-soft mt-2 text-sm">
         This page only exists while running <code className="font-mono">npm run dev</code>.

@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://brionmario.github.io/medmark">
-    <img src="https://raw.githubusercontent.com/brionmario/medmark/main/apps/website/static/assets/images/brand/banner.svg" alt="medmark — export your Medium articles to Markdown" width="100%">
+    <img src="https://raw.githubusercontent.com/brionmario/medmark/main/apps/website/static/assets/images/brand/banner.svg" alt="medmark: export your Medium articles to Markdown" width="100%">
   </a>
 </p>
 
@@ -16,8 +16,8 @@
 </p>
 
 <p align="center">
-  <b>medmark</b> turns a Medium export into clean Markdown or MDX — front matter, images,
-  embeds and a content registry — ready for Next.js, Astro, Hugo or anything else.
+  <b>medmark</b> turns a Medium export into clean Markdown or MDX: front matter, images,
+  embeds and a content registry, ready for Next.js, Astro, Hugo or anything else.
 </p>
 
 <p align="center">
@@ -47,18 +47,34 @@ Everything lives at **[brionmario.github.io/medmark](https://brionmario.github.i
 ## For AI agents
 
 medmark ships an [agent skill](https://brionmario.github.io/medmark/docs/agent-skill) for Claude Code, Codex, Cursor and
-friends. Installed, it takes the migration end to end — conversion, a blog built from the output, and the deploy. The
+friends. Installed, it takes the migration end to end: conversion, a blog built from the output, and the deploy. The
 skill and its Next.js starter live in [`skills/medmark`](./skills/medmark).
+
+Install it with the [`skills`](https://skills.sh) CLI, which every one of those agents reads:
+
+```bash
+npx skills add brionmario/medmark
+```
+
+Or, inside Claude Code, as a plugin:
+
+```bash
+/plugin marketplace add brionmario/medmark
+/plugin install medmark@medmark
+```
+
+Then ask for the whole thing in one sentence: _"Convert my Medium export to Markdown and get it hosted."_ The skill asks
+whose blog it is, offers four looks, builds the site, previews it and walks you through deploying.
 
 ## Showcase
 
 Moved your writing across with medmark?
-[Add your site to the showcase](https://brionmario.github.io/medmark/docs/showcase) — it's a one-line change to a JSON
+[Add your site to the showcase](https://brionmario.github.io/medmark/docs/showcase). It's a one-line change to a JSON
 file. There's a [badge](https://brionmario.github.io/medmark/docs/showcase#badge) too.
 
 ## Contributing
 
-Bug reports, code and documentation improvements are all welcome — see the [contributing guidelines](./CONTRIBUTING.md).
+Bug reports, code and documentation improvements are all welcome. See the [contributing guidelines](./CONTRIBUTING.md).
 
 ## License
 

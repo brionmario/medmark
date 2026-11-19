@@ -4,7 +4,7 @@ description: Install the medmark skill so your coding agent can convert and host
 ---
 
 medmark ships an [agent skill](https://github.com/brionmario/medmark/tree/main/skills/medmark) that teaches coding
-agents — Claude Code, Codex, Cursor, Copilot — how to run the CLI and put the generated Markdown online.
+agents (Claude Code, Codex, Cursor, Copilot) how to run the CLI and put the generated Markdown online.
 
 Once it's installed, this is the whole workflow:
 
@@ -62,7 +62,7 @@ cp -R /tmp/medmark/skills/medmark ~/.claude/skills/medmark
 ### Converts your archive
 
 It scaffolds the working folders with `npx medmark init`, tells you where to unzip the Medium archive, and runs the
-conversion. Requesting the archive from Medium is still yours to do — the agent can't download it for you.
+conversion. Requesting the archive from Medium is still yours to do. The agent can't download it for you.
 
 </Step>
 
@@ -70,11 +70,11 @@ conversion. Requesting the archive from Medium is still yours to do — the agen
 
 ### Makes it your blog, not an export
 
-Before building anything it asks whose blog this is — paste a LinkedIn profile, type the details, or give just a name
-and a couple of links. Your name, role, bio and links go into `site.config.ts`, and every section that has nothing to
-say hides itself. It won't invent a career you don't have.
+Before building anything it asks whose blog this is. Paste a LinkedIn profile, type the details, or give just a name and
+a couple of links. Your name, role, bio and links go into `site.config.ts`, and every section that has nothing to say
+hides itself. It won't invent a career you don't have.
 
-It also asks which of the four palettes you want — clay, ink, forest or plum — and the dev server has a `/themes` page
+It also asks which of the four palettes you want (clay, ink, forest or plum) and the dev server has a `/themes` page
 that shows them side by side, so the look is a choice you make by eye rather than a default you inherit.
 
 </Step>
@@ -83,7 +83,7 @@ that shows them side by side, so the look is a choice you make by eye rather tha
 
 ### Builds a site from the output
 
-The skill carries a Next.js 16 starter — App Router, TypeScript, Tailwind v4, statically exported. It reads medmark's
+The skill carries a Next.js 16 starter: App Router, TypeScript, Tailwind v4, statically exported. It reads medmark's
 folder-per-slug output straight from `content/posts/`: posts grouped by year, post pages with tags and syntax
 highlighting, tag pages, an about page, RSS, sitemap, OG tags, and a light/dark toggle. Markdown is rendered with raw
 HTML allowed, so Medium's figures and embeds survive.
@@ -108,7 +108,7 @@ on Medium stay until you clear the folder first.
 
 ## Without an agent
 
-The starter is a plain Next.js project — you can use it on its own:
+The starter is a plain Next.js project. You can use it on its own:
 
 ```bash
 git clone https://github.com/brionmario/medmark.git /tmp/medmark

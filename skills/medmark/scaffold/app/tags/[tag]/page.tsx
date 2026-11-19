@@ -12,7 +12,7 @@ interface TagPageProps {
 export function generateStaticParams(): {tag: string}[] {
   const tags = getTags();
 
-  // See the note in app/posts/[...slug]/page.tsx — one placeholder path keeps
+  // See the note in app/posts/[...slug]/page.tsx: one placeholder path keeps
   // `next build` working before any posts exist.
   return tags.length > 0 ? tags.map(({slug}: {slug: string}) => ({tag: slug})) : [{tag: '_'}];
 }

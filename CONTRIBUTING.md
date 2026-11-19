@@ -223,7 +223,7 @@ The content of the commit message body should contain:
 Migrated your blog off Medium with Medmark? Add it to the
 [showcase](https://brionmario.github.io/medmark/showcase).
 
-It is a single entry appended to [`apps/website/content/showcase.json`](apps/website/content/showcase.json) —
+It is a single entry appended to [`apps/website/content/showcase.json`](apps/website/content/showcase.json):
 no code, no build step. The full field reference and house rules live in the
 [submission guide](https://brionmario.github.io/medmark/docs/showcase).
 

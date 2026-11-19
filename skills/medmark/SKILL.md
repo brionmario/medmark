@@ -15,9 +15,9 @@ Turn a Medium archive into Markdown, then put it online as the user's own person
 
 Three jobs, in this order:
 
-1. **Convert** — run the `medmark` CLI over a Medium export to produce Markdown.
-2. **Personalise** — find out whose blog this is, and fill in the site with their details.
-3. **Host** — drop the Markdown into the Next.js blog in `scaffold/`, preview it, deploy it.
+1. **Convert**: run the `medmark` CLI over a Medium export to produce Markdown.
+2. **Personalise**: find out whose blog this is, and fill in the site with their details.
+3. **Host**: drop the Markdown into the Next.js blog in `scaffold/`, preview it, deploy it.
 
 If the user already has Markdown from a previous run, skip straight to [Personalise](#2-make-it-their-blog).
 
@@ -28,36 +28,36 @@ If the user already has Markdown from a previous run, skip straight to [Personal
 ### Find the archive first
 
 Before running anything, locate the archive. It is a folder (or a `.zip` of one) containing a `posts/` directory full
-of `.html` files — names look like `2019-04-01_My-post-title-abc123def.html`. Look in, roughly this order:
+of `.html` files, with names like `2019-04-01_My-post-title-abc123def.html`. Look in, roughly this order:
 
 1. A path the user named in the conversation.
 2. The working directory: `medmark/medium-export/`, `medium-export/`, `./posts/`.
-3. The usual download spots: `~/Downloads`, `~/Desktop` — `medium-export*.zip`, `medium-export/`.
+3. The usual download spots: `~/Downloads`, `~/Desktop`, holding `medium-export*.zip` or `medium-export/`.
 
 ```bash
 find . ~/Downloads ~/Desktop -maxdepth 3 \( -name "medium-export*" -o -name "medium_export*" \) 2>/dev/null
 ```
 
-**If you cannot find one, stop and ask the user — do not run the CLI against a guess and do not invent sample posts.**
+**If you cannot find one, stop and ask the user. Do not run the CLI against a guess and do not invent sample posts.**
 
 Ask properly: if your host gives you an interactive question tool (Claude Code's does), use it, with "I have the
-archive" and "I haven't exported it yet" as the choices — a dialog they can answer in one click beats a wall of text.
-Without such a tool, ask in your message and end the turn. Ask for their details in the same breath — see
-[Ask who the blog belongs to](#ask-who-the-blog-belongs-to) — so they are not interrupted twice.
+archive" and "I haven't exported it yet" as the choices. A dialog they can answer in one click beats a wall of text.
+Without such a tool, ask in your message and end the turn. Ask for their details in the same breath (see
+[Ask who the blog belongs to](#ask-who-the-blog-belongs-to)) so they are not interrupted twice.
 
 Then cover whichever applies:
 
 - _They have it already:_ ask for the path to the unzipped folder (or the `.zip`), then carry on. Unzip it yourself if
   they give you a zip.
-- _They do not have it yet:_ exporting is theirs to do — you cannot download it for them. Tell them:
+- _They do not have it yet:_ exporting is theirs to do. You cannot download it for them. Tell them:
   1. Open <https://medium.com/me/settings> (the Security and apps tab) → "Download your information" → **Download**.
-  2. Confirm with the password prompt, then wait for Medium's email ("Your Medium export is ready") — usually minutes,
+  2. Confirm with the password prompt, then wait for Medium's email ("Your Medium export is ready"), usually minutes,
      sometimes hours.
   3. Download the zip from the link in that email and tell you where it landed.
 
   Then end your turn. Pick this up when they come back with the file rather than polling or waiting.
 
-If you find something ambiguous — several candidate folders, or a folder with no `posts/` inside — say what you found
+If you find something ambiguous, such as several candidate folders or a folder with no `posts/` inside, say what you found
 and let the user pick, rather than choosing for them.
 
 ### Run the conversion
@@ -77,7 +77,7 @@ medmark/
 .medmark/logs/            # run logs
 ```
 
-Copy the archive you located into `medmark/medium-export/` — the `posts/` folder with the `.html` files must end up
+Copy the archive you located into `medmark/medium-export/`. The `posts/` folder with the `.html` files must end up
 directly inside it. Then run:
 
 ```bash
@@ -126,7 +126,7 @@ images: [...]
 ---
 ```
 
-Images default to `imageStorageStrategy: 'REMOTE'` — the Markdown points at Medium's CDN, so nothing extra needs
+Images default to `imageStorageStrategy: 'REMOTE'`, so the Markdown points at Medium's CDN, so nothing extra needs
 hosting. With `'LOCAL'`, images are written next to each post under the configured `imagePath` (default `/resources`);
 see [Local images](#local-images) below when hosting those.
 
@@ -135,7 +135,7 @@ field names.
 
 ## 2. Make it their blog
 
-The goal is **the user's personal blog** — their name, their words, their links — not a visible "medmark export". A
+The goal is **the user's personal blog**, with their name, their words and their links, not a visible "medmark export". A
 site that ships saying `Your Name` is a failed job, so gather the details before you build anything.
 
 ### Ask who the blog belongs to
@@ -143,9 +143,9 @@ site that ships saying `Your Name` is a failed job, so gather the details before
 Ask once, early, with your host's interactive question tool if you have one (Claude Code: AskUserQuestion). Offer
 these ways to answer:
 
-- **"I'll paste my LinkedIn"** — the fastest route for most people.
-- **"I'll type the details"** — name, what they do, a one-line tagline, links.
-- **"Just use my posts"** — minimal: name and links only, with the tagline drawn from what they actually write about.
+- **"I'll paste my LinkedIn"**: the fastest route for most people.
+- **"I'll type the details"**: name, what they do, a one-line tagline, links.
+- **"Just use my posts"**: minimal, name and links only, with the tagline drawn from what they actually write about.
 
 Whatever they pick, you need at most these, and the site works with the first two alone:
 
@@ -158,7 +158,7 @@ Whatever they pick, you need at most these, and the site works with the first tw
 | About | LinkedIn "About", or them | home intro + `/about/` |
 | Work | LinkedIn "Experience" | `/about/` |
 | Links | them | header, footer, `/about/` |
-| Look | them, from four palettes | the whole site — see [Pick a look](#pick-a-look) |
+| Look | them, from four palettes | the whole site, see [Pick a look](#pick-a-look) |
 
 ### Reading a LinkedIn profile
 
@@ -167,13 +167,13 @@ authentication error, not the profile. So:
 
 1. If you have a browser tool **and** the user is already signed in to LinkedIn there, open the profile URL they gave
    you and read the page. Do not sign in on their behalf or enter credentials.
-2. Otherwise, ask them to paste the profile text — the "About" section and their recent roles are enough. Say that
+2. Otherwise, ask them to paste the profile text. The "About" section and their recent roles are enough. Say that
    plainly instead of silently giving up on the URL they handed you.
 
 Pull out only what the profile actually says: name, headline, location, the About paragraphs, and recent roles with
 titles, companies and dates. **Never invent a career.** No made-up employers, dates, degrees or achievements, and no
 LinkedIn marketing voice ("passionate about leveraging…") unless that is genuinely how they wrote it. Where the
-profile is thin, leave the field empty — every section of the scaffold hides itself when its field is empty.
+profile is thin, leave the field empty. Every section of the scaffold hides itself when its field is empty.
 
 Then show them the filled-in config and get an OK before deploying. A LinkedIn profile is semi-private; a personal
 blog is fully public, and employer names, location and dates are theirs to publish or withhold.
@@ -182,16 +182,16 @@ blog is fully public, and employer names, location and dates are theirs to publi
 
 The skill ships a small, production-ready **Next.js 16** blog in `scaffold/`:
 
-- App Router, TypeScript, Tailwind CSS v4, statically exported (`output: 'export'`) — `out/` is plain HTML
+- App Router, TypeScript, Tailwind CSS v4, statically exported (`output: 'export'`), so `out/` is plain HTML
 - Posts grouped by year, excerpts that strip the title Medium repeats into the body
 - Post pages with tags, reading time and older/newer links; tag pages; an about page
 - RSS feed, sitemap, robots.txt and a 404 page
 - Light and dark themes with a toggle that remembers the choice, following the OS until it is used
-- Serif display type (Instrument Serif) over Inter, and four palettes to choose from — one line of config
+- Serif display type (Instrument Serif) over Inter, and four palettes to choose from, one line of config
 
 Markdown is rendered at build time through remark/rehype with `rehype-raw`, **not** MDX: Medium exports carry raw HTML
 (figures, captions, iframes) that MDX rejects. Code blocks are highlighted by Shiki in both themes. Front matter is
-read leniently — unknown keys are ignored, missing ones degrade gracefully — so custom medmark templates still render.
+read leniently, ignoring unknown keys and degrading gracefully on missing ones, so custom medmark templates still render.
 
 ### Create the site
 
@@ -202,7 +202,7 @@ cd my-blog
 
 `<skill-dir>` is wherever this skill is installed (for example `~/.claude/skills/medmark` or `.claude/skills/medmark`).
 
-Then copy the posts in — the scaffold reads `content/posts/`:
+Then copy the posts in. The scaffold reads `content/posts/`:
 
 ```bash
 cp -R ../medmark/output/. content/posts/
@@ -210,23 +210,23 @@ cp -R ../medmark/output/. content/posts/
 
 ### Pick a look
 
-The scaffold ships four palettes in `app/themes.ts` — `clay` (warm paper, terracotta accent; the default), `ink`
+The scaffold ships four palettes in `app/themes.ts`: `clay` (warm paper, terracotta accent; the default), `ink`
 (cool greys, blue link), `forest` (off-white, deep green) and `plum` (faint violet, deep purple). Each defines a light
 and a dark version of the same seven colours, and `theme` in `site.config.ts` picks one. Nothing else in the site
 hard-codes a colour, so switching is one line.
 
-Offer the choice rather than deciding silently — most people have an opinion once they see the options, and this is
+Offer the choice rather than deciding silently. Most people have an opinion once they see the options, and this is
 the part of the site that is most theirs. Use your host's interactive question tool with the four names and their
 one-line descriptions as the choices, or ask in your message. Either way, say that it changes everything in one line,
 so nobody treats it as a commitment.
 
 Showing it beats describing it: with the dev server running, `/themes` renders all four side by side, in light and
-dark, with the person's own name and tagline in the samples. That page exists only in `npm run dev` — production
+dark, with the person's own name and tagline in the samples. That page exists only in `npm run dev`. Production
 builds 404 it, so there is nothing to delete afterwards.
 
 If your host happens to have a visual design tool (Claude's artifact canvas, for example), you can mock the palettes
 up there instead. Do not depend on it: the `/themes` page is the route every agent can use, and the choice is the same
-one either way. A palette they want that isn't here is a new block in `app/themes.ts` with the same seven keys — copy
+one either way. A palette they want that isn't here is a new block in `app/themes.ts` with the same seven keys. Copy
 `clay` and change the colours.
 
 ### Fill in site.config.ts
@@ -246,7 +246,7 @@ export const site: SiteConfig = {
   avatar: '/avatar.jpg',
   about: ['I build language tooling…', 'Before that…'],
   now: 'Working on an incremental type checker.',
-  work: [{role: 'Principal Engineer', company: 'Analytical Engines', period: '2021 — now'}],
+  work: [{role: 'Principal Engineer', company: 'Analytical Engines', period: '2021 to now'}],
   nav: [{label: 'Writing', href: '/'}, {label: 'About', href: '/about/'}],
   links: [{label: 'GitHub', href: 'https://github.com/ada'}, {label: 'RSS', href: '/rss.xml'}],
 };
@@ -259,10 +259,10 @@ Rules that matter:
   than asking them to compose from scratch.
 - **description** goes in meta tags and the RSS feed. Never leave it mentioning medmark or Medium.
 - **url** matters before deploying: canonical links, RSS and the sitemap need it (or `SITE_URL` in the environment).
-- **about** empty means no `/about/` page and no home intro — that is fine, and better than filler. The `About` nav
+- **about** empty means no `/about/` page and no home intro. That is fine, and better than filler. The `About` nav
   item removes itself.
-- **links** — their real accounts, or drop the row. A dead link to a stranger's profile is worse than no link.
-- **avatar** — only if they give you an image; drop it in `public/` first.
+- **links**: their real accounts, or drop the row. A dead link to a stranger's profile is worse than no link.
+- **avatar**: only if they give you an image; drop it in `public/` first.
 
 Also before you call it done:
 
@@ -305,7 +305,7 @@ cd my-blog
 find content/posts -type d -name resources -exec sh -c 'mkdir -p public/resources && cp -R "$0"/. public/resources/' {} \;
 ```
 
-Then confirm an image loads in the browser — do not assume.
+Then confirm an image loads in the browser. Do not assume.
 
 ## 4. Deploy
 
@@ -335,11 +335,11 @@ npx netlify deploy --prod --dir out
 npx wrangler pages deploy out
 ```
 
-**GitHub Pages** — two gotchas, both of which break the site silently:
+**GitHub Pages** has two gotchas, both of which break the site silently:
 
 1. Project pages are served from a subpath, so set `basePath: '/<repo>'` in `next.config.ts` (and `url` to
    `https://<user>.github.io/<repo>`) before building. A custom domain or `<user>.github.io` repo needs no `basePath`.
-2. Add an empty `.nojekyll` file to `out/` — GitHub Pages otherwise hides the `_next/` directory and the site loads
+2. Add an empty `.nojekyll` file to `out/`. GitHub Pages otherwise hides the `_next/` directory and the site loads
    without CSS or JavaScript.
 
 Then deploy `out/` with `actions/upload-pages-artifact@v3` and `actions/deploy-pages@v4`, and set Settings → Pages →
@@ -350,33 +350,33 @@ report the resulting URL afterwards.
 
 ### Before you call it production-ready
 
-Walk this yourself — don't hand the user a checklist to run.
+Walk this yourself. Don't hand the user a checklist to run.
 
 - [ ] No placeholders left: `Your Name`, the default tagline, the placeholder favicon, an empty `description`.
-- [ ] Nothing invented in `site.config.ts` — every role, date and claim came from the user or their profile.
+- [ ] Nothing invented in `site.config.ts`: every role, date and claim came from the user or their profile.
 - [ ] `url` (or `SITE_URL`) is the real domain, and `/rss.xml`, `/sitemap.xml` and `/robots.txt` show absolute URLs.
-- [ ] They have seen the look and agreed to it — `/themes` in dev, or the site itself — rather than keeping the
+- [ ] They have seen the look and agreed to it, through `/themes` in dev or the site itself, rather than keeping the
       default because nobody asked.
-- [ ] `npm run build` is clean, and you have opened `npm run start` — not just the dev server.
+- [ ] `npm run build` is clean, and you have opened `npm run start`, not just the dev server.
 - [ ] Open three or four posts, including the oldest and the longest. Check images, code blocks, embeds and links.
 - [ ] Look at it at phone width, and flip the theme toggle on both the home page and a post.
 - [ ] A made-up URL renders the 404 page, and a tag link from a post lands on a tag page.
 - [ ] Drafts and replies the user didn't want are gone from `content/posts/`.
-- [ ] If they're keeping the Medium originals up, set `canonicalUrl` in the post's front matter — the post page then
+- [ ] If they're keeping the Medium originals up, set `canonicalUrl` in the post's front matter. The post page then
       links back to the original and the canonical tag points there, so search engines know which copy is which.
 
-Then tell the user what you checked and what you couldn't — a broken image behind a Medium CDN redirect, say — rather
+Then tell the user what you checked and what you couldn't, such as a broken image behind a Medium CDN redirect, rather
 than declaring it perfect.
 
 ## Keeping it up to date
 
 Re-export from Medium, re-run `npx medmark`, then copy the output over `content/posts/` again and redeploy. Posts
-removed from the output stay in `content/posts/` until deleted — clear the folder first for an exact mirror.
+removed from the output stay in `content/posts/` until deleted. Clear the folder first for an exact mirror.
 
 ## Notes and gotchas
 
 - The scaffold is a starting point, not a framework. If the user wants a different look, change or add a palette in
-  `app/themes.ts` and edit the components in `app/components/` — they are short on purpose.
+  `app/themes.ts` and edit the components in `app/components/`. They are short on purpose.
 - `/themes` is dev-only by design (`notFound()` in production). Do not "fix" it into a public page, and do not tell the
   user to delete it.
 - Posts live in `content/posts/` (not inside `app/`) so the generated output can be replaced wholesale without
@@ -386,5 +386,5 @@ removed from the output stay in `content/posts/` until deleted — clear the fol
 - `next/font` downloads Inter and Instrument Serif at build time, so the first build needs network access.
 - Medium embeds (tweets, gists, YouTube) come through as HTML or links and render as they are. Add an integration only
   if the user wants richer embeds.
-- `registry.json` is handy for building an index, tag pages or a feed in another framework — it carries title, slug,
+- `registry.json` is handy for building an index, tag pages or a feed in another framework. It carries title, slug,
   path, date, tags, authors and the source URL.

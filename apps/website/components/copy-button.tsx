@@ -23,7 +23,7 @@ export function CopyButton({className, label, value}: CopyButtonProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* clipboard unavailable — nothing useful to do */
+      /* clipboard unavailable, nothing useful to do */
     }
   };
 

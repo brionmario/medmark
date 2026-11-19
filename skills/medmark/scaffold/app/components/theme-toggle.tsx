@@ -35,7 +35,7 @@ export default function ThemeToggle() {
     try {
       localStorage.setItem('theme', next ? 'dark' : 'light');
     } catch {
-      // Private browsing — the toggle still works for this page view.
+      // Private browsing; the toggle still works for this page view.
     }
 
     setDark(next);

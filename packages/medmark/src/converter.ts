@@ -513,7 +513,7 @@ function writeRegistry(template: MedmarkTemplate, options: MedmarkOptions, outpu
 /**
  * The shape of a dynamically imported template module. A template can be
  * authored as CommonJS (`module.exports = template`), as ESM
- * (`export default template`), or compiled from TypeScript — which produces
+ * (`export default template`), or compiled from TypeScript, which produces
  * `exports.default`, and therefore a second level of `default` once the module
  * is imported. {@link resolveTemplateModule} flattens all three.
  */

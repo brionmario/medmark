@@ -19,7 +19,7 @@ export interface WorkEntry {
   /** Job title, e.g. "Senior Software Engineer". */
   role: string;
   company: string;
-  /** Free text, e.g. "2022 — now". */
+  /** Free text, e.g. "2022 to now". */
   period: string;
   /** One line on what you did there. Optional. */
   summary?: string;

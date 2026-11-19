@@ -94,7 +94,7 @@ program
     const medmarkDir: string = path.join(cwd, DEFAULT_MEDMARK_FOLDER_NAME);
 
     if (!fs.existsSync(medmarkDir)) {
-      log.step(`No ${DEFAULT_MEDMARK_FOLDER_NAME}/ folder found — running first-time setup...`);
+      log.step(`No ${DEFAULT_MEDMARK_FOLDER_NAME}/ folder found, running first-time setup...`);
       await init();
     }
 

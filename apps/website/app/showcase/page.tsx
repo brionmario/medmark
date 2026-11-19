@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
+import type {Metadata} from 'next';
 import Link from 'next/link';
-import { ArrowUpRight, Code2, Plus } from 'lucide-react';
-import { gitConfig } from '@/lib/shared';
-import { getDisplayHost, getShowcaseSites, type ShowcaseSite } from '@/lib/showcase';
+import {ArrowUpRight, Code2, Plus} from 'lucide-react';
+import {gitConfig} from '@/lib/shared';
+import {getDisplayHost, getShowcaseSites, type ShowcaseSite} from '@/lib/showcase';
 
 const submitUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}/edit/${gitConfig.branch}/apps/website/content/showcase.json`;
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Blogs and sites whose content was migrated from Medium with medmark.',
 };
 
-function SiteCard({ site }: { site: ShowcaseSite }) {
+function SiteCard({site}: {site: ShowcaseSite}) {
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-fd-border bg-fd-card p-5 transition-colors hover:border-fd-primary/40">
       <div className="flex items-start justify-between gap-3">
@@ -98,8 +98,8 @@ export default function Page() {
       <header className="mb-10 flex flex-col gap-3">
         <h1 className="m-0 text-3xl font-bold tracking-tight sm:text-4xl">Showcase</h1>
         <p className="m-0 max-w-2xl text-fd-muted-foreground">
-          Blogs and sites whose content was migrated off Medium with medmark. Moved your own writing
-          across? Add it to the list — it is a one-line change to a JSON file.
+          Blogs and sites whose content was migrated off Medium with medmark. Moved your own writing across? Add it to
+          the list. It is a one-line change to a JSON file.
         </p>
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <a
@@ -124,7 +124,7 @@ export default function Page() {
         <div className="rounded-xl border border-dashed border-fd-border p-10 text-center">
           <p className="m-0 font-semibold text-fd-foreground">Nothing here yet</p>
           <p className="m-0 mt-1 text-sm text-fd-muted-foreground">
-            Be the first — see the{' '}
+            Be the first. See the{' '}
             <Link href="/docs/showcase" className="underline">
               submission guide
             </Link>

@@ -5,10 +5,9 @@ description: Customise the Markdown output shape with a template file.
 
 A **template** is a plain CommonJS `.js` file that controls:
 
-1. **Options** — how medmark processes each post (image storage, code language default, folder strategy, registry
-   output)
-2. **Render** — how each post is written to disk (front matter shape, body)
-3. **Registry** — optionally, what gets recorded per post and how the registry is serialized
+1. **Options**: how medmark processes each post (image storage, code language default, folder strategy, registry output)
+2. **Render**: how each post is written to disk (front matter shape, body)
+3. **Registry**: optionally, what gets recorded per post and how the registry is serialized
 
 ## Built-in default
 
@@ -79,20 +78,20 @@ module.exports = {
 };
 ```
 
-Only `getOptions()` and `render()` are required. `buildRegistryEntry()` and `serializeRegistry()` are optional hooks —
+Only `getOptions()` and `render()` are required. `buildRegistryEntry()` and `serializeRegistry()` are optional hooks:
 leave them out and medmark falls back to its built-in behaviour.
 
 ## `getOptions()` reference
 
-| Option                     | Type                    | Default                                | Description                                                      |
-| -------------------------- | ----------------------- | -------------------------------------- | ---------------------------------------------------------------- |
-| `defaultCodeBlockLanguage` | `string`                | `'js'`                                 | Language hint for fenced code blocks with no language tag        |
-| `folderForEachSlug`        | `boolean`               | `true`                                 | Create a `slug/index.md` folder structure instead of `slug.md`   |
-| `imagePath`                | `string`                | `'/resources'`                         | Base path used for image references in the output                |
-| `imageStorageStrategy`     | `'REMOTE'` \| `'LOCAL'` | `'REMOTE'`                             | `REMOTE` keeps Medium CDN URLs; `LOCAL` downloads images         |
-| `registry`                 | `object`                | `{ enabled: true, formats: ['json'] }` | Content registry output — see [Content Registry](/docs/registry) |
+| Option                     | Type                    | Default                                | Description                                                     |
+| -------------------------- | ----------------------- | -------------------------------------- | --------------------------------------------------------------- |
+| `defaultCodeBlockLanguage` | `string`                | `'js'`                                 | Language hint for fenced code blocks with no language tag       |
+| `folderForEachSlug`        | `boolean`               | `true`                                 | Create a `slug/index.md` folder structure instead of `slug.md`  |
+| `imagePath`                | `string`                | `'/resources'`                         | Base path used for image references in the output               |
+| `imageStorageStrategy`     | `'REMOTE'` \| `'LOCAL'` | `'REMOTE'`                             | `REMOTE` keeps Medium CDN URLs; `LOCAL` downloads images        |
+| `registry`                 | `object`                | `{ enabled: true, formats: ['json'] }` | Content registry output, see [Content Registry](/docs/registry) |
 
-## `render(data)` — available data
+## `render(data)`: available data
 
 | Field               | Type       | Description                                          |
 | ------------------- | ---------- | ---------------------------------------------------- |
@@ -111,7 +110,7 @@ leave them out and medmark falls back to its built-in behaviour.
 | `data.authors`      | `Author[]` | Array of `{name, url}` objects                       |
 | `data.images`       | `Image[]`  | Array of `{mediumUrl, localName, localPath}` objects |
 
-`render()` must return the complete file contents as a string — front matter included. medmark writes exactly what you
+`render()` must return the complete file contents as a string, front matter included. medmark writes exactly what you
 return.
 
 ## Using a custom template
@@ -128,7 +127,7 @@ project has installed.
 ## Writing templates in TypeScript
 
 Templates are imported at runtime, so medmark loads JavaScript only. If you prefer TypeScript, the published types are
-exported from the package — compile your template to `.js` and point `--template` at the output:
+exported from the package. Compile your template to `.js` and point `--template` at the output:
 
 ```ts title="my-template.ts"
 import type {MedmarkTemplate} from 'medmark';

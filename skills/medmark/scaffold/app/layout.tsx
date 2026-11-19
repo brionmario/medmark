@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   openGraph: {
     description: site.description,
     siteName: site.name,
-    title: `${site.name}${site.tagline ? ` — ${site.tagline}` : ''}`,
+    title: `${site.name}${site.tagline ? ` · ${site.tagline}` : ''}`,
     type: 'website',
   },
   title: {
-    default: `${site.name}${site.tagline ? ` — ${site.tagline}` : ''}`,
+    default: `${site.name}${site.tagline ? ` · ${site.tagline}` : ''}`,
     template: `%s · ${site.name}`,
   },
   twitter: {card: 'summary_large_image'},

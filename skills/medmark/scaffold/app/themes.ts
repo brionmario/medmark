@@ -2,8 +2,8 @@
  * The looks this blog can wear.
  *
  * This file is the single source of truth for colour: `app/layout.tsx` turns
- * the selected theme into CSS variables, and everything else — components,
- * post body, code blocks — reads those variables. Nothing hard-codes a colour.
+ * the selected theme into CSS variables, and everything else
+ * (components, post body, code blocks) reads those variables. Nothing hard-codes a colour.
  *
  * Pick one with `theme` in `site.config.ts`, or add your own: copy a block,
  * give it a name, and keep the same seven keys.
@@ -11,7 +11,7 @@
 export interface Palette {
   /** Page background. */
   paper: string;
-  /** Slightly raised surfaces — code blocks, table headers. */
+  /** Slightly raised surfaces: code blocks, table headers. */
   raised: string;
   /** Body text. */
   ink: string;
@@ -59,7 +59,7 @@ export const themes = {
   },
   ink: {
     label: 'Ink',
-    description: 'Cool greys and a classic blue link. The plainest of the four — gets out of the way.',
+    description: 'Cool greys and a classic blue link. The plainest of the four, and gets out of the way.',
     light: {
       paper: '#fcfcfc',
       raised: '#ffffff',

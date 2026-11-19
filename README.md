@@ -56,10 +56,13 @@ Install it with the [`skills`](https://skills.sh) CLI, which every one of those 
 npx skills add brionmario/medmark
 ```
 
-Or, inside Claude Code, as a plugin:
+Or, inside Claude Code, as a plugin. Type these into Claude Code itself, one at a time:
 
-```bash
+```text
 /plugin marketplace add brionmario/medmark
+```
+
+```text
 /plugin install medmark@medmark
 ```
 

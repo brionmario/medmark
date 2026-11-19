@@ -11,9 +11,16 @@ interface InstallPath {
   commands: string[];
   /** One line under the commands explaining what this path gives you. */
   hint: string;
+  /** What each line is typed into: a shell, or the agent's own prompt. */
+  prompt: '$' | '>';
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   /** Tab text, e.g. "Claude Code". */
   label: string;
+  /**
+   * The mark's own colour. npm and Claude have one; OpenAI and Cursor use a
+   * black-or-white wordmark, so they follow the text instead.
+   */
+  tone: string;
 }
 
 /**
@@ -25,26 +32,34 @@ const PATHS: InstallPath[] = [
   {
     commands: ['npx medmark'],
     hint: 'The CLI on its own. No agent needed.',
+    prompt: '$',
     icon: NpmIcon,
     label: 'npx',
+    tone: 'text-[#CB3837]',
   },
   {
     commands: ['/plugin marketplace add brionmario/medmark', '/plugin install medmark@medmark'],
-    hint: 'Run both inside Claude Code, then ask it to convert your archive.',
+    hint: 'Type these into Claude Code itself, one after the other, then ask it to convert your archive.',
+    prompt: '>',
     icon: ClaudeIcon,
     label: 'Claude Code',
+    tone: 'text-[#D97757]',
   },
   {
     commands: ['npx skills add brionmario/medmark'],
     hint: 'Installs the skill where Codex looks for it.',
+    prompt: '$',
     icon: OpenAiIcon,
     label: 'Codex',
+    tone: 'text-black dark:text-white',
   },
   {
     commands: ['npx skills add brionmario/medmark'],
     hint: 'Same skill, picked up by Cursor and other agents.',
+    prompt: '$',
     icon: CursorIcon,
     label: 'Cursor',
+    tone: 'text-black dark:text-white',
   },
   {
     commands: [
@@ -52,8 +67,10 @@ const PATHS: InstallPath[] = [
       'cp -R /tmp/medmark/skills/medmark ~/.claude/skills/medmark',
     ],
     hint: 'Copy the skill folder in yourself.',
+    prompt: '$',
     icon: FolderCode,
     label: 'Manual',
+    tone: 'text-fd-muted-foreground',
   },
 ];
 
@@ -63,16 +80,16 @@ const PATHS: InstallPath[] = [
  */
 export function InstallTabs() {
   const [active, setActive] = useState(0);
-  const [copied, setCopied] = useState(false);
+  /** Index of the command copied a moment ago, or -1. */
+  const [copied, setCopied] = useState(-1);
 
   const path: InstallPath = PATHS[active]!;
-  const text: string = path.commands.join('\n');
 
-  const copy = async () => {
+  const copy = async (command: string, index: number) => {
     try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(command);
+      setCopied(index);
+      setTimeout(() => setCopied(-1), 2000);
     } catch {
       /* clipboard unavailable, nothing useful to do */
     }
@@ -83,7 +100,7 @@ export function InstallTabs() {
       <p className="m-0 text-sm font-medium text-fd-foreground">Get medmark where you work</p>
 
       <div role="tablist" aria-label="Install medmark" className="mt-3 flex flex-wrap gap-2">
-        {PATHS.map(({icon: Icon, label}, index) => (
+        {PATHS.map(({icon: Icon, label, tone}, index) => (
           <button
             key={label}
             type="button"
@@ -91,7 +108,7 @@ export function InstallTabs() {
             aria-selected={index === active}
             onClick={() => {
               setActive(index);
-              setCopied(false);
+              setCopied(-1);
             }}
             className={cn(
               'inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors',
@@ -100,32 +117,33 @@ export function InstallTabs() {
                 : 'border-fd-border bg-fd-card text-fd-muted-foreground hover:border-fd-primary/40 hover:text-fd-foreground',
             )}
           >
-            <Icon className={cn('size-3.5', index === active && 'text-fd-primary')} />
+            <Icon className={cn('size-3.5', tone)} />
             {label}
           </button>
         ))}
       </div>
 
-      <div className="mt-3 flex items-start gap-3 rounded-lg border border-fd-border bg-fd-card px-4 py-3">
-        <pre className="m-0 flex-1 overflow-x-auto bg-transparent break-words whitespace-pre-wrap p-0 font-mono text-sm leading-7 text-fd-foreground">
-          <code>
-            {path.commands.map((command: string) => (
-              <span key={command} className="block">
-                <span className="select-none text-fd-primary">$ </span>
-                {command}
-              </span>
-            ))}
-          </code>
-        </pre>
-        <button
-          type="button"
-          onClick={copy}
-          aria-label={`Copy ${text}`}
-          className="mt-0.5 inline-flex shrink-0 items-center gap-1.5 rounded-md border border-fd-border px-2.5 py-1.5 text-xs text-fd-muted-foreground transition-colors hover:border-fd-primary/40 hover:text-fd-foreground"
-        >
-          {copied ? <Check className="size-3.5 text-fd-primary" /> : <Copy className="size-3.5" />}
-          {copied ? 'Copied' : 'Copy'}
-        </button>
+      <div className="mt-3 divide-y divide-fd-border rounded-lg border border-fd-border bg-fd-card">
+        {path.commands.map((command: string, index: number) => (
+          <div key={command} className="flex items-start gap-3 px-4 py-3">
+            {path.commands.length > 1 && (
+              <span className="mt-1 shrink-0 font-mono text-xs text-fd-muted-foreground">{index + 1}.</span>
+            )}
+            <code className="flex-1 font-mono text-sm leading-6 break-words whitespace-pre-wrap text-fd-foreground">
+              <span className="select-none text-fd-primary">{path.prompt} </span>
+              {command}
+            </code>
+            <button
+              type="button"
+              onClick={() => copy(command, index)}
+              aria-label={`Copy ${command}`}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-fd-border px-2.5 py-1.5 text-xs text-fd-muted-foreground transition-colors hover:border-fd-primary/40 hover:text-fd-foreground"
+            >
+              {copied === index ? <Check className="size-3.5 text-fd-primary" /> : <Copy className="size-3.5" />}
+              {copied === index ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+        ))}
       </div>
 
       <p className="mt-2 text-xs text-fd-muted-foreground">{path.hint}</p>

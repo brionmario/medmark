@@ -5,6 +5,7 @@ import {
   Bot,
   FileCode2,
   GitBranch,
+  Heart,
   Images,
   Layers,
   Rss,
@@ -12,16 +13,17 @@ import {
   Terminal as TerminalIcon,
 } from 'lucide-react';
 import {CopyButton} from '@/components/copy-button';
+import {InstallTabs} from '@/components/install-tabs';
 import {MedmarkLogo} from '@/components/logo';
 
 export const metadata: Metadata = {
   description:
-    'medmark converts your Medium export into clean Markdown or MDX — front matter, images, a content registry, and an agent skill that hosts the result.',
+    'medmark converts your Medium export into clean Markdown or MDX: front matter, images, a content registry, and an agent skill that hosts the result.',
 };
 
 const FEATURES = [
   {
-    body: 'YAML front matter with slug, title, date, description, reading time, tags, categories and images — ready for any static-site generator.',
+    body: 'YAML front matter with slug, title, date, description, reading time, tags, categories and images, ready for any static-site generator.',
     icon: FileCode2,
     title: 'Clean Markdown & MDX',
   },
@@ -36,7 +38,7 @@ const FEATURES = [
     title: 'Content registry',
   },
   {
-    body: 'Own the output shape. A template is a small JS module — change the front matter, the body, the file layout, the registry.',
+    body: 'Own the output shape. A template is a small JS module. Change the front matter, the body, the file layout, the registry.',
     icon: Layers,
     title: 'Custom templates',
   },
@@ -64,7 +66,7 @@ const STEPS = [
     title: 'Convert',
   },
   {
-    body: 'Drop the Markdown into your site — or let the agent skill scaffold and deploy one for you.',
+    body: 'Drop the Markdown into your site, or let the agent skill scaffold and deploy one for you.',
     code: 'npx skills add brionmario/medmark',
     title: 'Publish',
   },
@@ -77,7 +79,7 @@ function TerminalMock() {
         <span className="size-2.5 rounded-full bg-[#FF5F57]" />
         <span className="size-2.5 rounded-full bg-[#FEBC2E]" />
         <span className="size-2.5 rounded-full bg-[#28C840]" />
-        <span className="ml-2 font-mono text-xs text-fd-muted-foreground">medmark — zsh</span>
+        <span className="ml-2 font-mono text-xs text-fd-muted-foreground">medmark · zsh</span>
       </div>
       <pre className="overflow-x-auto p-5 font-mono text-[0.8rem] leading-6 text-fd-muted-foreground">
         <code>
@@ -128,19 +130,17 @@ export default function HomePage() {
               as Markdown you own.
             </h1>
             <p className="max-w-xl text-lg text-fd-muted-foreground">
-              medmark turns a Medium export into clean Markdown or MDX — front matter, images, embeds and a content
-              registry — ready to drop into Next.js, Astro, Hugo or anything else.
+              medmark turns a Medium export into clean Markdown or MDX: front matter, images, embeds and a content
+              registry, ready to drop into Next.js, Astro, Hugo or anything else.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/docs"
-                className="inline-flex items-center gap-2 rounded-lg bg-fd-primary px-5 py-2.5 text-sm font-semibold text-fd-primary-foreground no-underline transition-opacity hover:opacity-90"
-              >
-                Read the docs
-                <ArrowRight className="size-4" />
-              </Link>
-              <CopyButton value="npx medmark" />
-            </div>
+            <InstallTabs />
+            <Link
+              href="/docs"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-fd-muted-foreground no-underline transition-colors hover:text-fd-foreground"
+            >
+              Read the docs
+              <ArrowRight className="size-3.5" />
+            </Link>
           </div>
           <TerminalMock />
         </div>
@@ -174,7 +174,7 @@ export default function HomePage() {
                 </Link>
               </div>
               <p className="text-sm text-fd-muted-foreground">
-                These docs are <Link href="/docs/llms">agent-readable</Link> too — llms.txt, llms-full.txt, and a
+                These docs are <Link href="/docs/llms">agent-readable</Link> too: llms.txt, llms-full.txt, and a
                 Markdown copy of every page.
               </p>
             </div>
@@ -282,8 +282,21 @@ export default function HomePage() {
           >
             npm
           </a>
+          <a
+            href="https://github.com/brionmario/medmark/blob/main/LICENSE"
+            className="text-fd-muted-foreground no-underline hover:text-fd-foreground"
+          >
+            MIT License
+          </a>
         </div>
-        <span>MIT © Brion Mario</span>
+        <span className="inline-flex items-center gap-1.5">
+          Made with
+          <Heart className="size-3.5 fill-fd-primary text-fd-primary" aria-label="love" />
+          by
+          <a href="https://github.com/brionmario" className="text-fd-foreground no-underline hover:text-fd-primary">
+            Brion Mario
+          </a>
+        </span>
       </footer>
     </main>
   );

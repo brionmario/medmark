@@ -150,8 +150,9 @@ site that ships saying `Your Name` is a failed job, so gather the details before
 Ask once, early, with your host's interactive question tool if you have one (Claude Code: AskUserQuestion). Offer
 these ways to answer:
 
-- **"I'll paste my LinkedIn"**: the fastest route for most people.
 - **"I'll type the details"**: name, what they do, a one-line tagline, links.
+- **"I'll paste a bio"**: anything they already have written about themselves, from a personal site, a CV, a
+  conference bio or a profile page they copied the text out of. Take it as given; do not go fetching the source.
 - **"Just use my posts"**: minimal, name and links only, with the tagline drawn from what they actually write about.
 
 Whatever they pick, you need at most these, and the site works with the first two alone:
@@ -159,31 +160,27 @@ Whatever they pick, you need at most these, and the site works with the first tw
 | Field | Comes from | Used for |
 | --- | --- | --- |
 | Name | them | header, copyright, meta tags |
-| Role | LinkedIn headline, or them | line under the tagline |
-| Location | LinkedIn, or them | same line (skip if they'd rather not say) |
+| Role | them | line under the tagline |
+| Location | them (skip if they'd rather not say) | same line |
 | Tagline | them, or draft one from their posts | the first line a reader sees |
-| About | LinkedIn "About", or them | home intro + `/about/` |
-| Work | LinkedIn "Experience" | `/about/` |
+| About | them, or a bio they paste | home intro + `/about/` |
+| Work | them, or a bio they paste | `/about/` |
 | Links | them | header, footer, `/about/` |
 | Look | them, from four palettes | the whole site, see [Pick a look](#pick-a-look) |
 
-### Reading a LinkedIn profile
+### Filling in the details
 
-LinkedIn blocks automated fetching: a plain `curl` or fetch of a profile URL returns a login wall or an
-authentication error, not the profile. So:
+Use only what they actually gave you. **Never invent a career.** No made-up employers, dates, degrees or
+achievements, and no profile-page marketing voice ("passionate about leveraging…") unless that is genuinely how they
+wrote it. Where you were given little, leave the field empty rather than padding it out. Every section of the
+scaffold hides itself when its field is empty, so a short config still produces a finished-looking site.
 
-1. If you have a browser tool **and** the user is already signed in to LinkedIn there, open the profile URL they gave
-   you and read the page. Do not sign in on their behalf or enter credentials.
-2. Otherwise, ask them to paste the profile text. The "About" section and their recent roles are enough. Say that
-   plainly instead of silently giving up on the URL they handed you.
+Do not try to fetch a profile from a social network to fill these in. Most block automated access and return a login
+wall rather than the page, and a profile the user has not handed you is not yours to scrape. If they offer a link
+instead of text, ask for the text.
 
-Pull out only what the profile actually says: name, headline, location, the About paragraphs, and recent roles with
-titles, companies and dates. **Never invent a career.** No made-up employers, dates, degrees or achievements, and no
-LinkedIn marketing voice ("passionate about leveraging…") unless that is genuinely how they wrote it. Where the
-profile is thin, leave the field empty. Every section of the scaffold hides itself when its field is empty.
-
-Then show them the filled-in config and get an OK before deploying. A LinkedIn profile is semi-private; a personal
-blog is fully public, and employer names, location and dates are theirs to publish or withhold.
+Then show them the filled-in config and get an OK before deploying. Details like employer names, location and dates
+are theirs to publish or withhold, and a personal blog is fully public.
 
 ## 3. Build the site
 

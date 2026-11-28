@@ -188,6 +188,39 @@ function getMediumImages(
 }
 
 /**
+ * Drop the title and lead image Medium repeats inside the post body.
+ *
+ * A Medium export carries the title twice: once as the `h1` in the header, and
+ * again as the first block of the body (`graf--title`). When the post has a lead
+ * image, that figure sits straight after it. Both are lifted into front matter
+ * (`title`, and `bannerImage` from the first image), so leaving them in the body
+ * renders each one twice: a heading under the heading, and the hero under the hero.
+ *
+ * Only a figure that comes before any prose is treated as a lead image. A post
+ * whose first image is genuinely mid-article keeps it, because the surrounding
+ * text usually refers to it.
+ * @param $cheerio - The parsed HTML document of the Medium post.
+ */
+const stripRepeatedTitleAndLeadImage = ($cheerio: CheerioAPI): void => {
+  if (!$cheerio('.section-content').length) {
+    return;
+  }
+
+  // `graf--title` is Medium's own marker for the block it derives the post title
+  // from, so its presence is the signal, not a text match against the header.
+  // The two differ more often than you would expect: the header truncates long
+  // titles with an ellipsis, and an edit to one is not always applied to the other.
+  $cheerio('.section-content .graf--title').first().remove();
+
+  const firstBlock: Cheerio<Element> = $cheerio('.section-content .graf').first();
+  const firstBlockTag: string = (firstBlock[0]?.tagName ?? '').toLowerCase();
+
+  if (firstBlockTag === 'figure') {
+    firstBlock.remove();
+  }
+};
+
+/**
  * Asynchronously gathers data from a Medium post.
  *
  * @param content - The HTML content of the Medium post.
@@ -321,10 +354,13 @@ async function gatherPostData(
 
   const title: string = $cheerio('h1').text();
 
-  // FIXME: Move this inside a function.
   // REMOVES: h1 and avatar section. (div avatar domEl right after h1)
+  // These live in the header, outside `.section-content`, so they never reached
+  // the Markdown; the copies that did are handled below.
   $cheerio('h1').next().remove();
   $cheerio('h1').remove();
+
+  stripRepeatedTitleAndLeadImage($cheerio);
 
   // process code blocks
   // medium exports inline code block as <code></code> and multi-line as <pre></pre>

@@ -117,9 +117,14 @@ program
           await text({
             defaultValue: defaultInput,
             message: 'Your Medium export (the .zip, or the folder you unzipped it to)',
-            placeholder: defaultInput,
+            // Show both shapes the answer can take. Medium's archive is named
+            // `medium-export-<hash>.zip` and lands in Downloads, which is not
+            // obvious from the workspace path alone.
+            placeholder: `${defaultInput}  ·  ~/Downloads/medium-export-a1b2c3.zip`,
             validate(value: string): string | undefined {
-              const resolved: string = path.resolve(cwd, value || defaultInput);
+              // Unquote here too: this runs before the resolver, so a path
+              // dragged in from Finder would otherwise be rejected on the spot.
+              const resolved: string = path.resolve(cwd, normalisePathInput(value) || defaultInput);
               if (!fs.existsSync(resolved)) {
                 return `Path not found: ${resolved}`;
               }

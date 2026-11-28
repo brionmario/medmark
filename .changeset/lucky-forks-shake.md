@@ -13,5 +13,14 @@ Path not found: /Users/you/Desktop/medmark/'/Users/you/Downloads/medium-export (
 ```
 
 Quoting and escaping are now stripped from the paths given to `--input` and `--output`, and from the same values typed
-at the prompt. Dragging the archive in is the most natural way to answer that question, especially since Medium's
-filenames contain spaces and brackets, which is exactly what makes a shell quote them.
+at the prompt, including in the prompt's own validation, which runs first and would otherwise reject the path as you
+enter it. Dragging the archive in is the most natural way to answer that question, especially since Medium's filenames
+contain spaces and brackets, which is exactly what makes a shell quote them.
+
+The prompt's placeholder now shows both shapes the answer can take:
+
+```
+medmark/medium-export  ·  ~/Downloads/medium-export-a1b2c3.zip
+```
+
+The workspace path alone gave no hint that the archive Medium emails you is accepted, or what it is called.

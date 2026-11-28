@@ -1,5 +1,60 @@
 # medmark
 
+## 0.4.0
+
+### Minor Changes
+
+- [`5d98d1a632e84be1da590518221876f4f59d3392`](https://github.com/brionmario/medmark/commit/5d98d1a632e84be1da590518221876f4f59d3392)
+  Thanks [@brionmario](https://github.com/brionmario)! - Take the Medium export in whatever shape you have it, and stop
+  printing scrape failures on ordinary runs.
+
+  `--input` now accepts the `.zip` Medium emails you, the folder you unzipped it to, or the `posts` folder inside it.
+  Zips are unpacked under `.medmark/extracted/` using `tar`, which ships with macOS, Linux and Windows 10 or later; if
+  it is missing, medmark says so and asks you to unzip by hand rather than failing on a spawn error. The interactive
+  prompt asks for the export rather than the `posts` folder, and the configuration summary shows the folder that was
+  resolved.
+
+  Also in this release:
+
+  - Added `-y, --yes`, and a non-TTY stdin now takes the same path automatically. The previously documented
+    "non-interactive form" was not non-interactive: `medmark --input … --output …` always asked "Configure advanced
+    options?", so it hung in CI and crashed in `uv_tty_init` with no TTY. A non-interactive run with a missing input
+    path now exits 1 with a readable message.
+  - `debug` defaulted to `true`, so every run behaved like a debug run: Apollo state scrape failures were printed for
+    every post and debug logs were written when nobody asked for them. It now defaults to `false`, which also makes
+    `--debug` mean something, and makes an ordinary run considerably faster.
+  - The Apollo state parse failure is logged only under `--debug`. The underlying parse failure is unchanged; it is
+    survivable, as the post still converts without the tags and authors it carries.
+
+### Patch Changes
+
+- [`e5a5b772c16923b7dde5c404191c1af33f3f3f35`](https://github.com/brionmario/medmark/commit/e5a5b772c16923b7dde5c404191c1af33f3f3f35)
+  Thanks [@brionmario](https://github.com/brionmario)! - Load templates that export via `export default`
+
+  Templates compiled from TypeScript (or any module that sets `exports.default`) produce a second level of `default`
+  once imported, so they silently fell back to the built-in template. The loader now unwraps nested `default` exports,
+  which means CommonJS, ESM, and TypeScript-compiled templates all work.
+
+  Also extracts `MedmarkRegistrySiteOptions` as a named exported interface, and adds the missing `hasClass` declaration
+  to the bundled `cheerio` types so the package type-checks cleanly.
+
+- [`03baf486af3d599b37342202c8940d10255ebe0e`](https://github.com/brionmario/medmark/commit/03baf486af3d599b37342202c8940d10255ebe0e)
+  Thanks [@brionmario](https://github.com/brionmario)! - Stop repeating the title and lead image inside the converted
+  body.
+
+  A Medium export carries the title twice: once as the `h1` in the header, and again as the first block of the body,
+  with the lead image straight after it. Both are lifted into front matter (`title`, and `bannerImage` from the first
+  image), so any site that renders front matter and then the body showed each one twice: a heading under the heading,
+  and the hero image under the hero image.
+
+  The body copies are now removed. The title block is matched on Medium's own `graf--title` marker rather than by
+  comparing text, because the two versions differ more often than you would expect: long titles are truncated with an
+  ellipsis in the header, and an edit to one is not always applied to the other. Only a figure that comes before any
+  prose is treated as a lead image, so a post whose first image is genuinely mid-article keeps it.
+
+  The `h1` removal that was already there never affected the output, since the header sits outside `.section-content`,
+  which is what becomes the Markdown.
+
 ## 0.3.0
 
 ### Minor Changes

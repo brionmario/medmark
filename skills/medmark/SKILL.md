@@ -319,8 +319,13 @@ Then confirm an image loads in the browser. Do not assume.
 Set the public URL first (`url` in `site.config.ts`, or `SITE_URL` in the host's environment), so canonical links, RSS
 and the sitemap are absolute.
 
-The build output is plain static files in `out/`, so any static host works. Pick the one the user already uses;
-otherwise Vercel is the shortest path for a Next.js site. Build command `npm run build`, output directory `out`.
+The build output is plain static files in `out/`, so any static host works. If the user already hosts something
+somewhere, use that and say so: a second account to manage is a cost, not a feature.
+
+If they do not, offer the four below rather than picking for them, the same way you offered the palettes. This is where
+their writing lives and what its URL will be, so it is their call. Use your host's interactive question tool with the
+four names, and say that Vercel is the shortest path for a Next.js site so the default is obvious without being
+imposed. Build command `npm run build`, output directory `out`.
 
 **Vercel**
 

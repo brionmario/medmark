@@ -97,6 +97,31 @@ const unpackArchive = (file: string, cwd: string): string => {
 };
 
 /**
+ * Clean up a path a person typed, pasted or dragged in.
+ *
+ * Dragging a file into a terminal inserts it the way a shell needs it: wrapped
+ * in quotes, or with its spaces backslash-escaped. A prompt is not a shell, so
+ * those characters survive into the answer and a perfectly good absolute path
+ * stops being absolute, then gets joined onto the working directory.
+ * @param value - Whatever the user gave us.
+ * @returns The path without shell quoting or escaping.
+ */
+export const normalisePathInput = (value: string): string => {
+  const trimmed: string = value.trim();
+
+  const quote: string = trimmed.slice(0, 1);
+  if ((quote === "'" || quote === '"') && trimmed.endsWith(quote) && trimmed.length > 1) {
+    const inner: string = trimmed.slice(1, -1);
+
+    // Single quotes are literal in a shell; double quotes still allow escapes.
+    return quote === '"' ? inner.replace(/\\(["\\$`])/g, '$1') : inner;
+  }
+
+  // Unquoted drags escape the awkward characters instead.
+  return trimmed.replace(/\\(.)/g, '$1');
+};
+
+/**
  * Find the folder of exported posts, given whatever the user pointed us at.
  *
  * People reach for the thing Medium emailed them, not the folder three levels
@@ -110,7 +135,7 @@ const unpackArchive = (file: string, cwd: string): string => {
  * @returns Absolute path to the folder holding the exported `.html` posts.
  */
 const resolveMediumExport = (input: string, cwd: string): string => {
-  const resolved: string = path.resolve(cwd, input);
+  const resolved: string = path.resolve(cwd, normalisePathInput(input));
 
   if (!fs.existsSync(resolved)) {
     throw new Error(`Path not found: ${resolved}`);

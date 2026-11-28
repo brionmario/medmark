@@ -32,7 +32,7 @@ import convert from './converter';
 import ConfigurationService from './configuration-service';
 import debug from './debug';
 import init from './init';
-import resolveMediumExport from './export-resolver';
+import resolveMediumExport, {normalisePathInput} from './export-resolver';
 import {
   DEFAULT_MEDMARK_FOLDER_NAME,
   DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME,
@@ -234,7 +234,13 @@ program
     s.start('Converting your Medium posts...');
 
     try {
-      await convert(postsPath, path.resolve(cwd, outputPath), resolvedTemplatePath, exportDrafts, toSkip);
+      await convert(
+        postsPath,
+        path.resolve(cwd, normalisePathInput(outputPath)),
+        resolvedTemplatePath,
+        exportDrafts,
+        toSkip,
+      );
       s.stop('Conversion complete!');
       outro('Your posts have been converted. Happy writing!');
     } catch (e) {

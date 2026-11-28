@@ -308,7 +308,13 @@ async function gatherPostData(
         tags = getTags(apolloState!);
         authors = getAuthors(apolloState!, metadata);
       } catch (e) {
-        logger.error(`An error ocurred while parsing Apollo state from scaped metadata: ${e}`);
+        // Medium's embedded Apollo state is not always valid JSON. It only carries
+        // nice-to-have metadata (tags, authors), and the post still converts without
+        // it, so this is not worth a wall of errors on an ordinary run. Keep it for
+        // `--debug`, where it is the first thing you want to see.
+        if (debug.enabled()) {
+          logger.error(`An error occurred while parsing Apollo state from scraped metadata: ${e}`);
+        }
       }
     }
   });

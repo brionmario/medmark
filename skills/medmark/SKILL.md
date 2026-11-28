@@ -50,10 +50,14 @@ Then cover whichever applies:
 - _They have it already:_ ask for the path to the unzipped folder (or the `.zip`), then carry on. Unzip it yourself if
   they give you a zip.
 - _They do not have it yet:_ exporting is theirs to do. You cannot download it for them. Tell them:
-  1. Open <https://medium.com/me/settings> (the Security and apps tab) → "Download your information" → **Download**.
-  2. Confirm with the password prompt, then wait for Medium's email ("Your Medium export is ready"), usually minutes,
-     sometimes hours.
-  3. Download the zip from the link in that email and tell you where it landed.
+  1. Open <https://medium.com/me/settings/security> (the Security and apps tab) → "Download your information" →
+     **Export**.
+  2. Wait for Medium's email with the download link, usually minutes, sometimes hours. The link is good for 24 hours
+     after it arrives.
+  3. Download the zip from that link and tell you where it landed.
+
+  Medium's own walkthrough, if they want it:
+  <https://help.medium.com/hc/en-us/articles/115004745787-Export-your-account-data>.
 
   Then end your turn. Pick this up when they come back with the file rather than polling or waiting.
 
@@ -88,8 +92,11 @@ The CLI prompts for the input folder, output folder and template, defaulting to 
 `medmark/output`. Non-interactive form:
 
 ```bash
-npx medmark --input medmark/medium-export/posts --output medmark/output
+npx medmark --yes --input medmark/medium-export --output medmark/output
 ```
+
+`--input` takes the export in whatever shape you have it: the `.zip` Medium emailed, the folder you unzipped it to, or
+the `posts` folder inside that. `--yes` skips the prompts, which is what you want when running this unattended.
 
 Other flags: `-t, --template <file>`, `-d, --drafts`, `-s, --skip <files>`, `-D, --debug`. Run `npx medmark --help` to
 confirm them for the installed version rather than guessing. Full CLI and configuration

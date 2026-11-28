@@ -17,7 +17,7 @@ You can bypass the interactive prompts by passing flags directly:
 
 ```bash
 npx medmark \
-  --input medmark/medium-export/posts \
+  --input medmark/medium-export \
   --output medmark/output \
   --template medmark/templates/sample-medmark-template.js
 ```
@@ -42,16 +42,16 @@ Running `medmark` without `init` first triggers the same setup automatically.
 
 ## Flags
 
-| Flag                | Short | Description                                                        |
-| ------------------- | ----- | ------------------------------------------------------------------ |
-| `--input <path>`    | `-i`  | Path to the `posts/` folder of the Medium export                   |
-| `--output <path>`   | `-o`  | Destination folder for converted files (default: `medmark/output`) |
-| `--template <file>` | `-t`  | Path to a custom template file                                     |
-| `--drafts`          | `-d`  | Include draft posts in the output                                  |
-| `--skip <files>`    | `-s`  | Comma-separated list of HTML filenames to skip                     |
-| `--debug`           | `-D`  | Enable debug mode (saves logs to `.medmark/logs/`)                 |
-| `--version`         | `-V`  | Print the installed version                                        |
-| `--help`            | `-h`  | Show help text                                                     |
+| Flag                | Short | Description                                                                     |
+| ------------------- | ----- | ------------------------------------------------------------------------------- |
+| `--input <path>`    | `-i`  | Your Medium export: the `.zip`, the folder it unzips to, or its `posts/` folder |
+| `--output <path>`   | `-o`  | Destination folder for converted files (default: `medmark/output`)              |
+| `--template <file>` | `-t`  | Path to a custom template file                                                  |
+| `--drafts`          | `-d`  | Include draft posts in the output                                               |
+| `--skip <files>`    | `-s`  | Comma-separated list of HTML filenames to skip                                  |
+| `--debug`           | `-D`  | Enable debug mode (saves logs to `.medmark/logs/`)                              |
+| `--version`         | `-V`  | Print the installed version                                                     |
+| `--help`            | `-h`  | Show help text                                                                  |
 
 Any flag you omit is prompted for interactively, so a partially-flagged run still works. Only the missing answers are
 asked for.

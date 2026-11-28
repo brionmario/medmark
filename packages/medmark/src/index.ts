@@ -32,13 +32,13 @@ import convert from './converter';
 import ConfigurationService from './configuration-service';
 import debug from './debug';
 import init from './init';
+import resolveMediumExport from './export-resolver';
 import {
   DEFAULT_MEDMARK_FOLDER_NAME,
   DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME,
   DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME,
   DEFAULT_MEDMARK_TEMPLATE_SAMPLE_FILENAME,
   DEFAULT_TEMPLATES_FOLDER_NAME,
-  MEDIUM_EXPORT_POSTS_FOLDER_NAME,
 } from './constants';
 
 // The package manifest sits outside `rootDir`, so it is read at runtime rather than imported.
@@ -65,7 +65,8 @@ function guardCancel<T>(value: T | symbol): T {
 
 /**
  * Flags accepted by the `medmark` command. Every flag is optional; anything
- * omitted is prompted for interactively.
+ * omitted is prompted for interactively, unless the run is non-interactive
+ * (see `yes`), in which case the default is used instead.
  */
 interface MedmarkCliOptions {
   debug?: boolean;
@@ -74,6 +75,7 @@ interface MedmarkCliOptions {
   output?: string;
   skip?: string;
   template?: string;
+  yes?: boolean;
 }
 
 const program: Command = new Command();
@@ -87,62 +89,81 @@ program
   .option('-d, --drafts', 'Export drafts along with other posts')
   .option('-s, --skip <files>', 'Comma-separated list of files to skip')
   .option('-D, --debug', 'Run in debug mode')
+  .option('-y, --yes', 'Skip all prompts and use the flags given, falling back to defaults')
   .action(async (options: MedmarkCliOptions) => {
     intro(BANNER);
 
     const cwd: string = process.cwd();
     const medmarkDir: string = path.join(cwd, DEFAULT_MEDMARK_FOLDER_NAME);
 
+    // Prompts need a TTY to read keypresses from. When stdin is not one (CI, a
+    // coding agent, a piped shell) asking would either hang or blow up in
+    // `uv_tty_init`, so fall back to the flags plus defaults instead. `--yes`
+    // forces the same path even when a TTY is present.
+    const nonInteractive: boolean = options.yes === true || !process.stdin.isTTY;
+
     if (!fs.existsSync(medmarkDir)) {
       log.step(`No ${DEFAULT_MEDMARK_FOLDER_NAME}/ folder found, running first-time setup...`);
       await init();
     }
 
-    const defaultInput: string = path.join(
-      DEFAULT_MEDMARK_FOLDER_NAME,
-      DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME,
-      MEDIUM_EXPORT_POSTS_FOLDER_NAME,
-    );
+    const defaultInput: string = path.join(DEFAULT_MEDMARK_FOLDER_NAME, DEFAULT_MEDIUM_EXPORTS_FOLDER_NAME);
     const defaultOutput: string = path.join(DEFAULT_MEDMARK_FOLDER_NAME, DEFAULT_MEDIUM_OUTPUT_FOLDER_NAME);
 
-    const inputPath: string =
-      options.input ??
-      guardCancel(
-        await text({
-          defaultValue: defaultInput,
-          message: 'Path to the `posts` folder of your Medium export',
-          placeholder: defaultInput,
-          validate(value: string): string | undefined {
-            const resolved: string = path.resolve(cwd, value || defaultInput);
-            if (!fs.existsSync(resolved)) {
-              return `Path not found: ${resolved}`;
-            }
-            return undefined;
-          },
-        }),
-      );
+    const inputPath: string = nonInteractive
+      ? options.input ?? defaultInput
+      : options.input ??
+        guardCancel(
+          await text({
+            defaultValue: defaultInput,
+            message: 'Your Medium export (the .zip, or the folder you unzipped it to)',
+            placeholder: defaultInput,
+            validate(value: string): string | undefined {
+              const resolved: string = path.resolve(cwd, value || defaultInput);
+              if (!fs.existsSync(resolved)) {
+                return `Path not found: ${resolved}`;
+              }
+              return undefined;
+            },
+          }),
+        );
 
-    const outputPath: string =
-      options.output ??
-      guardCancel(
-        await text({
-          defaultValue: defaultOutput,
-          message: 'Destination folder for output files',
-          placeholder: defaultOutput,
-        }),
-      );
+    // Whatever they pointed at, work out where the exported posts actually live:
+    // the archive, the folder it unzips to, or the `posts` folder itself all work.
+    // Failing here with a readable message beats failing deep inside the conversion.
+    let postsPath: string = '';
+
+    try {
+      postsPath = resolveMediumExport(inputPath, cwd);
+    } catch (e) {
+      log.error((e as Error).message);
+      process.exit(1);
+    }
+
+    const outputPath: string = nonInteractive
+      ? options.output ?? defaultOutput
+      : options.output ??
+        guardCancel(
+          await text({
+            defaultValue: defaultOutput,
+            message: 'Destination folder for output files',
+            placeholder: defaultOutput,
+          }),
+        );
 
     let templatePath: string = options.template ?? '';
     let exportDrafts: boolean = options.drafts ?? false;
     let toSkip: string[] = [];
     let debugMode: boolean = options.debug ?? false;
 
-    const configureAdvanced: boolean = guardCancel(
-      await confirm({
-        initialValue: false,
-        message: 'Configure advanced options?',
-      }),
-    );
+    const configureAdvanced: boolean = nonInteractive
+      ? false
+      : guardCancel(
+          await confirm({
+            initialValue: false,
+            message: 'Configure advanced options?',
+          }),
+        );
 
     if (configureAdvanced) {
       const defaultTemplatePath: string = path.join(
@@ -193,7 +214,7 @@ program
 
     note(
       [
-        `Input     ${inputPath}`,
+        `Input     ${postsPath}`,
         `Output    ${outputPath}`,
         `Template  ${resolvedTemplatePath || 'built-in default'}`,
         `Drafts    ${exportDrafts ? 'yes' : 'no'}`,
@@ -213,13 +234,7 @@ program
     s.start('Converting your Medium posts...');
 
     try {
-      await convert(
-        path.resolve(cwd, inputPath),
-        path.resolve(cwd, outputPath),
-        resolvedTemplatePath,
-        exportDrafts,
-        toSkip,
-      );
+      await convert(postsPath, path.resolve(cwd, outputPath), resolvedTemplatePath, exportDrafts, toSkip);
       s.stop('Conversion complete!');
       outro('Your posts have been converted. Happy writing!');
     } catch (e) {

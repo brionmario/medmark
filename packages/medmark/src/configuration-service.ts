@@ -49,7 +49,10 @@ class ConfigurationService {
    * The current configuration object.
    */
   private config: Configuration = {
-    debug: true,
+    // Off unless `--debug` asks for it. Defaulting this to `true` made every
+    // ordinary run behave like a debug run: scrape failures were printed for
+    // every post and debug logs were written when nobody asked for them.
+    debug: false,
     runnerTimestamp: new Date().toISOString(),
   };
 
